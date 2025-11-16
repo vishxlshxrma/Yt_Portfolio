@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "components/Header";
 import Sidebar from "components/Sidebar";
 import HeroSection from "components/HeroSection";
@@ -6,97 +6,163 @@ import VideoInfo from "components/VideoInfo";
 import Footer from "components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs";
 import { HomeTab, SkillsTab, ExperienceTab, EducationTab } from "components/tabs";
+import ProjectsTab from "components/tabs/ProjectsTab"; // <-- added
 
 export default function Portfolio() {
-  const [activeTab, setActiveTab] = useState("home");
+  // DEFAULT TO EXPERIENCE (since Home is becoming Work Experience)
+  const [activeTab, setActiveTab] = useState("experience");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const firstRender = useRef(true); // track initial mount
+  const scrollFromSidebar = useRef(false); // scroll only when sidebar triggers the change
+
+  // Smooth scroll on tab change, but:
+  // - skip the very first render
+  // - (home special-case removed since we no longer use 'home' as a tab)
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return; // no scroll on initial load
+    }
+
+    requestAnimationFrame(() => {
+      // only scroll when navigation came from the sidebar
+      if (scrollFromSidebar.current) {
+        const el = document.getElementById(activeTab);
+        el?.scrollIntoView({ behavior: "smooth", block: "start" });
+        scrollFromSidebar.current = false; // reset
+      }
+    });
+  }, [activeTab]);
+
+  // Sidebar click handler: switch tab (scroll handled by the effect above)
+  const handleGoto = (id) => {
+    scrollFromSidebar.current = true; // flag that this change came from sidebar
+    setActiveTab(id);
+  };
 
   const workExperience = [
     {
-      title: "Senior Product Designer @ Meta",
-      company: "Meta",
-      duration: "2:2022–Present",
-      views: "15K",
-      thumbnail:
-        "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=300&h=200&fit=crop",
+      title: "Teaching Assistant",
+      company: "Viterbi K-12, USC",
+      duration: "6:2025–8:2025",
+      views: "10K",
+      thumbnail: "/images/viterbi-k12.png",
       description:
-        "Leading design for Instagram Shopping, increasing conversion by 45% • Shipped 3 major product features to 2B+ users • Led cross-functional team of 12 engineers and PMs",
-      tags: ["UI/UX", "Product Strategy", "Team Leadership"],
+        "Teaching Cybersecurity, Python, and Game Development to high school students as part of USC’s outreach program. Design and deliver interactive, hands-on lessons to simplify complex CS concepts and encourage active learning. Help create a fun, inclusive environment that fosters curiosity and foundational tech skills.",
+      tags: ["Teaching", "CyberSecurity"],
     },
     {
-      title: "Lead Designer @ Spotify",
-      company: "Spotify",
-      duration: "1:2020–2:2022",
+      title: "Software Developer Intern",
+      company: "Punjab National Bank",
+      duration: "6:2024-9:2024",
       views: "12K",
-      thumbnail:
-        "https://images.unsplash.com/photo-1611339555312-e607c8352fd7?w=300&h=200&fit=crop",
+      thumbnail: "/images/pnb.png",
       description:
-        "Redesigned playlist creation flow, boosting user engagement by 30% • Established design system used by 50+ designers • Mentored 4 junior designers to senior level",
-      tags: ["Design Systems", "Mobile Design", "Mentorship"],
+        "In my role as a Software Developer Intern at Punjab National Bank (PNB), a prestigious government-owned financial institution, I was actively engaged in the process of developing and enhancing digital banking solutions. I was responsible for collaborating with senior developers, developing the modern banking interfaces and developing and testing software applications.",
+      tags: ["Web Development", "Design Systems"],
     },
     {
-      title: "Product Designer @ Airbnb",
-      company: "Airbnb",
-      duration: "2:2018–1:2020",
+      title: "Software Developer Intern",
+      company: "Vartulz Technologies Pvt. Ltd.",
+      duration: "2:2024–4:2024",
       views: "8K",
-      thumbnail:
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop",
+      thumbnail: "/images/vartulz.png",
       description:
-        "Designed host onboarding experience, reducing time-to-first-booking by 25% • Created responsive booking flow for 10M+ properties • Collaborated with international teams across 5 countries",
-      tags: ["UX Research", "International Design", "Growth"],
+        "Software Developer Intern at Vartulz Technologies, where I enhanced the website by adding new functionalities, designed analytics frameworks, and integrated user data collection features.",
+      tags: ["UX Design", "Data Analytics"],
     },
     {
-      title: "UI Designer @ Uber",
-      company: "Uber",
-      duration: "1:2016–2:2018",
+      title: "Operational Analyst",
+      company: "LMDMax",
+      duration: "8:2023–1:2024",
       views: "6K",
-      thumbnail:
-        "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=300&h=200&fit=crop",
+      thumbnail: "/images/lmdmax.png",
       description:
-        "Designed driver app interface used by 5M+ drivers globally • Improved app rating from 3.2 to 4.6 stars • Reduced support tickets by 40% through better UX",
-      tags: ["Mobile Apps", "Driver Experience", "Global Scale"],
+        "In my previous role as an Operational Analyst intern, I was actively engaged in the process of optimizing operational efficiency and streamlining workflows. I was responsible for collecting and analyzing data, allowing me to identify areas for improvement and provide data-driven insights to support decision-making.",
+      tags: ["Data Analytics", "Systems Design"],
     },
   ];
 
+  // NEW: separate data source for the Projects tab (unlinks from workExperience)
+  // moved to its own component (ProjectsTab) for clarity and reuse
+
   const subscriptions = [
-    { name: "Figma", avatar: "F", isLive: true },
-    { name: "Adobe Creative", avatar: "A", isLive: true },
-    { name: "Product Hunt", avatar: "P", isLive: false },
-    { name: "Design Systems", avatar: "D", isLive: true },
-    { name: "UX Research", avatar: "U", isLive: false },
-    { name: "Leadership", avatar: "L", isLive: true },
+    { name: "Web Development", avatar: "W", isLive: true },
+    { name: "AI Automation", avatar: "A", isLive: true },
+    { name: "Machine Learning", avatar: "M", isLive: false },
+    { name: "Game Development", avatar: "G", isLive: true },
+    { name: "App Development", avatar: "A", isLive: true },
+    { name: "Data Science", avatar: "D", isLive: false },
   ];
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white">
       <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div className="flex">
-        <Sidebar open={sidebarOpen} subscriptions={subscriptions} />
+        {/* Pass active tab + goto handler so the blue dot tracks the visible section */}
+        <Sidebar
+          open={sidebarOpen}
+          subscriptions={subscriptions}
+          activeId={activeTab}
+          onGoto={handleGoto}
+        />
+
         <main className="flex-1">
           <HeroSection />
           <VideoInfo />
+
+          {/* Tabs area */}
           <div className="px-6">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
               <TabsList className="bg-transparent border-b border-gray-800 rounded-none h-auto p-0 w-full justify-start">
-                <TabsTrigger value="home" className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400">Home</TabsTrigger>
-                <TabsTrigger value="skills" className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400">Skills</TabsTrigger>
-                <TabsTrigger value="experience" className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400">Work Exp</TabsTrigger>
-                <TabsTrigger value="education" className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400">Education</TabsTrigger>
+                {/* Home -> Work Experience (id/value: 'experience') */}
+                <TabsTrigger
+                  value="experience"
+                  className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400"
+                >
+                  Work Experience
+                </TabsTrigger>
+
+                <TabsTrigger
+                  value="skills"
+                  className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400"
+                >
+                  Skills
+                </TabsTrigger>
+
+                {/* Work Exp -> Projects (id/value: 'projects') */}
+                <TabsTrigger
+                  value="projects"
+                  className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400"
+                >
+                  Projects
+                </TabsTrigger>
+
+                <TabsTrigger
+                  value="education"
+                  className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400"
+                >
+                  Education
+                </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="home" className="mt-6">
-                <HomeTab workExperience={workExperience} />
+              {/* Targets for scrolling; scroll offset handled by sticky header */}
+              {/* First tab now renders Experience content */}
+              <TabsContent value="experience" id="experience" className="mt-6 scroll-mt-24">
+                {/* tile/placard layout using HomeTab with experience data */}
+                <HomeTab projects={workExperience} />
               </TabsContent>
 
-              <TabsContent value="skills" className="mt-6">
+              <TabsContent value="skills" id="skills" className="mt-6 scroll-mt-24">
                 <SkillsTab />
               </TabsContent>
 
-              <TabsContent value="experience" className="mt-6">
-                <ExperienceTab workExperience={workExperience} />
+              {/* Projects tab uses the grid cards (previous HomeTab) */}
+              <TabsContent value="projects" id="projects" className="mt-6 scroll-mt-24">
+                <ProjectsTab />
               </TabsContent>
 
-              <TabsContent value="education" className="mt-6">
+              <TabsContent value="education" id="education" className="mt-6 scroll-mt-24">
                 <EducationTab />
               </TabsContent>
             </Tabs>

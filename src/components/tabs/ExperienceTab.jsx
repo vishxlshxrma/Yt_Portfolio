@@ -1,9 +1,9 @@
 import React from "react";
 import { Badge } from "components/ui/badge";
 
-export default function ExperienceTab({ workExperience }) {
+export default function ExperienceTab({ workExperience = [] }) {
   return (
-    <div className="space-y-6">
+    <section id="experience" className="space-y-6 scroll-mt-24">
       {workExperience.map((exp, i) => (
         <div key={i} className="flex space-x-4 p-4 bg-[#1a1a1a] rounded-lg hover:bg-[#222222] transition-colors">
           <img src={exp.thumbnail} alt={exp.title} className="w-32 h-20 object-cover rounded flex-shrink-0" />
@@ -23,6 +23,6 @@ export default function ExperienceTab({ workExperience }) {
           </div>
         </div>
       ))}
-    </div>
+    </section>
   );
 }
