@@ -21,9 +21,8 @@ export default function Sidebar({ open, subscriptions = [], activeId, onGoto }) 
   // "You" section — each maps to an existing top section
   const youItems = [
     { id: "experience", label: "History", Icon: History }, // takes to Work Experience
-    { id: "projects", label: "Projects", Icon: List }, // takes to Projects
-    { id: "projects", label: "Your work", Icon: Video }, // also Projects
-    { id: "education", label: "Your education", Icon: GraduationCap }, // takes to Education
+    { id: "projects", label: "Past Works", Icon: Video }, // also Projects
+    { id: "education", label: "My Education", Icon: GraduationCap }, // takes to Education
   ];
 
   return (
@@ -54,7 +53,7 @@ export default function Sidebar({ open, subscriptions = [], activeId, onGoto }) 
         {/* You Section */}
         <div className="mb-6">
           <div className="flex items-center space-x-2 px-3 py-2 text-white">
-            <span className="text-sm font-medium">You</span>
+            <span className="text-sm font-medium">A little about me</span>
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"

@@ -15,8 +15,8 @@ export default function HeroSection() {
             <div className="w-20 h-20 bg-[#FF0000] rounded-full flex items-center justify-center mb-4 mx-auto cursor-pointer hover:bg-red-600 transition-colors">
               <Play className="w-8 h-8 text-white fill-current ml-1" />
             </div>
-            <h1 className="text-2xl font-bold mb-2">My Career Journey | Resume 2025</h1>
-            <p className="text-gray-300">I tend to solve real-world problems.</p>
+            <h1 className="text-2xl font-bold mb-2">My Career Journey | Resume</h1>
+            <p className="text-gray-300">I tend to look at creative solutions to complex problems.</p>
           </div>
         </div>
       </div>
