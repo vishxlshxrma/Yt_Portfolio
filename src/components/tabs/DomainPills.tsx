@@ -6,7 +6,7 @@ type Props = {
   onSelect: (id: DomainId) => void;
 };
 
-export default function CategoryPills({ domains, activeDomainId, onSelect }: Props) {
+export default function DomainPills({ domains, activeDomainId, onSelect }: Props) {
   return (
     <div className="flex flex-wrap items-center gap-3 justify-center lg:justify-start">
       {domains.map((domain) => {

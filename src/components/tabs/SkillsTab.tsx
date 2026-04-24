@@ -2,21 +2,65 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import SkillSphereScene from "./SkillSphereScene";
 import InfoPanel from "./InfoPanel";
-import CategoryPills from "./CategoryPills";
-import { categoryOrder, skillCategories, type CategoryId } from "./skillsData";
+import DomainPills from "./DomainPills";
+import { 
+  domains, 
+  skills, 
+  projects,
+  getDomain,
+  getSkillsForDomain,
+  getSubclustersForDomain,
+  type DomainId,
+  type Project
+} from "./skillsData";
+
+export type ViewMode = "overview" | "domain" | "skill";
 
 export default function SkillsTab() {
-  const [activeCategoryId, setActiveCategoryId] = useState<CategoryId | null>(null);
+  const [activeDomainId, setActiveDomainId] = useState<DomainId | null>(null);
+  const [activeSkillId, setActiveSkillId] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const pillsRef = useRef<HTMLDivElement>(null);
 
-  const activeCategory = useMemo(
-    () => skillCategories.find((category) => category.id === activeCategoryId) ?? null,
-    [activeCategoryId]
+  // Determine view mode based on state priority
+  const viewMode: ViewMode = activeSkillId ? "skill" : activeDomainId ? "domain" : "overview";
+
+  // Get active domain
+  const activeDomain = useMemo(
+    () => activeDomainId ? getDomain(activeDomainId) ?? null : null,
+    [activeDomainId]
   );
 
-  const previewCategory = activeCategory;
+  // Get active skill
+  const activeSkill = useMemo(
+    () => activeSkillId ? skills.find(s => s.id === activeSkillId) ?? null : null,
+    [activeSkillId]
+  );
+
+  // Get skills for active domain
+  const domainSkills = useMemo(
+    () => activeDomainId ? getSkillsForDomain(activeDomainId) : [],
+    [activeDomainId]
+  );
+
+  // Get subclusters for active domain
+  const domainSubclusters = useMemo(
+    () => activeDomainId ? getSubclustersForDomain(activeDomainId) : [],
+    [activeDomainId]
+  );
+
+  // Get projects for active domain
+  const domainProjects = useMemo(
+    () => activeDomain?.featuredProjectIds.map(id => projects.find(p => p.id === id)).filter(Boolean) as Project[] ?? [],
+    [activeDomain]
+  );
+
+  // Handle domain selection
+  const handleDomainSelect = (domainId: DomainId) => {
+    setActiveDomainId(current => current === domainId ? null : domainId);
+    setActiveSkillId(null); // Clear skill when domain changes
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -54,20 +98,30 @@ export default function SkillsTab() {
       <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
           <div className="relative min-h-[560px] rounded-[2.5rem] border border-white/10 bg-[#070a12]/80 p-4 shadow-[0_50px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl">
-            <SkillSphereScene activeCategoryId={activeCategory?.id ?? null} />
+            <SkillSphereScene 
+              activeDomainId={activeDomainId}
+              activeSkillId={activeSkillId}
+            />
           </div>
 
-          <div ref={panelRef} className="space-y-6">
-            <InfoPanel category={previewCategory} />
+          <div ref={panelRef} className="min-w-0 space-y-6">
+            <InfoPanel 
+              viewMode={viewMode}
+              domain={activeDomain}
+              skill={activeSkill}
+              domainSkills={domainSkills}
+              domainSubclusters={domainSubclusters}
+              domainProjects={domainProjects}
+              domains={domains}
+            />
           </div>
         </div>
 
         <div ref={pillsRef} className="mt-10">
-          <CategoryPills
-            categories={categoryOrder.map((id) => skillCategories.find((item) => item.id === id)!).filter(Boolean)}
-            activeCategoryId={activeCategoryId}
-            onHover={() => {}}
-            onSelect={(id) => setActiveCategoryId((current) => (current === id ? null : id))}
+          <DomainPills
+            domains={domains}
+            activeDomainId={activeDomainId}
+            onSelect={handleDomainSelect}
           />
         </div>
       </div>

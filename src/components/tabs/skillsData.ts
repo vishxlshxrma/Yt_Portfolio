@@ -1,118 +1,373 @@
-export type CategoryId = "ai" | "backend" | "frontend" | "databases" | "infra" | "languages";
+/**
+ * Skill Cosmos Data Model
+ * 
+ * A multi-layer graph-based data structure representing skills across domains,
+ * subclusters, and individual technologies with cross-domain relationships.
+ */
 
-export type SkillItem = {
-  id: string;
+// ============================================================================
+// TYPES
+// ============================================================================
+
+export type SkillType = "language" | "framework" | "library" | "database" | "tool" | "concept" | "platform";
+export type SkillImportance = "core" | "strong" | "familiar" | "learning";
+
+export type DomainId = 
+  | "intelligent-systems" 
+  | "application-engineering" 
+  | "backend-distributed" 
+  | "data-storage" 
+  | "infrastructure-devops" 
+  | "languages-foundations";
+
+export interface Domain {
+  id: DomainId;
   name: string;
-  importance: "core" | "strong" | "familiar";
-  description: string;
-  relatedProjects: string[];
-};
-
-export type SkillCategory = {
-  id: CategoryId;
-  title: string;
+  shortName: string;
   color: string;
   accent: string;
   description: string;
-  skills: SkillItem[];
-  usedIn: string[];
-};
+  whyItMatters: string;
+  subclusterIds: string[];
+  featuredProjectIds: string[];
+  highlightedSkillIds: string[];
+}
 
-export const skillCategories: SkillCategory[] = [
+export interface Subcluster {
+  id: string;
+  name: string;
+  domainId: DomainId;
+  description: string;
+  skillIds: string[];
+}
+
+export interface Skill {
+  id: string;
+  name: string;
+  type: SkillType;
+  importance: SkillImportance;
+  description: string;
+  domainIds: DomainId[];
+  subclusterIds: string[];
+  relatedProjectIds: string[];
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  description: string;
+  skillIds: string[];
+}
+
+// ============================================================================
+// PROJECTS DATA
+// ============================================================================
+
+export const projects: Project[] = [
   {
-    id: "ai",
-    title: "AI / GenAI",
-    color: "#34d6ff",
-    accent: "cyan",
-    description:
-      "Building AI-powered workflows, LLM applications, and computer vision systems.",
-    skills: [
-      { id: "llm", name: "LLMs", importance: "core", description: "Designing and integrating large language models.", relatedProjects: ["SightRanger", "Research publication on Generative AI Integration using APIs"] },
-      { id: "prompt", name: "Prompt Engineering", importance: "strong", description: "Creating precise prompts for AI workflows.", relatedProjects: ["SightRanger", "Research publication on Generative AI Integration using APIs"] },
-      { id: "tensorflow", name: "TensorFlow", importance: "strong", description: "Training and deploying production-ready neural models.", relatedProjects: ["SightRanger"] },
-      { id: "yolov8", name: "YOLOv8", importance: "strong", description: "Real-time computer vision inference and object tracking.", relatedProjects: ["SightRanger"] },
-      { id: "huggingface", name: "Hugging Face", importance: "familiar", description: "Model deployment and transformer pipelines.", relatedProjects: ["Research publication on Generative AI Integration using APIs"] },
-      { id: "vision", name: "Computer Vision", importance: "core", description: "Applying visual analysis to real-world systems.", relatedProjects: ["SightRanger"] },
-    ],
-    usedIn: ["SightRanger", "Research publication on Generative AI Integration using APIs"],
+    id: "transizr",
+    name: "Transizr",
+    description: "AI-powered media transcription platform using distributed workers and real-time job tracking.",
+    skillIds: ["fastapi", "celery", "rabbitmq", "redis", "docker", "python", "distributed-systems", "event-driven", "rest-apis", "postgresql"]
   },
   {
-    id: "backend",
-    title: "Backend",
-    color: "#ff9c3f",
-    accent: "orange",
-    description: "Designing APIs, services, and scalable backend workflows.",
-    skills: [
-      { id: "node", name: "Node.js", importance: "core", description: "Building server architectures and microservices.", relatedProjects: ["Punjab National Bank internship", "Transizr"] },
-      { id: "fastapi", name: "FastAPI", importance: "strong", description: "High-performance Python API design.", relatedProjects: ["Transizr", "SightRanger"] },
-      { id: "express", name: "Express.js", importance: "strong", description: "REST API and middleware systems.", relatedProjects: ["Punjab National Bank internship"] },
-      { id: "rest", name: "REST APIs", importance: "core", description: "Reliable API design for modern applications.", relatedProjects: ["Punjab National Bank internship", "Transizr"] },
-      { id: "api-design", name: "API Design", importance: "core", description: "Designing clean service contracts and workflows.", relatedProjects: ["Transizr"] },
-      { id: "event-driven", name: "Event-Driven Architecture", importance: "strong", description: "Asynchronous systems for scalable workflows.", relatedProjects: ["Transizr"] },
-    ],
-    usedIn: ["Transizr", "Punjab National Bank internship"],
+    id: "sightranger",
+    name: "SightRanger",
+    description: "AI surveillance system using real-time computer vision and dashboard monitoring.",
+    skillIds: ["fastapi", "yolov8", "nextjs", "docker", "python", "computer-vision", "react", "typescript", "tailwind", "redis"]
   },
   {
-    id: "frontend",
-    title: "Frontend",
-    color: "#d45cff",
-    accent: "magenta",
-    description: "Creating responsive interfaces and real-time product experiences.",
-    skills: [
-      { id: "react", name: "React", importance: "core", description: "Building polished, component-driven interfaces.", relatedProjects: ["SightRanger", "Transizr"] },
-      { id: "next", name: "Next.js", importance: "strong", description: "Server-rendered and hybrid React applications.", relatedProjects: ["SightRanger"] },
-      { id: "tailwind", name: "Tailwind CSS", importance: "core", description: "Fast, consistent UI styling for premium layouts.", relatedProjects: ["Transizr", "Portfolio"] },
-      { id: "typescript", name: "TypeScript", importance: "core", description: "Typed code that scales across UI and system layers.", relatedProjects: ["SightRanger", "Transizr"] },
-      { id: "dashboard", name: "Real-time Dashboards", importance: "strong", description: "Interactive, data-rich interfaces for stakeholders.", relatedProjects: ["Transizr"] },
-    ],
-    usedIn: ["SightRanger", "Transizr"],
+    id: "pnb-internship",
+    name: "Punjab National Bank Internship",
+    description: "Litigation management and banking workflow automation using backend APIs and database optimization.",
+    skillIds: ["nodejs", "express", "rest-apis", "mysql", "java-servlets", "jsp", "apache-tomcat", "database-design", "postgresql"]
   },
   {
-    id: "databases",
-    title: "Databases",
-    color: "#34ff88",
-    accent: "green",
-    description: "Working with relational and in-memory systems for storage, caching, and live updates.",
-    skills: [
-      { id: "postgresql", name: "PostgreSQL", importance: "core", description: "Reliable relational data modeling and analytics.", relatedProjects: ["Punjab National Bank internship"] },
-      { id: "mysql", name: "MySQL", importance: "core", description: "Production-grade transactional databases.", relatedProjects: ["Punjab National Bank internship"] },
-      { id: "redis", name: "Redis", importance: "strong", description: "Caching and fast data layer design.", relatedProjects: ["Transizr"] },
-      { id: "firebase", name: "Firebase", importance: "familiar", description: "Realtime backend and user authentication flows.", relatedProjects: ["Portfolio"] },
-    ],
-    usedIn: ["Punjab National Bank internship", "Transizr"],
+    id: "usc-ta",
+    name: "USC Teaching Assistant",
+    description: "Teaching cybersecurity, Python, and game development foundations to high school students.",
+    skillIds: ["python", "cybersecurity", "game-development", "problem-solving", "technical-communication"]
   },
   {
-    id: "infra",
-    title: "Systems / Infra",
-    color: "#b16cff",
-    accent: "purple",
-    description: "Using containers, queues, distributed workflows, and production-ready infrastructure patterns.",
-    skills: [
-      { id: "docker", name: "Docker", importance: "core", description: "Containerized deployments and reproducible environments.", relatedProjects: ["Transizr", "SightRanger"] },
-      { id: "rabbitmq", name: "RabbitMQ", importance: "strong", description: "Message queues for resilient background workflows.", relatedProjects: ["Transizr"] },
-      { id: "celery", name: "Celery", importance: "strong", description: "Task orchestration for scalable async jobs.", relatedProjects: ["Transizr"] },
-      { id: "distributed", name: "Distributed Systems", importance: "core", description: "Designing systems that scale across services and teams.", relatedProjects: ["Transizr"] },
-      { id: "microservices", name: "Microservices", importance: "strong", description: "Modular service design for flexibility and reliability.", relatedProjects: ["Transizr"] },
-      { id: "git", name: "Git / GitHub", importance: "core", description: "Collaborative version control and deployment workflows.", relatedProjects: ["All projects"] },
-    ],
-    usedIn: ["Transizr", "SightRanger"],
+    id: "genai-research",
+    name: "Generative AI Research",
+    description: "Research on LLM and API integration strategies for practical AI-augmented workflows.",
+    skillIds: ["llms", "generative-ai", "prompt-engineering", "api-integration", "python", "fastapi"]
   },
   {
-    id: "languages",
-    title: "Languages",
-    color: "#ff5466",
-    accent: "red",
-    description: "Core languages I use across backend, frontend, systems, and applied AI work.",
-    skills: [
-      { id: "python", name: "Python", importance: "core", description: "Primary language for backend, AI, and automation.", relatedProjects: ["SightRanger", "Research publication on Generative AI Integration using APIs"] },
-      { id: "javascript", name: "JavaScript", importance: "core", description: "Client-side logic and interactive user experiences.", relatedProjects: ["Portfolio", "Transizr"] },
-      { id: "typescript", name: "TypeScript", importance: "core", description: "Typed applications for front-to-back consistency.", relatedProjects: ["Portfolio", "SightRanger"] },
-      { id: "go", name: "Go", importance: "strong", description: "Compiled services and efficient backend tooling.", relatedProjects: ["Research publication on Generative AI Integration using APIs"] },
-      { id: "java", name: "Java", importance: "familiar", description: "Object-oriented architecture and enterprise integration.", relatedProjects: ["Punjab National Bank internship"] },
-      { id: "sql", name: "SQL", importance: "core", description: "Structured queries for analytics and transactional systems.", relatedProjects: ["Punjab National Bank internship"] },
-    ],
-    usedIn: ["Punjab National Bank internship", "Research publication on Generative AI Integration using APIs"],
-  },
+    id: "portfolio",
+    name: "Portfolio",
+    description: "Interactive portfolio with 3D skill cosmos and real-time animations.",
+    skillIds: ["react", "nextjs", "typescript", "tailwind", "threejs", "react-three-fiber", "gsap"]
+  }
 ];
 
-export const categoryOrder: CategoryId[] = ["ai", "backend", "frontend", "databases", "infra", "languages"];
+// ============================================================================
+// DOMAINS DATA
+// ============================================================================
+
+export const domains: Domain[] = [
+  {
+    id: "intelligent-systems",
+    name: "Intelligent Systems",
+    shortName: "AI & ML",
+    color: "#34d6ff",
+    accent: "cyan",
+    description: "AI, machine learning, computer vision, and data-driven workflows used to build intelligent product experiences.",
+    whyItMatters: "This layer shows my ability to apply AI and data techniques to practical systems rather than treating AI as a standalone buzzword.",
+    subclusterIds: ["machine-learning", "generative-ai", "computer-vision", "data-science"],
+    featuredProjectIds: ["sightranger", "genai-research"],
+    highlightedSkillIds: ["python", "llms", "tensorflow", "yolov8", "huggingface", "numpy", "pandas"]
+  },
+  {
+    id: "application-engineering",
+    name: "Application Engineering",
+    shortName: "Apps & UI",
+    color: "#d45cff",
+    accent: "magenta",
+    description: "Web, mobile, dashboard, and interactive application development across user-facing product surfaces.",
+    whyItMatters: "This layer represents my ability to turn systems into usable products across platforms and interfaces.",
+    subclusterIds: ["web-development", "mobile-development", "game-development", "ui-engineering"],
+    featuredProjectIds: ["portfolio", "sightranger", "transizr"],
+    highlightedSkillIds: ["react", "nextjs", "typescript", "javascript", "tailwind", "swift", "swiftui"]
+  },
+  {
+    id: "backend-distributed",
+    name: "Backend & Distributed Systems",
+    shortName: "Backend",
+    color: "#ff9c3f",
+    accent: "orange",
+    description: "APIs, services, queues, async workflows, and distributed architecture patterns for scalable software.",
+    whyItMatters: "This layer connects product logic with reliability, performance, and system-level thinking.",
+    subclusterIds: ["api-design", "microservices", "event-driven-systems", "system-design"],
+    featuredProjectIds: ["transizr", "pnb-internship", "sightranger"],
+    highlightedSkillIds: ["fastapi", "nodejs", "express", "rest-apis", "celery", "rabbitmq", "redis"]
+  },
+  {
+    id: "data-storage",
+    name: "Data & Storage Systems",
+    shortName: "Data",
+    color: "#34ff88",
+    accent: "green",
+    description: "Databases, caching, data pipelines, query design, and analytics foundations for reliable data handling.",
+    whyItMatters: "This layer shows how I structure, store, retrieve, and analyze data across software systems.",
+    subclusterIds: ["relational-databases", "nosql-caching", "data-modeling", "data-analysis"],
+    featuredProjectIds: ["transizr", "pnb-internship", "sightranger"],
+    highlightedSkillIds: ["postgresql", "mysql", "redis", "firebase", "sql", "database-design"]
+  },
+  {
+    id: "infrastructure-devops",
+    name: "Infrastructure & DevOps",
+    shortName: "Infra",
+    color: "#b16cff",
+    accent: "purple",
+    description: "Containers, deployment workflows, automation, version control, and production-readiness practices.",
+    whyItMatters: "This layer shows my understanding of how software moves from local development to maintainable systems.",
+    subclusterIds: ["containers", "ci-cd", "cloud-fundamentals", "developer-tooling"],
+    featuredProjectIds: ["transizr", "sightranger", "pnb-internship"],
+    highlightedSkillIds: ["docker", "docker-compose", "git", "github", "apache-tomcat", "aws", "deployment"]
+  },
+  {
+    id: "languages-foundations",
+    name: "Languages & Foundations",
+    shortName: "Foundations",
+    color: "#ff5466",
+    accent: "red",
+    description: "Programming languages, CS fundamentals, engineering practices, and problem-solving foundations.",
+    whyItMatters: "This layer represents the fundamentals that let me adapt across stacks, domains, and engineering problems.",
+    subclusterIds: ["programming-languages", "cs-fundamentals", "software-engineering", "problem-solving"],
+    featuredProjectIds: ["pnb-internship", "usc-ta", "genai-research"],
+    highlightedSkillIds: ["python", "javascript", "typescript", "go", "swift", "java", "sql", "oop", "data-structures"]
+  }
+];
+
+// ============================================================================
+// SUBCLUSTERS DATA
+// ============================================================================
+
+export const subclusters: Subcluster[] = [
+  // Intelligent Systems
+  { id: "machine-learning", name: "Machine Learning", domainId: "intelligent-systems", description: "ML models, training pipelines, and predictive systems", skillIds: ["tensorflow", "scikit-learn", "pytorch", "ml-modeling"] },
+  { id: "generative-ai", name: "Generative AI", domainId: "intelligent-systems", description: "LLMs, prompt engineering, and AI-generated content", skillIds: ["llms", "generative-ai", "prompt-engineering", "huggingface", "langchain"] },
+  { id: "computer-vision", name: "Computer Vision", domainId: "intelligent-systems", description: "Image processing, object detection, and visual AI", skillIds: ["yolov8", "opencv", "computer-vision", "image-processing"] },
+  { id: "data-science", name: "Data Science", domainId: "intelligent-systems", description: "Data analysis, visualization, and statistical modeling", skillIds: ["numpy", "pandas", "matplotlib", "data-science", "predictive-modeling"] },
+  
+  // Application Engineering
+  { id: "web-development", name: "Web Development", domainId: "application-engineering", description: "Full-stack web applications and frameworks", skillIds: ["react", "nextjs", "javascript", "typescript", "tailwind", "html", "css"] },
+  { id: "mobile-development", name: "Mobile Development", domainId: "application-engineering", description: "iOS and Android native applications", skillIds: ["swift", "swiftui", "ios-development", "android", "react-native"] },
+  { id: "game-development", name: "Game Development", domainId: "application-engineering", description: "Game logic, physics, and interactive experiences", skillIds: ["game-development", "unity", "c#", "game-physics"] },
+  { id: "ui-engineering", name: "UI Engineering", domainId: "application-engineering", description: "User interface design and implementation", skillIds: ["ui-design", "responsive-design", "accessibility", "animation"] },
+  
+  // Backend & Distributed Systems
+  { id: "api-design", name: "API Design", domainId: "backend-distributed", description: "RESTful APIs, GraphQL, and service contracts", skillIds: ["rest-apis", "graphql", "fastapi", "express", "api-documentation"] },
+  { id: "microservices", name: "Microservices", domainId: "backend-distributed", description: "Service architecture and decomposition", skillIds: ["microservices", "service-mesh", "api-gateway", "container-orchestration"] },
+  { id: "event-driven-systems", name: "Event-Driven Systems", domainId: "backend-distributed", description: "Message queues, event sourcing, and async workflows", skillIds: ["event-driven", "celery", "rabbitmq", "kafka", "redis-pubsub"] },
+  { id: "system-design", name: "System Design", domainId: "backend-distributed", description: "Scalability patterns and distributed architecture", skillIds: ["distributed-systems", "system-design", "scalability", "load-balancing"] },
+  
+  // Data & Storage Systems
+  { id: "relational-databases", name: "Relational Databases", domainId: "data-storage", description: "SQL databases and query optimization", skillIds: ["postgresql", "mysql", "sql", "database-design", "query-optimization"] },
+  { id: "nosql-caching", name: "NoSQL & Caching", domainId: "data-storage", description: "Document stores, key-value stores, and caching layers", skillIds: ["redis", "mongodb", "firebase", "caching-strategies"] },
+  { id: "data-modeling", name: "Data Modeling", domainId: "data-storage", description: "Schema design and data architecture", skillIds: ["database-design", "er-modeling", "normalization", "data-warehousing"] },
+  { id: "data-analysis", name: "Data Analysis", domainId: "data-storage", description: "ETL pipelines and analytics workflows", skillIds: ["etl", "data-pipelines", "analytics", "business-intelligence"] },
+  
+  // Infrastructure & DevOps
+  { id: "containers", name: "Containers", domainId: "infrastructure-devops", description: "Docker, Kubernetes, and containerization", skillIds: ["docker", "docker-compose", "kubernetes", "containerization"] },
+  { id: "ci-cd", name: "CI/CD", domainId: "infrastructure-devops", description: "Continuous integration and deployment pipelines", skillIds: ["ci-cd", "github-actions", "jenkins", "automated-testing"] },
+  { id: "cloud-fundamentals", name: "Cloud Fundamentals", domainId: "infrastructure-devops", description: "Cloud platforms and serverless computing", skillIds: ["aws", "gcp", "azure", "serverless", "cloudformation"] },
+  { id: "developer-tooling", name: "Developer Tooling", domainId: "infrastructure-devops", description: "Version control, debugging, and productivity tools", skillIds: ["git", "github", "debugging", "performance-optimization", "environment-management"] },
+  
+  // Languages & Foundations
+  { id: "programming-languages", name: "Programming Languages", domainId: "languages-foundations", description: "Multiple programming languages and paradigms", skillIds: ["python", "javascript", "typescript", "go", "swift", "java", "c#", "sql"] },
+  { id: "cs-fundamentals", name: "CS Fundamentals", domainId: "languages-foundations", description: "Computer science core concepts", skillIds: ["data-structures", "algorithms", "oop", "functional-programming"] },
+  { id: "software-engineering", name: "Software Engineering", domainId: "languages-foundations", description: "Development practices and methodologies", skillIds: ["agile", "scrum", "tdd", "code-review", "technical-documentation"] },
+  { id: "problem-solving", name: "Problem Solving", domainId: "languages-foundations", description: "Analytical thinking and solution design", skillIds: ["problem-solving", "debugging", "logical-thinking", "systematic-analysis"] }
+];
+
+// ============================================================================
+// SKILLS DATA
+// ============================================================================
+
+export const skills: Skill[] = [
+  // Intelligent Systems
+  { id: "python", name: "Python", type: "language", importance: "core", description: "Primary language for backend, AI, and automation", domainIds: ["intelligent-systems", "backend-distributed", "data-storage", "languages-foundations"], subclusterIds: ["machine-learning", "generative-ai", "data-science", "api-design", "event-driven-systems", "programming-languages", "cs-fundamentals"], relatedProjectIds: ["sightranger", "transizr", "genai-research", "usc-ta"] },
+  { id: "llms", name: "LLMs", type: "concept", importance: "core", description: "Large language models for natural language processing", domainIds: ["intelligent-systems"], subclusterIds: ["generative-ai"], relatedProjectIds: ["genai-research", "sightranger"] },
+  { id: "generative-ai", name: "Generative AI", type: "concept", importance: "core", description: "AI systems that generate content, text, and media", domainIds: ["intelligent-systems"], subclusterIds: ["generative-ai"], relatedProjectIds: ["genai-research"] },
+  { id: "prompt-engineering", name: "Prompt Engineering", type: "concept", importance: "strong", description: "Creating precise prompts for AI workflows", domainIds: ["intelligent-systems"], subclusterIds: ["generative-ai"], relatedProjectIds: ["genai-research", "sightranger"] },
+  { id: "tensorflow", name: "TensorFlow", type: "framework", importance: "strong", description: "Machine learning framework for neural networks", domainIds: ["intelligent-systems"], subclusterIds: ["machine-learning"], relatedProjectIds: ["sightranger"] },
+  { id: "yolov8", name: "YOLOv8", type: "library", importance: "strong", description: "Real-time object detection and computer vision", domainIds: ["intelligent-systems"], subclusterIds: ["computer-vision"], relatedProjectIds: ["sightranger"] },
+  { id: "huggingface", name: "Hugging Face", type: "platform", importance: "strong", description: "Model hub and transformer pipelines", domainIds: ["intelligent-systems"], subclusterIds: ["generative-ai", "machine-learning"], relatedProjectIds: ["genai-research"] },
+  { id: "numpy", name: "NumPy", type: "library", importance: "core", description: "Numerical computing and array operations", domainIds: ["intelligent-systems", "data-storage"], subclusterIds: ["data-science", "machine-learning"], relatedProjectIds: ["sightranger", "genai-research"] },
+  { id: "pandas", name: "pandas", type: "library", importance: "core", description: "Data manipulation and analysis", domainIds: ["intelligent-systems", "data-storage"], subclusterIds: ["data-science", "data-analysis"], relatedProjectIds: ["genai-research"] },
+  { id: "computer-vision", name: "Computer Vision", type: "concept", importance: "core", description: "Visual analysis and image processing systems", domainIds: ["intelligent-systems"], subclusterIds: ["computer-vision"], relatedProjectIds: ["sightranger"] },
+  { id: "scikit-learn", name: "scikit-learn", type: "library", importance: "strong", description: "Machine learning algorithms and tools", domainIds: ["intelligent-systems"], subclusterIds: ["machine-learning"], relatedProjectIds: ["genai-research"] },
+  { id: "pytorch", name: "PyTorch", type: "framework", importance: "familiar", description: "Deep learning framework", domainIds: ["intelligent-systems"], subclusterIds: ["machine-learning"], relatedProjectIds: [] },
+  { id: "opencv", name: "OpenCV", type: "library", importance: "familiar", description: "Computer vision library", domainIds: ["intelligent-systems"], subclusterIds: ["computer-vision"], relatedProjectIds: ["sightranger"] },
+  { id: "data-science", name: "Data Science", type: "concept", importance: "strong", description: "Data analysis and statistical modeling", domainIds: ["intelligent-systems"], subclusterIds: ["data-science"], relatedProjectIds: ["genai-research"] },
+  { id: "predictive-modeling", name: "Predictive Modeling", type: "concept", importance: "familiar", description: "Building models for forecasting and predictions", domainIds: ["intelligent-systems"], subclusterIds: ["machine-learning", "data-science"], relatedProjectIds: [] },
+  
+  // Application Engineering
+  { id: "react", name: "React", type: "framework", importance: "core", description: "Building polished, component-driven interfaces", domainIds: ["application-engineering"], subclusterIds: ["web-development", "ui-engineering"], relatedProjectIds: ["portfolio", "sightranger", "transizr"] },
+  { id: "nextjs", name: "Next.js", type: "framework", importance: "core", description: "Server-rendered and hybrid React applications", domainIds: ["application-engineering"], subclusterIds: ["web-development"], relatedProjectIds: ["portfolio", "sightranger"] },
+  { id: "typescript", name: "TypeScript", type: "language", importance: "core", description: "Typed code that scales across UI and system layers", domainIds: ["application-engineering", "languages-foundations"], subclusterIds: ["web-development", "programming-languages"], relatedProjectIds: ["portfolio", "sightranger", "transizr"] },
+  { id: "javascript", name: "JavaScript", type: "language", importance: "core", description: "Client-side logic and interactive user experiences", domainIds: ["application-engineering", "languages-foundations"], subclusterIds: ["web-development", "programming-languages"], relatedProjectIds: ["portfolio", "transizr"] },
+  { id: "tailwind", name: "Tailwind CSS", type: "framework", importance: "core", description: "Fast, consistent UI styling for premium layouts", domainIds: ["application-engineering"], subclusterIds: ["web-development", "ui-engineering"], relatedProjectIds: ["portfolio", "transizr"] },
+  { id: "swift", name: "Swift", type: "language", importance: "strong", description: "iOS and macOS application development", domainIds: ["application-engineering", "languages-foundations"], subclusterIds: ["mobile-development", "programming-languages"], relatedProjectIds: [] },
+  { id: "swiftui", name: "SwiftUI", type: "framework", importance: "strong", description: "Declarative UI framework for Apple platforms", domainIds: ["application-engineering"], subclusterIds: ["mobile-development"], relatedProjectIds: [] },
+  { id: "html", name: "HTML", type: "language", importance: "core", description: "Markup language for web content", domainIds: ["application-engineering"], subclusterIds: ["web-development"], relatedProjectIds: ["portfolio", "transizr"] },
+  { id: "css", name: "CSS", type: "language", importance: "core", description: "Styling and layout for web interfaces", domainIds: ["application-engineering"], subclusterIds: ["web-development", "ui-engineering"], relatedProjectIds: ["portfolio", "transizr"] },
+  { id: "ios-development", name: "iOS Development", type: "concept", importance: "strong", description: "Native iOS application development", domainIds: ["application-engineering"], subclusterIds: ["mobile-development"], relatedProjectIds: [] },
+  { id: "android", name: "Android", type: "platform", importance: "familiar", description: "Android mobile development", domainIds: ["application-engineering"], subclusterIds: ["mobile-development"], relatedProjectIds: [] },
+  { id: "react-native", name: "React Native", type: "framework", importance: "familiar", description: "Cross-platform mobile development", domainIds: ["application-engineering"], subclusterIds: ["mobile-development"], relatedProjectIds: [] },
+  { id: "threejs", name: "Three.js", type: "library", importance: "strong", description: "3D graphics and WebGL", domainIds: ["application-engineering"], subclusterIds: ["ui-engineering"], relatedProjectIds: ["portfolio"] },
+  { id: "react-three-fiber", name: "React Three Fiber", type: "library", importance: "strong", description: "React renderer for Three.js", domainIds: ["application-engineering"], subclusterIds: ["ui-engineering"], relatedProjectIds: ["portfolio"] },
+  { id: "gsap", name: "GSAP", type: "library", importance: "strong", description: "Animation platform for web", domainIds: ["application-engineering"], subclusterIds: ["ui-engineering"], relatedProjectIds: ["portfolio"] },
+  { id: "ui-design", name: "UI Design", type: "concept", importance: "strong", description: "User interface design principles", domainIds: ["application-engineering"], subclusterIds: ["ui-engineering"], relatedProjectIds: ["portfolio"] },
+  { id: "responsive-design", name: "Responsive Design", type: "concept", importance: "core", description: "Adaptive layouts across devices", domainIds: ["application-engineering"], subclusterIds: ["ui-engineering"], relatedProjectIds: ["portfolio"] },
+  { id: "game-development", name: "Game Development", type: "concept", importance: "strong", description: "Game logic and interactive experiences", domainIds: ["application-engineering"], subclusterIds: ["game-development"], relatedProjectIds: ["usc-ta"] },
+  { id: "unity", name: "Unity", type: "tool", importance: "familiar", description: "Game engine and development platform", domainIds: ["application-engineering"], subclusterIds: ["game-development"], relatedProjectIds: [] },
+  { id: "c#", name: "C#", type: "language", importance: "familiar", description: "Object-oriented language for games and .NET", domainIds: ["application-engineering", "languages-foundations"], subclusterIds: ["game-development", "programming-languages"], relatedProjectIds: [] },
+  
+  // Backend & Distributed Systems
+  { id: "fastapi", name: "FastAPI", type: "framework", importance: "core", description: "High-performance Python API design", domainIds: ["backend-distributed"], subclusterIds: ["api-design"], relatedProjectIds: ["transizr", "sightranger"] },
+  { id: "nodejs", name: "Node.js", type: "framework", importance: "core", description: "Server-side JavaScript runtime", domainIds: ["backend-distributed"], subclusterIds: ["api-design"], relatedProjectIds: ["pnb-internship", "transizr"] },
+  { id: "express", name: "Express.js", type: "framework", importance: "strong", description: "REST API and middleware systems", domainIds: ["backend-distributed"], subclusterIds: ["api-design"], relatedProjectIds: ["pnb-internship"] },
+  { id: "rest-apis", name: "REST APIs", type: "concept", importance: "core", description: "Reliable API design for modern applications", domainIds: ["backend-distributed"], subclusterIds: ["api-design"], relatedProjectIds: ["transizr", "pnb-internship", "sightranger"] },
+  { id: "event-driven", name: "Event-Driven Architecture", type: "concept", importance: "core", description: "Asynchronous systems for scalable workflows", domainIds: ["backend-distributed"], subclusterIds: ["event-driven-systems"], relatedProjectIds: ["transizr"] },
+  { id: "celery", name: "Celery", type: "tool", importance: "core", description: "Task orchestration for scalable async jobs", domainIds: ["backend-distributed"], subclusterIds: ["event-driven-systems"], relatedProjectIds: ["transizr"] },
+  { id: "rabbitmq", name: "RabbitMQ", type: "tool", importance: "core", description: "Message queues for resilient background workflows", domainIds: ["backend-distributed"], subclusterIds: ["event-driven-systems"], relatedProjectIds: ["transizr"] },
+  { id: "distributed-systems", name: "Distributed Systems", type: "concept", importance: "core", description: "Designing systems that scale across services", domainIds: ["backend-distributed"], subclusterIds: ["system-design", "event-driven-systems"], relatedProjectIds: ["transizr"] },
+  { id: "microservices", name: "Microservices", type: "concept", importance: "strong", description: "Modular service design for flexibility", domainIds: ["backend-distributed"], subclusterIds: ["microservices"], relatedProjectIds: ["transizr"] },
+  { id: "system-design", name: "System Design", type: "concept", importance: "strong", description: "Architecture patterns for scalable systems", domainIds: ["backend-distributed"], subclusterIds: ["system-design"], relatedProjectIds: ["transizr"] },
+  { id: "scalability", name: "Scalability", type: "concept", importance: "strong", description: "Designing for growth and load handling", domainIds: ["backend-distributed"], subclusterIds: ["system-design"], relatedProjectIds: ["transizr"] },
+  { id: "java-servlets", name: "Java Servlets", type: "framework", importance: "familiar", description: "Java web application framework", domainIds: ["backend-distributed"], subclusterIds: ["api-design"], relatedProjectIds: ["pnb-internship"] },
+  { id: "jsp", name: "JSP", type: "framework", importance: "familiar", description: "JavaServer Pages for dynamic content", domainIds: ["backend-distributed"], subclusterIds: ["api-design"], relatedProjectIds: ["pnb-internship"] },
+  { id: "api-documentation", name: "API Documentation", type: "concept", importance: "strong", description: "Clear and comprehensive API docs", domainIds: ["backend-distributed"], subclusterIds: ["api-design"], relatedProjectIds: ["transizr", "pnb-internship"] },
+  { id: "graphql", name: "GraphQL", type: "concept", importance: "familiar", description: "Query language for APIs", domainIds: ["backend-distributed"], subclusterIds: ["api-design"], relatedProjectIds: [] },
+  
+  // Data & Storage Systems
+  { id: "postgresql", name: "PostgreSQL", type: "database", importance: "core", description: "Reliable relational data modeling", domainIds: ["data-storage"], subclusterIds: ["relational-databases"], relatedProjectIds: ["pnb-internship", "transizr"] },
+  { id: "mysql", name: "MySQL", type: "database", importance: "core", description: "Production-grade transactional databases", domainIds: ["data-storage"], subclusterIds: ["relational-databases"], relatedProjectIds: ["pnb-internship"] },
+  { id: "sql", name: "SQL", type: "language", importance: "core", description: "Structured queries for data operations", domainIds: ["data-storage", "languages-foundations"], subclusterIds: ["relational-databases", "programming-languages"], relatedProjectIds: ["pnb-internship", "transizr"] },
+  { id: "redis", name: "Redis", type: "database", importance: "core", description: "Caching and fast data layer", domainIds: ["data-storage", "backend-distributed"], subclusterIds: ["nosql-caching", "event-driven-systems"], relatedProjectIds: ["transizr", "sightranger"] },
+  { id: "firebase", name: "Firebase", type: "platform", importance: "strong", description: "Realtime backend and authentication", domainIds: ["data-storage"], subclusterIds: ["nosql-caching"], relatedProjectIds: ["portfolio"] },
+  { id: "database-design", name: "Database Design", type: "concept", importance: "core", description: "Schema architecture and modeling", domainIds: ["data-storage"], subclusterIds: ["data-modeling"], relatedProjectIds: ["pnb-internship", "transizr"] },
+  { id: "query-optimization", name: "Query Optimization", type: "concept", importance: "strong", description: "Performance tuning for databases", domainIds: ["data-storage"], subclusterIds: ["relational-databases"], relatedProjectIds: ["pnb-internship"] },
+  { id: "mongodb", name: "MongoDB", type: "database", importance: "familiar", description: "NoSQL document database", domainIds: ["data-storage"], subclusterIds: ["nosql-caching"], relatedProjectIds: [] },
+  { id: "etl", name: "ETL Concepts", type: "concept", importance: "familiar", description: "Extract, transform, load pipelines", domainIds: ["data-storage"], subclusterIds: ["data-analysis"], relatedProjectIds: [] },
+  { id: "data-pipelines", name: "Data Pipelines", type: "concept", importance: "familiar", description: "Automated data flow systems", domainIds: ["data-storage"], subclusterIds: ["data-analysis"], relatedProjectIds: ["transizr"] },
+  { id: "analytics", name: "Analytics", type: "concept", importance: "familiar", description: "Data analysis and insights", domainIds: ["data-storage"], subclusterIds: ["data-analysis"], relatedProjectIds: [] },
+  { id: "caching-strategies", name: "Caching Strategies", type: "concept", importance: "strong", description: "Performance optimization through caching", domainIds: ["data-storage", "backend-distributed"], subclusterIds: ["nosql-caching"], relatedProjectIds: ["transizr"] },
+  
+  // Infrastructure & DevOps
+  { id: "docker", name: "Docker", type: "tool", importance: "core", description: "Containerized deployments", domainIds: ["infrastructure-devops"], subclusterIds: ["containers"], relatedProjectIds: ["transizr", "sightranger"] },
+  { id: "docker-compose", name: "Docker Compose", type: "tool", importance: "core", description: "Multi-container orchestration", domainIds: ["infrastructure-devops"], subclusterIds: ["containers"], relatedProjectIds: ["transizr", "sightranger"] },
+  { id: "git", name: "Git", type: "tool", importance: "core", description: "Version control system", domainIds: ["infrastructure-devops"], subclusterIds: ["developer-tooling"], relatedProjectIds: ["all"] },
+  { id: "github", name: "GitHub", type: "platform", importance: "core", description: "Code hosting and collaboration", domainIds: ["infrastructure-devops"], subclusterIds: ["developer-tooling"], relatedProjectIds: ["all"] },
+  { id: "apache-tomcat", name: "Apache Tomcat", type: "tool", importance: "strong", description: "Java servlet container", domainIds: ["infrastructure-devops"], subclusterIds: ["containers"], relatedProjectIds: ["pnb-internship"] },
+  { id: "aws", name: "AWS", type: "platform", importance: "familiar", description: "Amazon cloud services", domainIds: ["infrastructure-devops"], subclusterIds: ["cloud-fundamentals"], relatedProjectIds: [] },
+  { id: "deployment", name: "Deployment", type: "concept", importance: "core", description: "Production release processes", domainIds: ["infrastructure-devops"], subclusterIds: ["ci-cd"], relatedProjectIds: ["transizr", "sightranger"] },
+  { id: "ci-cd", name: "CI/CD Concepts", type: "concept", importance: "strong", description: "Continuous integration and delivery", domainIds: ["infrastructure-devops"], subclusterIds: ["ci-cd"], relatedProjectIds: ["transizr"] },
+  { id: "github-actions", name: "GitHub Actions", type: "tool", importance: "familiar", description: "Workflow automation", domainIds: ["infrastructure-devops"], subclusterIds: ["ci-cd"], relatedProjectIds: [] },
+  { id: "kubernetes", name: "Kubernetes", type: "tool", importance: "familiar", description: "Container orchestration", domainIds: ["infrastructure-devops"], subclusterIds: ["containers"], relatedProjectIds: [] },
+  { id: "containerization", name: "Containerization", type: "concept", importance: "core", description: "Packaging applications in containers", domainIds: ["infrastructure-devops"], subclusterIds: ["containers"], relatedProjectIds: ["transizr", "sightranger"] },
+  { id: "debugging-infra", name: "Debugging", type: "concept", importance: "core", description: "Finding and fixing issues", domainIds: ["infrastructure-devops", "languages-foundations"], subclusterIds: ["developer-tooling", "problem-solving"], relatedProjectIds: ["all"] },
+  { id: "performance-optimization", name: "Performance Optimization", type: "concept", importance: "strong", description: "Improving system efficiency", domainIds: ["infrastructure-devops"], subclusterIds: ["developer-tooling"], relatedProjectIds: ["transizr"] },
+  { id: "environment-management", name: "Environment Management", type: "concept", importance: "strong", description: "Managing dev/staging/prod environments", domainIds: ["infrastructure-devops"], subclusterIds: ["developer-tooling"], relatedProjectIds: ["transizr"] },
+  
+  // Languages & Foundations
+  { id: "go", name: "Go", type: "language", importance: "strong", description: "Compiled services and backend tooling", domainIds: ["languages-foundations"], subclusterIds: ["programming-languages"], relatedProjectIds: ["genai-research"] },
+  { id: "java", name: "Java", type: "language", importance: "strong", description: "Enterprise and Android development", domainIds: ["languages-foundations"], subclusterIds: ["programming-languages"], relatedProjectIds: ["pnb-internship"] },
+  { id: "oop", name: "OOP", type: "concept", importance: "core", description: "Object-oriented programming principles", domainIds: ["languages-foundations"], subclusterIds: ["cs-fundamentals"], relatedProjectIds: ["pnb-internship", "usc-ta"] },
+  { id: "data-structures", name: "Data Structures", type: "concept", importance: "core", description: "Arrays, lists, trees, graphs, and more", domainIds: ["languages-foundations"], subclusterIds: ["cs-fundamentals"], relatedProjectIds: ["usc-ta"] },
+  { id: "algorithms", name: "Algorithms", type: "concept", importance: "core", description: "Problem-solving algorithmic techniques", domainIds: ["languages-foundations"], subclusterIds: ["cs-fundamentals"], relatedProjectIds: ["usc-ta"] },
+  { id: "agile", name: "Agile Development", type: "concept", importance: "strong", description: "Iterative development methodology", domainIds: ["languages-foundations"], subclusterIds: ["software-engineering"], relatedProjectIds: ["transizr"] },
+  { id: "scrum", name: "Scrum", type: "concept", importance: "familiar", description: "Agile framework for project management", domainIds: ["languages-foundations"], subclusterIds: ["software-engineering"], relatedProjectIds: [] },
+  { id: "tdd", name: "TDD", type: "concept", importance: "familiar", description: "Test-driven development", domainIds: ["languages-foundations"], subclusterIds: ["software-engineering"], relatedProjectIds: [] },
+  { id: "code-review", name: "Code Review", type: "concept", importance: "strong", description: "Peer code inspection practices", domainIds: ["languages-foundations"], subclusterIds: ["software-engineering"], relatedProjectIds: ["all"] },
+  { id: "technical-communication", name: "Technical Communication", type: "concept", importance: "core", description: "Clear technical documentation and explanation", domainIds: ["languages-foundations"], subclusterIds: ["software-engineering"], relatedProjectIds: ["usc-ta"] },
+  { id: "problem-solving", name: "Problem Solving", type: "concept", importance: "core", description: "Analytical thinking and solution design", domainIds: ["languages-foundations"], subclusterIds: ["problem-solving"], relatedProjectIds: ["all"] },
+  { id: "debugging-foundation", name: "Debugging", type: "concept", importance: "core", description: "Systematic issue identification and resolution", domainIds: ["languages-foundations"], subclusterIds: ["problem-solving"], relatedProjectIds: ["all"] },
+  { id: "cybersecurity", name: "Cybersecurity", type: "concept", importance: "strong", description: "Security principles and practices", domainIds: ["languages-foundations"], subclusterIds: ["cs-fundamentals"], relatedProjectIds: ["usc-ta"] },
+  { id: "functional-programming", name: "Functional Programming", type: "concept", importance: "familiar", description: "Functional programming paradigms", domainIds: ["languages-foundations"], subclusterIds: ["cs-fundamentals"], relatedProjectIds: [] },
+  { id: "api-integration", name: "API Integration", type: "concept", importance: "core", description: "Connecting and integrating external APIs", domainIds: ["languages-foundations", "backend-distributed"], subclusterIds: ["programming-languages", "api-design"], relatedProjectIds: ["genai-research", "sightranger"] }
+];
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+export const getDomain = (id: DomainId): Domain | undefined => 
+  domains.find(d => d.id === id);
+
+export const getSubcluster = (id: string): Subcluster | undefined => 
+  subclusters.find(s => s.id === id);
+
+export const getSkill = (id: string): Skill | undefined => 
+  skills.find(s => s.id === id);
+
+export const getProject = (id: string): Project | undefined => 
+  projects.find(p => p.id === id);
+
+export const getSkillsForDomain = (domainId: DomainId): Skill[] => 
+  skills.filter(s => s.domainIds.includes(domainId));
+
+export const getSubclustersForDomain = (domainId: DomainId): Subcluster[] => 
+  subclusters.filter(s => s.domainId === domainId);
+
+export const getProjectsForSkill = (skillId: string): Project[] => 
+  projects.filter(p => p.skillIds.includes(skillId));
+
+export const getCrossDomainSkills = (): Skill[] => 
+  skills.filter(s => s.domainIds.length > 1);
+
+export const getCoreStack = (): Skill[] => 
+  skills.filter(s => s.importance === "core").slice(0, 8);
+
+export const domainOrder: DomainId[] = [
+  "intelligent-systems",
+  "application-engineering", 
+  "backend-distributed",
+  "data-storage",
+  "infrastructure-devops",
+  "languages-foundations"
+];

@@ -1,68 +1,94 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Line, Stars } from "@react-three/drei";
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { CategoryId, SkillCategory } from "./skillsData";
-import { skillCategories } from "./skillsData";
-import { Color, Group, Vector3 } from "three";
+import { Billboard, Line, Stars, Text } from "@react-three/drei";
+import { useMemo, useRef, useState } from "react";
+import { domains, skills, type DomainId, type SkillImportance } from "./skillsData";
+import { Group, Vector3 } from "three";
 
-const orbitMap: Record<CategoryId, [number, number, number]> = {
-  ai: [1.6, 0.4, -1.2],
-  backend: [-1.5, 0.8, 1.1],
-  frontend: [0.4, -1.3, 1.4],
-  databases: [1.1, -0.8, -1.3],
-  infra: [-1.3, -1.0, 1.0],
-  languages: [0.2, 1.5, 0.9],
+const skillsMap = new Map(skills.map((skill) => [skill.id, skill]));
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+const MAX_SKILLS_PER_DOMAIN = 20;
+
+type SkillGlobeNode = {
+  skillId: string;
+  skillName: string;
+  importance: SkillImportance;
+  domainId: DomainId;
+  domainColor: string;
+  normal: [number, number, number];
+  pointPosition: [number, number, number];
 };
 
-const createClusterLines = (offset: [number, number, number], color: string) => {
-  const lines: Array<[number, number, number][]> = [];
-  for (let i = 0; i < 8; i += 1) {
-    const angle = (Math.PI * 2 * i) / 8;
-    const radius = 1.7 + (i % 3) * 0.08;
-    const start = new Vector3(
-      Math.cos(angle) * 1.28,
-      Math.sin(angle) * 0.28,
-      Math.sin(angle * 1.2) * 1.28
-    );
-    const end = start.clone().multiplyScalar(radius).add(new Vector3(...offset).multiplyScalar(0.12));
-    lines.push([start.toArray(), end.toArray()]);
-  }
-  return lines;
-};
+const scaleVector = (vector: [number, number, number], scalar: number): [number, number, number] => [
+  vector[0] * scalar,
+  vector[1] * scalar,
+  vector[2] * scalar,
+];
 
-function RadiatingCluster({ category, active }: { category: SkillCategory; active: boolean }) {
-  const lines = useMemo(() => createClusterLines(orbitMap[category.id], category.color), [category]);
-  const opacity = active ? 1 : 0.16;
-  return (
-    <group>
-      {lines.map((segment, index) => (
-        <Line
-          key={`${category.id}-${index}`}
-          points={segment as [number, number, number][]}
-          color={category.color}
-          lineWidth={active ? 2.2 : 0.8}
-          transparent
-          opacity={opacity}
-          dashed={false}
-        />
-      ))}
-      {lines.map((segment, index) => (
-        <mesh key={`${category.id}-dot-${index}`} position={segment[1]}>
-          <sphereGeometry args={[0.035, 10, 10]} />
-          <meshStandardMaterial emissive={new Color(category.color)} color="#111827" emissiveIntensity={active ? 0.85 : 0.32} transparent opacity={active ? 0.9 : 0.4} />
-        </mesh>
-      ))}
-    </group>
+const createSkillGlobeNodes = (): SkillGlobeNode[] => {
+  const seenSkillIds = new Set<string>();
+  const pickedSkills = domains.flatMap((domain, domainIndex) =>
+    domain.highlightedSkillIds
+      .slice(0, MAX_SKILLS_PER_DOMAIN)
+      .map((skillId, localIndex) => {
+        if (seenSkillIds.has(skillId)) return null;
+        const skill = skillsMap.get(skillId);
+        if (!skill) return null;
+        seenSkillIds.add(skillId);
+        return {
+          skillId: skill.id,
+          skillName: skill.name,
+          importance: skill.importance,
+          domainId: domain.id,
+          domainColor: domain.color,
+          domainIndex,
+          localIndex,
+        };
+      })
+      .filter(Boolean) as Array<{
+    skillId: string;
+    skillName: string;
+    importance: SkillImportance;
+    domainId: DomainId;
+    domainColor: string;
+    domainIndex: number;
+    localIndex: number;
+  }>
   );
-}
 
+  const total = pickedSkills.length;
+  return pickedSkills.map((item, index) => {
+    const yBase = 1 - ((index + 0.5) / total) * 2;
+    const y = Math.max(-0.93, Math.min(0.93, yBase + Math.sin((index + 1.6) * 1.13) * 0.06));
+    const radius = Math.sqrt(1 - y * y);
+    const theta = index * GOLDEN_ANGLE + item.domainIndex * 0.44 + item.localIndex * 0.16;
+    const normalVec = new Vector3(
+      Math.cos(theta) * radius,
+      y,
+      Math.sin(theta) * radius
+    ).normalize();
+    const normal = normalVec.toArray() as [number, number, number];
+    const pointPosition = scaleVector(normal, 1.44 + (item.localIndex % 2 === 0 ? 0.02 : -0.015));
+
+    return {
+      skillId: item.skillId,
+      skillName: item.skillName,
+      importance: item.importance,
+      domainId: item.domainId,
+      domainColor: item.domainColor,
+      normal,
+      pointPosition,
+    };
+  });
+};
+
+// Background Particle Field
 function ParticleShell() {
   const points = useMemo(() => {
     const positions = [] as number[];
-    for (let i = 0; i < 220; i += 1) {
+    for (let i = 0; i < 300; i += 1) {
       const phi = Math.random() * Math.PI;
       const theta = Math.random() * Math.PI * 2;
-      const radius = 1.85 + Math.random() * 0.5;
+      const radius = 1.9 + Math.random() * 0.6;
       positions.push(Math.cos(theta) * Math.sin(phi) * radius);
       positions.push(Math.sin(theta) * Math.sin(phi) * radius);
       positions.push(Math.cos(phi) * radius);
@@ -75,33 +101,38 @@ function ParticleShell() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" count={points.length / 3} array={points} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.04} color="#7ee2ff" transparent opacity={0.45} depthWrite={false} />
+      <pointsMaterial size={0.035} color="#7ee2ff" transparent opacity={0.35} depthWrite={false} />
     </points>
   );
 }
 
-function SkillSphere({ activeCategoryId }: { activeCategoryId: CategoryId | null }) {
+// Main Skill Cosmos Sphere
+function SkillCosmos({ 
+  activeDomainId, 
+  activeSkillId 
+}: { 
+  activeDomainId: DomainId | null;
+  activeSkillId: string | null;
+}) {
   const sphereRef = useRef<Group>(null);
   const { viewport, mouse } = useThree();
-  const [hovered, setHovered] = useState(false);
-
+  const [hoveredSkillId, setHoveredSkillId] = useState<string | null>(null);
+  const nodes = useMemo(() => createSkillGlobeNodes(), []);
+  
   useFrame((state) => {
     if (!sphereRef.current) return;
     const elapsed = state.clock.getElapsedTime();
-    sphereRef.current.rotation.y = elapsed * 0.12;
-    sphereRef.current.rotation.x = Math.sin(elapsed / 6) * 0.08;
-    sphereRef.current.position.x = mouse.x * viewport.width * 0.12;
-    sphereRef.current.position.y = mouse.y * viewport.height * 0.08;
+    // Slower rotation for more elegant feel
+    sphereRef.current.rotation.y = elapsed * 0.08;
+    sphereRef.current.rotation.x = Math.sin(elapsed / 8) * 0.06;
+    // Subtle mouse parallax
+    sphereRef.current.position.x = mouse.x * viewport.width * 0.08;
+    sphereRef.current.position.y = mouse.y * viewport.height * 0.05;
   });
 
-  useEffect(() => {
-    const handle = () => setHovered(false);
-    window.addEventListener("pointerleave", handle);
-    return () => window.removeEventListener("pointerleave", handle);
-  }, []);
-
   return (
-    <group ref={sphereRef} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
+    <group ref={sphereRef}>
+      {/* Core Sphere */}
       <mesh>
         <sphereGeometry args={[1.4, 64, 64]} />
         <meshStandardMaterial
@@ -109,32 +140,126 @@ function SkillSphere({ activeCategoryId }: { activeCategoryId: CategoryId | null
           roughness={0.15}
           metalness={0.9}
           transparent
-          opacity={0.8}
+          opacity={0.75}
           emissive="#0b3b58"
-          emissiveIntensity={0.28}
+          emissiveIntensity={0.25}
         />
       </mesh>
+      
+      {/* Inner Wireframe */}
       <mesh scale={[1.05, 1.05, 1.05]}>
         <icosahedronGeometry args={[1.44, 3]} />
-        <meshBasicMaterial color="#7ee2ff" transparent opacity={0.12} wireframe />
+        <meshBasicMaterial color="#7ee2ff" transparent opacity={0.1} wireframe />
       </mesh>
+      
+      {/* Outer Glow */}
       <mesh scale={[1.22, 1.22, 1.22]}>
         <sphereGeometry args={[1, 32, 32]} />
-        <meshStandardMaterial color="#31d1ff" roughness={0.9} transparent opacity={0.04} />
+        <meshStandardMaterial color="#31d1ff" roughness={0.9} transparent opacity={0.03} />
       </mesh>
-      {skillCategories.map((category) => (
-        <RadiatingCluster key={category.id} category={category} active={!activeCategoryId || activeCategoryId === category.id} />
-      ))}
+      
+      {/* Skill dots + city-style labels */}
+      {nodes.map((node) => {
+        const domainVisible = !activeDomainId || activeDomainId === node.domainId;
+        const isSelected = activeSkillId === node.skillId;
+        const isHovered = hoveredSkillId === node.skillId;
+        const emphasis = isHovered || isSelected;
+        const skillVisible = !activeSkillId || isSelected;
+        const opacity = domainVisible && skillVisible ? 1 : 0.18;
+        const pointSize =
+          node.importance === "core"
+            ? emphasis ? 0.038 : 0.032
+            : node.importance === "strong"
+              ? emphasis ? 0.034 : 0.028
+              : emphasis ? 0.03 : 0.024;
+        const labelDistance = emphasis ? 1.67 : 1.6;
+        const lineEndDistance = emphasis ? 1.61 : 1.54;
+        const labelPosition = scaleVector(node.normal, labelDistance);
+        const lineEndPosition = scaleVector(node.normal, lineEndDistance);
+
+        return (
+          <group key={node.skillId}>
+            <Line
+              points={[
+                node.pointPosition,
+                lineEndPosition,
+              ] as [number, number, number][]}
+              color={node.domainColor}
+              lineWidth={emphasis ? 1.3 : 0.9}
+              transparent
+              opacity={opacity * (emphasis ? 1 : 0.72)}
+            />
+            <mesh position={node.pointPosition}>
+              <sphereGeometry args={[pointSize, 16, 16]} />
+              <meshStandardMaterial
+                color="#081121"
+                emissive={node.domainColor}
+                emissiveIntensity={emphasis ? 1.4 : 0.95}
+                transparent
+                opacity={opacity}
+              />
+            </mesh>
+            <mesh position={node.pointPosition}>
+              <sphereGeometry args={[pointSize * 2.25, 14, 14]} />
+              <meshBasicMaterial
+                color={node.domainColor}
+                transparent
+                opacity={opacity * (emphasis ? 0.2 : 0.09)}
+              />
+            </mesh>
+            <Billboard position={labelPosition}>
+              <Text
+                fontSize={emphasis ? 0.07 : 0.062}
+                color="#f8fbff"
+                outlineColor="#041221"
+                outlineWidth={0.004}
+                anchorX="center"
+                anchorY="middle"
+                textAlign="center"
+                maxWidth={1.4}
+                fillOpacity={opacity * (emphasis ? 1 : 0.92)}
+                onPointerOver={(event) => {
+                  event.stopPropagation();
+                  setHoveredSkillId(node.skillId);
+                }}
+                onPointerOut={(event) => {
+                  event.stopPropagation();
+                  setHoveredSkillId((current) => (current === node.skillId ? null : current));
+                }}
+              >
+                {node.skillName.toUpperCase()}
+              </Text>
+            </Billboard>
+          </group>
+        );
+      })}
+      
+      {/* Background Particles */}
       <ParticleShell />
+      
+      {/* Center Core */}
       <mesh position={[0, 0, 0]}>
         <icosahedronGeometry args={[0.18, 2]} />
-        <meshStandardMaterial emissive="#ffffff" emissiveIntensity={0.9} color="#0d1220" roughness={0.2} metalness={0.9} transparent opacity={0.95} />
+        <meshStandardMaterial 
+          emissive="#ffffff" 
+          emissiveIntensity={0.85} 
+          color="#0d1220" 
+          roughness={0.2} 
+          metalness={0.9} 
+          transparent 
+          opacity={0.95} 
+        />
       </mesh>
     </group>
   );
 }
 
-export default function SkillSphereScene({ activeCategoryId }: { activeCategoryId: CategoryId | null }) {
+interface Props {
+  activeDomainId: DomainId | null;
+  activeSkillId: string | null;
+}
+
+export default function SkillSphereScene({ activeDomainId, activeSkillId }: Props) {
   return (
     <div className="relative h-[520px] w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#05070f] shadow-[0_50px_120px_rgba(0,0,0,0.45)]">
       <Canvas camera={{ position: [0, 0, 6], fov: 38 }} shadows>
@@ -143,7 +268,7 @@ export default function SkillSphereScene({ activeCategoryId }: { activeCategoryI
         <pointLight position={[6, 4, 8]} intensity={1.1} color="#70d5ff" />
         <pointLight position={[-5, -2, -5]} intensity={0.35} color="#ff5ebe" />
         <Stars radius={40} depth={60} count={2500} factor={4} saturation={0.3} fade />
-        <SkillSphere activeCategoryId={activeCategoryId} />
+        <SkillCosmos activeDomainId={activeDomainId} activeSkillId={activeSkillId} />
       </Canvas>
     </div>
   );
