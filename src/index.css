@@ -53,6 +53,17 @@ code {
   }
 }
 
+@keyframes projectRouteLoad {
+  from {
+    transform: scaleX(0);
+    opacity: 0.7;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
 .animate-experienceOverlayIn {
   animation: experienceOverlayIn 220ms ease-out forwards;
 }

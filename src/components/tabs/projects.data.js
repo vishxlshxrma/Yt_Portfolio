@@ -1,21 +1,54 @@
 // Keep this purely as data so it's easy to reuse/test
 const projects = [
   {
-    title: "Artsy Platform – Web & Android",
+    title: "SightRanger",
+    company: "AI-Powered Smart Surveillance System",
+    duration: "2026",
+    views: "4.1K",
+    thumbnail: "/images/SightRanger.png",
+    description:
+      "Built an intelligent real-time surveillance platform using FastAPI, YOLOv8, and Next.js that monitors webcam or mobile video streams, detects human intrusions, and sends instant email alerts with captured evidence. Designed modular backend and frontend services with bulk video processing and Docker-based deployment for scalable monitoring workflows.",
+    tags: ["FastAPI", "YOLOv8", "Next.js", "Tailwind", "Docker"],
+  },
+  {
+    title: "CodeBundle",
+    company: "CLI Tool for AI-Ready Codebase Export",
+    duration: "2026",
+    views: "3.2K",
+    thumbnail: "/images/CodeBundle.png",
+    description:
+      "Created a lightweight Go CLI that bundles an entire directory into a single structured text file for AI tools, code reviews, and project snapshots. Added recursive file collection, tree-style structure output, fast mode for large repositories, and a zero-config developer experience optimized for sharing full codebases with LLMs.",
+    tags: ["Go", "CLI", "Developer Tools", "LLM Workflow", "Automation"],
+  },
+  {
+    title: "Transizr",
+    company: "AI-Powered Media Transcription Platform",
+    duration: "2026",
+    views: "4.6K",
+    thumbnail: "/images/Transizr.png",
+    description:
+      "Developed a distributed transcription system for audio and video processing with FastAPI, Celery, RabbitMQ, Redis, and containerized workers. Implemented scalable task execution, media optimization, and real-time status updates through Redis Pub-Sub and Server-Sent Events to support reliable high-volume transcription workloads.",
+    tags: ["FastAPI", "Celery", "RabbitMQ", "Redis", "Docker"],
+  },
+  {
+    title: "Artsy Platform – Web App",
     company: "USC Web Development Project",
     duration: "2025",
     views: "3.8K",
     thumbnail: "/images/artsy.png",
     description:
-      "Developed a dual-platform art-sharing ecosystem featuring an Android app (Kotlin + Firebase) and a web version (Angular + Node.js). Enabled creators to upload, explore, and recommend digital artworks. Integrated Hugging Face image models for art-style classification, AI-based tag generation, and personalized recommendations. Designed scalable APIs, responsive routing, and seamless synchronization across web and mobile clients.",
-    tags: [
-      "Kotlin",
-      "Angular",
-      "Node.js",
-      "Firebase",
-      "Hugging Face",
-      "AI Recommendations",
-    ],
+      "Developed a scalable full-stack web application using Angular and Node.js, integrating third-party APIs (Artsy) to deliver real-time artist search, artwork insights, and similarity-based discovery. Implemented secure authentication (JWT), state management, and a personalized favorites system using MongoDB, with a responsive and component-driven frontend architecture.",
+    tags: ["Angular", "Node.js", "MongoDB", "JWT Auth", "Artsy API"],
+  },
+  {
+    title: "Artsy Platform – Android App",
+    company: "USC Mobile Development Project",
+    duration: "2025",
+    views: "3.6K",
+    thumbnail: "/images/artsy.png",
+    description:
+      "Developed a scalable Android application using Kotlin and Jetpack Compose, leveraging REST APIs (Artsy) for real-time artist discovery, artwork insights, and similarity-based exploration. Implemented MVVM architecture, asynchronous data handling with coroutines, and a personalized favorites system with persistent user sessions.",
+    tags: ["Kotlin", "Jetpack Compose", "MVVM", "Coroutines", "Artsy API"],
   },
   {
     title: "Morph Runner",
@@ -84,8 +117,8 @@ const projects = [
     views: "2.5K",
     thumbnail: "/images/invoice.png",
     description:
-      "Developed a secure full-stack invoicing app with React + TypeScript frontend and Node.js backend. Integrated AI-based OCR validation using Tesseract and OpenAI embeddings for smart invoice summaries.",
-    tags: ["React", "Node.js", "TypeScript", "OCR", "AI Embeddings"],
+      "Developed a scalable full-stack invoicing platform using React, TypeScript, and Node.js, featuring secure JWT-based authentication, dynamic invoice creation with real-time GST calculations, and automated PDF generation via Puppeteer. Designed RESTful APIs with MongoDB for efficient data management and retrieval.",
+    tags: ["React", "TypeScript", "Node.js", "MongoDB", "Puppeteer"],
   },
   {
     title: "Sales Analysis Dashboard",
@@ -94,8 +127,8 @@ const projects = [
     views: "2K",
     thumbnail: "/images/sales-dashboard.png",
     description:
-      "Created an AI-powered analytics dashboard that visualizes sales data, auto-generates GPT-based summaries, and detects anomalies across multiple KPIs using data pipelines built in Python.",
-    tags: ["Python", "Pandas", "Matplotlib", "OpenAI API", "EDA"],
+      "Developed a data analysis pipeline using Python, Pandas, and Matplotlib to process and visualize sales data, enabling insights into trends, product performance, and customer behavior through structured exploratory analysis.",
+    tags: ["Python", "Pandas", "Matplotlib", "EDA", "Data Analysis"],
   },
   {
     title: "Music Store Analytics",
@@ -104,8 +137,8 @@ const projects = [
     views: "1.8K",
     thumbnail: "/images/music-store.png",
     description:
-      "Performed deep SQL analytics on a digital music store dataset using joins, CTEs, and window functions. Summarized user and genre trends via GPT-enhanced reporting in Streamlit dashboards.",
-    tags: ["PostgreSQL", "SQL", "Streamlit", "OpenAI API", "Data Analytics"],
+      "Designed complex SQL queries using joins, CTEs, and window functions to analyze a digital music store dataset, uncovering insights into customer purchasing behavior, genre trends, and revenue distribution.",
+    tags: ["PostgreSQL", "SQL", "CTEs", "Window Functions", "Data Analysis"],
   },
 ];
 

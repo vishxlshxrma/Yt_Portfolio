@@ -12,8 +12,26 @@ export default function Portfolio() {
   // DEFAULT TO EXPERIENCE (since Home is becoming Work Experience)
   const [activeTab, setActiveTab] = useState("experience");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [projectToOpen, setProjectToOpen] = useState(null);
+  const [projectTransition, setProjectTransition] = useState(null);
   const firstRender = useRef(true); // track initial mount
   const scrollFromSidebar = useRef(false); // scroll only when sidebar triggers the change
+
+  const skillProjectToPortfolioTitle = {
+    "apple-iphone-website-clone": "Apple Website Clone",
+    "artsy-android-app": "Artsy Platform – Android App",
+    "artsy-website": "Artsy Platform – Web App",
+    "chatbot-template": "Chatbot Template (NLP)",
+    codebundle: "CodeBundle",
+    "invoice-generator": "Invoice Generator Platform",
+    "malaria-classification": "Malaria Detection using Deep Learning",
+    "morph-runner": "Morph Runner",
+    "music-store-analysis": "Music Store Analytics",
+    "sales-analysis": "Sales Analysis Dashboard",
+    sightranger: "SightRanger",
+    "taxi-demand-prediction": "Taxi Demand Prediction",
+    transizr: "Transizr",
+  };
 
   // Smooth scroll on tab change, but:
   // - skip the very first render
@@ -37,7 +55,31 @@ export default function Portfolio() {
   // Sidebar click handler: switch tab (scroll handled by the effect above)
   const handleGoto = (id) => {
     scrollFromSidebar.current = true; // flag that this change came from sidebar
+    setProjectToOpen(null);
+    setProjectTransition(null);
     setActiveTab(id);
+  };
+
+  const handleOpenProjectFromSkills = (projectId) => {
+    const projectTitle = skillProjectToPortfolioTitle[projectId];
+    if (!projectTitle) return;
+    setProjectTransition(projectTitle);
+
+    window.setTimeout(() => {
+      scrollFromSidebar.current = true;
+      setActiveTab("projects");
+    }, 240);
+
+    window.setTimeout(() => {
+      setProjectToOpen({
+        title: projectTitle,
+        token: Date.now(),
+      });
+    }, 620);
+
+    window.setTimeout(() => {
+      setProjectTransition(null);
+    }, 760);
   };
 
   const workExperience = [
@@ -135,6 +177,22 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white">
+      {projectTransition ? (
+        <div className="pointer-events-none fixed inset-0 z-[10000] flex items-center justify-center bg-black/45 backdrop-blur-md transition-all duration-500">
+          <div className="animate-experiencePanelIn rounded-[1.5rem] border border-white/10 bg-[#11141d]/95 px-6 py-5 text-center shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+            <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f9db8]">
+              Opening Project
+            </p>
+            <p className="mt-3 text-lg font-semibold text-white">
+              {projectTransition}
+            </p>
+            <div className="mt-4 h-1.5 w-48 overflow-hidden rounded-full bg-white/10">
+              <div className="h-full w-full origin-left animate-[projectRouteLoad_0.7s_ease-in-out_forwards] rounded-full bg-[#ff4e45]" />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div className="flex">
         {/* Pass active tab + goto handler so the blue dot tracks the visible section */}
@@ -191,12 +249,12 @@ export default function Portfolio() {
               </TabsContent>
 
               <TabsContent value="skills" id="skills" className="mt-6 scroll-mt-24">
-                <SkillsTab />
+                <SkillsTab onOpenProject={handleOpenProjectFromSkills} />
               </TabsContent>
 
               {/* Projects tab uses the grid cards (previous HomeTab) */}
               <TabsContent value="projects" id="projects" className="mt-6 scroll-mt-24">
-                <ProjectsTab />
+                <ProjectsTab openProjectRequest={projectToOpen} />
               </TabsContent>
 
               <TabsContent value="education" id="education" className="mt-6 scroll-mt-24">

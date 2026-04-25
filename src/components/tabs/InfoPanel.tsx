@@ -1,5 +1,5 @@
 import { useRef, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
-import type { Domain, Skill, Subcluster, Project } from "./skillsData";
+import { projects as allProjects, type Domain, type Skill, type Subcluster, type Project } from "./skillsData";
 import { ViewMode } from "./SkillsTab";
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
   domainSubclusters: Subcluster[];
   domainProjects: Project[];
   domains: Domain[];
+  onOpenProject?: (projectId: string) => void;
 };
 
 const overviewShowcaseItems = [
@@ -28,10 +29,14 @@ export default function InfoPanel({
   domainSkills, 
   domainSubclusters, 
   domainProjects,
-  domains 
+  domains,
+  onOpenProject
 }: Props) {
   const coreTechScrollRef = useRef<HTMLDivElement | null>(null);
+  const appliedProjectsScrollRef = useRef<HTMLDivElement | null>(null);
+  const relatedProjectsScrollRef = useRef<HTMLDivElement | null>(null);
   const isDraggingRef = useRef(false);
+  const dragMovedRef = useRef(false);
   const dragStartXRef = useRef(0);
   const dragStartScrollLeftRef = useRef(0);
 
@@ -39,6 +44,7 @@ export default function InfoPanel({
     const container = coreTechScrollRef.current;
     if (!container) return;
     isDraggingRef.current = true;
+    dragMovedRef.current = false;
     dragStartXRef.current = event.clientX;
     dragStartScrollLeftRef.current = container.scrollLeft;
     container.setPointerCapture(event.pointerId);
@@ -49,6 +55,9 @@ export default function InfoPanel({
     const container = coreTechScrollRef.current;
     if (!container) return;
     const deltaX = event.clientX - dragStartXRef.current;
+    if (Math.abs(deltaX) > 6) {
+      dragMovedRef.current = true;
+    }
     container.scrollLeft = dragStartScrollLeftRef.current - deltaX;
   };
 
@@ -68,6 +77,57 @@ export default function InfoPanel({
     container.scrollLeft += event.deltaY;
     event.preventDefault();
   };
+
+  const createSliderHandlers = (ref: { current: HTMLDivElement | null }) => ({
+    onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => {
+      const container = ref.current;
+      if (!container) return;
+      isDraggingRef.current = true;
+      dragMovedRef.current = false;
+      dragStartXRef.current = event.clientX;
+      dragStartScrollLeftRef.current = container.scrollLeft;
+      container.setPointerCapture(event.pointerId);
+    },
+    onPointerMove: (event: ReactPointerEvent<HTMLDivElement>) => {
+      if (!isDraggingRef.current) return;
+      const container = ref.current;
+      if (!container) return;
+      const deltaX = event.clientX - dragStartXRef.current;
+      if (Math.abs(deltaX) > 6) {
+        dragMovedRef.current = true;
+      }
+      container.scrollLeft = dragStartScrollLeftRef.current - deltaX;
+    },
+    onPointerEnd: (event: ReactPointerEvent<HTMLDivElement>) => {
+      const container = ref.current;
+      if (!container) return;
+      isDraggingRef.current = false;
+      if (container.hasPointerCapture(event.pointerId)) {
+        container.releasePointerCapture(event.pointerId);
+      }
+    },
+    onWheel: (event: ReactWheelEvent<HTMLDivElement>) => {
+      const container = ref.current;
+      if (!container) return;
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      container.scrollLeft += event.deltaY;
+      event.preventDefault();
+    },
+  });
+
+  const appliedProjectsSlider = createSliderHandlers(appliedProjectsScrollRef);
+  const relatedProjectsSlider = createSliderHandlers(relatedProjectsScrollRef);
+
+  const handleProjectCardClick = (projectId: string) => {
+    if (dragMovedRef.current) return;
+    onOpenProject?.(projectId);
+  };
+
+  const skillProjects = skill
+    ? allProjects
+        .filter((project) => project.domainIds?.length && project.skillIds.some((skillId) => skill.id === skillId))
+        .slice(0, 8)
+    : [];
 
   // Overview Panel
   if (viewMode === "overview") {
@@ -208,16 +268,31 @@ export default function InfoPanel({
         {domainProjects.length > 0 && (
           <div className="mt-8">
             <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Applied in</h3>
-            <div className="mt-4 space-y-3">
+            <div
+              ref={appliedProjectsScrollRef}
+              className="mt-4 -mx-2 w-full max-w-full overflow-x-auto px-2 pb-2 select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              onPointerDown={appliedProjectsSlider.onPointerDown}
+              onPointerMove={appliedProjectsSlider.onPointerMove}
+              onPointerUp={appliedProjectsSlider.onPointerEnd}
+              onPointerCancel={appliedProjectsSlider.onPointerEnd}
+              onPointerLeave={appliedProjectsSlider.onPointerEnd}
+              onWheel={appliedProjectsSlider.onWheel}
+              style={{ touchAction: "pan-x" }}
+            >
+              <div className="flex w-max snap-x snap-mandatory gap-3">
               {domainProjects.map((project) => (
-                <div 
+                <button
+                  type="button"
                   key={project.id}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                  onClick={() => handleProjectCardClick(project.id)}
+                  className="w-[220px] min-w-[220px] max-w-[220px] snap-start rounded-3xl bg-[#0f1320]/80 p-4 text-left transition hover:bg-[#141a2c]/90 sm:w-[240px] sm:min-w-[240px] sm:max-w-[240px]"
+                  style={{ borderLeft: `3px solid ${domain.color}` }}
                 >
-                  <p className="text-sm font-semibold text-white">{project.name}</p>
-                  <p className="mt-1 text-xs leading-5 text-gray-400">{project.description}</p>
-                </div>
+                  <p className="line-clamp-2 text-sm font-semibold text-white">{project.name}</p>
+                  <p className="mt-1 line-clamp-3 text-xs leading-5 text-gray-400">{project.description}</p>
+                </button>
               ))}
+              </div>
             </div>
           </div>
         )}
@@ -300,18 +375,33 @@ export default function InfoPanel({
         </div>
 
         {/* Related Projects */}
-        {skill.relatedProjectIds.length > 0 && (
+        {skillProjects.length > 0 && (
           <div className="mt-8">
             <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Applied in Projects</h3>
-            <div className="mt-4 space-y-3">
-              {skill.relatedProjectIds.slice(0, 3).map((projectId) => (
-                <div 
-                  key={projectId}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-4"
+            <div
+              ref={relatedProjectsScrollRef}
+              className="mt-4 -mx-2 w-full max-w-full overflow-x-auto px-2 pb-2 select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              onPointerDown={relatedProjectsSlider.onPointerDown}
+              onPointerMove={relatedProjectsSlider.onPointerMove}
+              onPointerUp={relatedProjectsSlider.onPointerEnd}
+              onPointerCancel={relatedProjectsSlider.onPointerEnd}
+              onPointerLeave={relatedProjectsSlider.onPointerEnd}
+              onWheel={relatedProjectsSlider.onWheel}
+              style={{ touchAction: "pan-x" }}
+            >
+              <div className="flex w-max snap-x snap-mandatory gap-3">
+              {skillProjects.map((project) => (
+                <button
+                  type="button"
+                  key={project.id}
+                  onClick={() => handleProjectCardClick(project.id)}
+                  className="w-[220px] min-w-[220px] max-w-[220px] snap-start rounded-3xl bg-[#0f1320]/80 p-4 text-left transition hover:bg-[#141a2c]/90 sm:w-[240px] sm:min-w-[240px] sm:max-w-[240px]"
                 >
-                  <p className="text-sm font-semibold text-white capitalize">{projectId.replace(/-/g, " ")}</p>
-                </div>
+                  <p className="line-clamp-2 text-sm font-semibold text-white">{project.name}</p>
+                  <p className="mt-1 line-clamp-3 text-xs leading-5 text-gray-400">{project.description}</p>
+                </button>
               ))}
+              </div>
             </div>
           </div>
         )}

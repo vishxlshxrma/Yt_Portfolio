@@ -57,6 +57,8 @@ export interface Project {
   name: string;
   description: string;
   skillIds: string[];
+  domainIds?: DomainId[];
+  skillKeywords?: string[];
 }
 
 // ============================================================================
@@ -68,24 +70,28 @@ export const projects: Project[] = [
     id: "transizr",
     name: "Transizr",
     description: "AI-powered media transcription platform using distributed workers and real-time job tracking.",
-    skillIds: ["fastapi", "celery", "rabbitmq", "redis", "docker", "python", "distributed-systems", "event-driven", "rest-apis", "postgresql"]
+    domainIds: ["application-engineering", "backend-distributed", "data-storage", "infrastructure-devops", "languages-foundations"],
+    skillIds: ["fastapi", "celery", "rabbitmq", "redis", "docker", "python", "distributed-systems", "event-driven", "rest-apis", "postgresql"],
+    skillKeywords: ["Full Stack Development", "Application Engineering", "Backend & Distributed Systems", "Distributed Systems", "Event-Driven Systems", "Microservices", "System Design", "Scalability", "API Design", "REST APIs", "FastAPI", "Python", "Asynchronous Programming", "Background Task Processing", "Celery", "RabbitMQ", "Redis", "Redis Pub/Sub", "Server-Sent Events (SSE)", "Real-Time Systems", "Notification Systems", "Containerization", "Docker", "Docker Compose", "Container Orchestration Concepts", "Infrastructure & DevOps", "CI/CD Concepts", "Developer Tooling (Makefile, scripts)", "Cloud Fundamentals", "Deployment", "PostgreSQL", "SQLAlchemy", "Relational Databases", "Database Design", "Data Modeling", "Query Optimization", "File Handling & Streaming", "Media Processing (Audio/Video)", "Image Processing Concepts", "Parallel Processing", "Threading", "Fault Tolerance", "Load Balancing Concepts", "Service-Oriented Architecture", "API Integration", "Authentication-ready Backend Patterns", "Validation & Schema Design (Pydantic)", "Middleware (CORS)", "Error Handling", "Logging (Loguru)", "Environment Management (.env)", "Next.js", "React", "TypeScript", "JavaScript", "Tailwind CSS", "HTML", "CSS", "UI Engineering", "Component-Based Architecture", "State Management (Zustand)", "Frontend-Backend Integration", "Real-Time UI Updates", "File Upload Systems", "Progress Tracking Systems", "Modular Code Structure", "Debugging", "Performance Optimization", "Technical Documentation", "Problem Solving"]
   },
   {
     id: "sightranger",
     name: "SightRanger",
-    description: "AI surveillance system using real-time computer vision and dashboard monitoring.",
-    skillIds: ["fastapi", "yolov8", "nextjs", "docker", "python", "computer-vision", "react", "typescript", "tailwind", "redis"]
+    description: "Built a real-time computer vision surveillance system using YOLOv8, FastAPI, and Next.js, enabling automated intrusion detection, alerting, and live monitoring through a responsive dashboard.",
+    domainIds: ["intelligent-systems", "application-engineering", "backend-distributed", "data-storage", "infrastructure-devops", "languages-foundations"],
+    skillIds: ["fastapi", "yolov8", "nextjs", "docker", "python", "computer-vision", "react", "typescript", "tailwind", "redis"],
+    skillKeywords: ["Full Stack Development", "Application Engineering", "Backend & Distributed Systems", "Web Development", "Machine Learning", "Computer Vision", "Generative AI", "Intelligent Systems", "API Design", "REST APIs", "Microservices", "Event-Driven Systems", "System Design", "Scalability", "Distributed Systems", "FastAPI", "Python", "YOLOv8", "OpenCV", "Image Processing", "Video Processing", "Deep Learning Inference", "Real-Time Systems", "Background Task Processing", "Asynchronous Programming", "Celery-like Task Patterns", "Notification Systems", "Email/SMTP Integration", "Template Rendering (Jinja2)", "File Handling & Streaming", "Storage Systems", "Data Pipelines", "Next.js", "React", "TypeScript", "JavaScript", "Tailwind CSS", "HTML", "CSS", "UI Engineering", "Responsive Design", "State Management (Zustand)", "API Integration (Axios)", "WebRTC / Media Recording", "Frontend-Backend Integration", "Component-Based Architecture", "Modular Code Structure", "Validation & Schema Design (Pydantic)", "Middleware (CORS)", "Error Handling", "Logging & Debugging", "Performance Optimization", "Environment Management (.env)", "Docker", "Docker Compose", "Containerization", "CI/CD Concepts", "Developer Tooling (Makefile, scripts)", "Git", "GitHub", "Deployment", "Cloud Fundamentals", "Security Considerations", "Technical Documentation", "Problem Solving"]
   },
   {
     id: "pnb-internship",
     name: "Punjab National Bank Internship",
-    description: "Litigation management and banking workflow automation using backend APIs and database optimization.",
+    description: "Built and optimized backend systems for litigation management at Punjab National Bank, improving workflow efficiency through REST APIs and database query optimization.",
     skillIds: ["nodejs", "express", "rest-apis", "mysql", "java-servlets", "jsp", "apache-tomcat", "database-design", "postgresql"]
   },
   {
     id: "usc-ta",
     name: "USC Teaching Assistant",
-    description: "Teaching cybersecurity, Python, and game development foundations to high school students.",
+    description: "Taught cybersecurity, Python, and game development fundamentals to high school students, focusing on hands-on learning and problem-solving skills.",
     skillIds: ["python", "cybersecurity", "game-development", "problem-solving", "technical-communication"]
   },
   {
@@ -97,8 +103,104 @@ export const projects: Project[] = [
   {
     id: "portfolio",
     name: "Portfolio",
-    description: "Interactive portfolio with 3D skill cosmos and real-time animations.",
+    description: "Developed an interactive portfolio using React, Three.js, and GSAP, featuring a 3D skill visualization system and real-time animations.",
     skillIds: ["react", "nextjs", "typescript", "tailwind", "threejs", "react-three-fiber", "gsap"]
+  },
+  {
+    id: "apple-iphone-website-clone",
+    name: "Apple Website Clone",
+    description: "Immersive Apple-style product showcase site with 3D scenes, polished motion, and responsive UI engineering.",
+    domainIds: ["application-engineering", "languages-foundations"],
+    skillIds: ["react", "javascript", "tailwind", "html", "css", "threejs", "react-three-fiber", "gsap", "responsive-design", "system-design", "performance-optimization", "git", "github", "deployment"],
+    skillKeywords: ["Web Development", "UI Engineering", "Frontend Engineering", "Software Engineering", "System Design", "Component-Based Architecture", "React", "JavaScript", "Tailwind CSS", "HTML", "CSS", "Three.js", "React Three Fiber", "GSAP", "3D Modeling", "Animation Systems", "Scroll Animations", "Responsive Design", "UI/UX Design", "Performance Optimization", "Vite", "Modular Code Structure", "State Management", "Debugging", "Git", "GitHub", "Deployment"]
+  },
+  {
+    id: "artsy-android-app",
+    name: "Artsy Platform – Android App",
+    description: "Built an Android app for discovering, saving, and exploring artwork, using modern Kotlin architecture with seamless backend integration for a smooth user experience.",
+    domainIds: ["application-engineering", "backend-distributed", "data-storage", "languages-foundations"],
+    skillIds: ["android", "firebase", "ui-design", "responsive-design", "api-integration", "problem-solving"],
+    skillKeywords: ["Android Development", "Mobile App Development", "Kotlin", "Jetpack Compose", "UI Engineering", "MVVM Architecture", "State Management", "Navigation Architecture", "REST API Integration", "Retrofit", "OkHttp", "Gson", "Authentication Systems", "Session Management", "Persistent Storage (SharedPreferences)", "Coroutine-Based Asynchronous Programming", "Flow (StateFlow)", "Reactive Programming", "Clean Architecture Principles", "Modular Code Structure", "Image Loading (Coil)", "Error Handling", "Form Validation", "UI/UX Design", "Material Design 3", "Favorites System", "Backend Integration", "Debugging", "Testing", "Gradle Build System"]
+  },
+  {
+    id: "chatbot-template",
+    name: "Chatbot Template",
+    description: "Lightweight NLP chatbot prototype with intent modeling, TF-IDF features, and Streamlit UI.",
+    domainIds: ["intelligent-systems", "application-engineering", "data-storage", "languages-foundations"],
+    skillIds: ["python", "scikit-learn", "data-science", "predictive-modeling", "problem-solving"],
+    skillKeywords: ["Python", "Machine Learning", "Natural Language Processing", "scikit-learn", "TF-IDF Vectorization", "Logistic Regression", "Predictive Modeling", "NLTK", "Streamlit", "Data Modeling", "Data Analysis", "Application Engineering", "Software Engineering", "Problem Solving", "Debugging", "UI Development"]
+  },
+  {
+    id: "codebundle",
+    name: "CodeBundle",
+    description: "Go CLI for bundling full codebases into a single structured text artifact for AI tools and reviews.",
+    domainIds: ["backend-distributed", "data-storage", "infrastructure-devops", "languages-foundations"],
+    skillIds: ["go", "system-design", "data-pipelines", "performance-optimization", "debugging", "problem-solving", "technical-communication"],
+    skillKeywords: ["Go", "Backend & Distributed Systems", "Application Engineering", "Software Engineering", "CLI Development", "System Design", "Microservices (modular package architecture)", "Event-Driven Systems (channel-based concurrency)", "Concurrency (Goroutines)", "Data Modeling", "File System Operations", "ETL Concepts", "Data Pipelines", "Performance Optimization", "Buffer-Based I/O", "GitIgnore Parsing", "API Design (CLI interface)", "Developer Tooling", "Debugging", "Error Handling", "Scalability", "Logical Thinking", "Systematic Analysis", "Technical Documentation"]
+  },
+  {
+    id: "artsy-website",
+    name: "Artsy Platform – Web App",
+    description: "Full-stack web art platform with Angular frontend, Node/Express backend, and secure session-based workflows.",
+    domainIds: ["application-engineering", "backend-distributed", "data-storage", "infrastructure-devops", "languages-foundations"],
+    skillIds: ["nodejs", "express", "rest-apis", "mongodb", "api-integration", "responsive-design", "performance-optimization", "deployment"],
+    skillKeywords: ["Full Stack Development", "Frontend Developmethe nt (Angular)", "Backend Development (Node.js, Express)", "REST API Design", "Authentication & Authorization (JWT, Cookies)", "Database Management (MongoDB, Mongoose)", "API Integration (Artsy API)", "State Management", "Reactive Programming (RxJS)", "UI/UX Development", "Component-Based Architecture", "Client-Server Architecture", "Secure Session Handling", "Middleware Design", "Error Handling", "Data Fetching & Caching", "Deployment (Google Cloud App Engine)", "Performance Optimization", "Debugging", "Software Engineering"]
+  },
+  {
+    id: "morph-runner",
+    name: "Morph Runner",
+    description: "Unity runner game with morphing mechanics, real-time systems, and gameplay-focused engineering.",
+    domainIds: ["application-engineering", "languages-foundations"],
+    skillIds: ["game-development", "unity", "c#", "responsive-design", "performance-optimization", "git", "problem-solving"],
+    skillKeywords: ["Game Development", "Unity Engine", "C# Programming", "Gameplay Engineering", "Physics Systems", "Character Mechanics (Morphing System)", "Animation Systems", "Collision Detection", "Level Design", "Procedural Logic", "Input Handling", "State Management (Finite State Machines)", "Event-Driven Gameplay", "UI/UX in Games", "Performance Optimization", "Object-Oriented Design", "Modular Architecture", "Debugging", "Game Testing", "Iterative Development", "Asset Integration", "Audio Integration", "Version Control (Git)", "Problem Solving", "Real-Time Systems"]
+  },
+  {
+    id: "dsa",
+    name: "DSA",
+    description: "Data structures and algorithms problem-solving work spanning core CS patterns and complexity analysis.",
+    domainIds: ["languages-foundations"],
+    skillIds: ["data-structures", "algorithms", "problem-solving", "python", "technical-communication", "performance-optimization", "code-review"],
+    skillKeywords: ["CS Fundamentals", "Data Structures", "Algorithms", "Problem Solving", "Logical Thinking", "Systematic Analysis", "Python", "Programming Languages", "Software Engineering", "Debugging", "Performance Optimization", "Technical Documentation", "Arrays", "Sorting Algorithms", "Recursion", "Hashing", "Two-Pointer Techniques", "Sliding Window / Prefix Sum Concepts", "Kadane’s Algorithm", "Boyer-Moore Voting Algorithm", "Search Algorithms", "Mathematical Problem Solving", "Time Complexity Analysis", "Space Complexity Analysis", "Competitive Programming", "Code Review", "Technical Communication"]
+  },
+  {
+    id: "invoice-generator",
+    name: "Invoice Generator Platform",
+    description: "Full-stack invoicing platform with auth, PDF generation, data modeling, and frontend-backend integration.",
+    domainIds: ["application-engineering", "backend-distributed", "data-storage", "infrastructure-devops", "languages-foundations"],
+    skillIds: ["react", "nodejs", "express", "javascript", "typescript", "tailwind", "html", "css", "rest-apis", "microservices", "system-design", "mongodb", "database-design", "data-pipelines", "api-integration", "performance-optimization", "git", "github", "deployment"],
+    skillKeywords: ["Web Development", "Full Stack Development", "Application Engineering", "Backend & Distributed Systems", "API Design", "REST APIs", "Microservices", "Software Engineering", "System Design", "Component-Based Architecture", "MVC Architecture", "Node.js", "Express.js", "JavaScript", "TypeScript", "React", "Vite", "Tailwind CSS", "HTML", "CSS", "React Router", "Redux Toolkit", "State Management", "React Query", "Axios", "API Integration", "Authentication Systems", "JWT (JSON Web Tokens)", "Authorization Middleware", "Backend Security", "Password Hashing (bcrypt)", "MongoDB", "Mongoose", "NoSQL & Caching", "Database Design", "Data Modeling", "Relational Mapping Concepts", "Query Optimization", "Data Flow Management", "Event-Driven Systems", "PDF Generation (Puppeteer)", "Server-Side Rendering (HTML to PDF)", "Dynamic Template Generation", "Business Logic Implementation", "Form Handling (Formik/Yup)", "Input Validation", "Error Handling", "Middleware Design", "Modular Code Structure", "Hooks Architecture", "Frontend-Backend Integration", "Environment Management (.env)", "Debugging", "Performance Optimization", "Technical Documentation", "Git", "GitHub", "Deployment"]
+  },
+  {
+    id: "malaria-classification",
+    name: "Malaria Detection using Deep Learning",
+    description: "Machine learning and image classification pipeline for malaria prediction and model evaluation.",
+    domainIds: ["intelligent-systems", "data-storage", "languages-foundations"],
+    skillIds: ["python", "scikit-learn", "numpy", "pandas", "predictive-modeling", "computer-vision", "technical-communication", "problem-solving"],
+    skillKeywords: ["Machine Learning", "Data Science", "Computer Vision", "Image Processing", "Predictive Modeling", "ML Modeling", "Python", "scikit-learn", "pandas", "NumPy", "Supervised Learning", "Classification Algorithms", "Random Forest", "AdaBoost", "Model Training", "Model Evaluation", "Classification Metrics", "Data Preprocessing", "Train-Test Split", "Feature Engineering", "Dataset Handling", "CSV Data Processing", "Model Persistence (joblib)", "Experimentation", "Performance Evaluation", "Scientific Computing", "Technical Documentation", "Problem Solving"]
+  },
+  {
+    id: "music-store-analysis",
+    name: "Music Store Analytics",
+    description: "SQL-heavy analytics case study focused on customer, revenue, and inventory insights.",
+    domainIds: ["data-storage", "languages-foundations"],
+    skillIds: ["sql", "postgresql", "database-design", "query-optimization", "analytics", "etl", "data-science", "technical-communication", "problem-solving"],
+    skillKeywords: ["Data Analysis", "Data Science", "Relational Databases", "SQL", "PostgreSQL", "Database Design", "Data Modeling", "Query Optimization", "Business Intelligence", "Analytics", "ETL Concepts", "Data Warehousing", "Data Exploration", "Data Aggregation", "Data Transformation", "Window Functions", "Joins (INNER, LEFT, etc.)", "Subqueries", "Common Table Expressions (CTEs)", "Group By & Aggregations", "Filtering & Sorting", "Statistical Analysis", "Customer Behavior Analysis", "Sales Analytics", "Revenue Analysis", "Inventory Analysis", "Performance Analysis", "Reporting", "Insight Generation", "Technical Documentation", "Problem Solving", "Logical Thinking"]
+  },
+  {
+    id: "sales-analysis",
+    name: "Sales Analysis Dashboard",
+    description: "Python analytics project for cleaning, visualizing, and extracting business insight from sales data.",
+    domainIds: ["data-storage", "languages-foundations"],
+    skillIds: ["python", "pandas", "numpy", "matplotlib", "analytics", "data-science", "technical-communication", "problem-solving"],
+    skillKeywords: ["Data Science", "Data Analysis", "Analytics", "Business Intelligence", "Python", "pandas", "NumPy", "Matplotlib", "Data Visualization", "Data Cleaning", "Data Preprocessing", "Exploratory Data Analysis (EDA)", "CSV Data Processing", "Statistical Analysis", "Trend Analysis", "Customer Behavior Analysis", "Sales Analytics", "Predictive Insights", "Data Transformation", "Data Aggregation", "Reporting", "Insight Generation", "Jupyter Notebook", "Technical Documentation", "Problem Solving", "Logical Thinking"]
+  },
+  {
+    id: "taxi-demand-prediction",
+    name: "Taxi Demand Prediction",
+    description: "Forecasting project using time-series models, deep learning, and large-scale data processing pipelines.",
+    domainIds: ["intelligent-systems", "data-storage", "languages-foundations"],
+    skillIds: ["python", "numpy", "pandas", "data-science", "predictive-modeling", "data-pipelines", "etl", "performance-optimization", "analytics", "problem-solving", "technical-communication"],
+    skillKeywords: ["Machine Learning", "Data Science", "Predictive Modeling", "Time Series Analysis", "Deep Learning", "Data Analysis", "Data Pipelines", "ETL Concepts", "Data Engineering", "Python", "pandas", "NumPy", "Dask", "Parquet", "Data Preprocessing", "Data Cleaning", "Feature Engineering", "Exploratory Data Analysis (EDA)", "Data Aggregation", "Statistical Analysis", "Forecasting Models", "ARIMA", "LSTM", "Neural Networks", "Model Training", "Model Evaluation", "Hyperparameter Tuning", "Grid Search", "Walk-Forward Validation", "Time Series Stationarity Testing (ADF, KPSS)", "Autocorrelation Analysis (ACF, PACF)", "Scaling & Normalization", "Big Data Processing", "Performance Optimization", "Visualization", "Business Intelligence", "Analytics", "Real-Time Prediction Systems", "Problem Solving", "Logical Thinking", "Technical Documentation"]
   }
 ];
 
@@ -356,6 +458,16 @@ export const getSubclustersForDomain = (domainId: DomainId): Subcluster[] =>
 
 export const getProjectsForSkill = (skillId: string): Project[] => 
   projects.filter(p => p.skillIds.includes(skillId));
+
+export const getProjectSearchTerms = (project: Project): string[] =>
+  Array.from(
+    new Set([
+      project.name,
+      project.description,
+      ...project.skillIds,
+      ...(project.skillKeywords ?? []),
+    ])
+  );
 
 export const getCrossDomainSkills = (): Skill[] => 
   skills.filter(s => s.domainIds.length > 1);

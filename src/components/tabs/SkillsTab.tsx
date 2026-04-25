@@ -10,13 +10,16 @@ import {
   getDomain,
   getSkillsForDomain,
   getSubclustersForDomain,
-  type DomainId,
-  type Project
+  type DomainId
 } from "./skillsData";
 
 export type ViewMode = "overview" | "domain" | "skill";
 
-export default function SkillsTab() {
+type Props = {
+  onOpenProject?: (projectId: string) => void;
+};
+
+export default function SkillsTab({ onOpenProject }: Props) {
   const [activeDomainId, setActiveDomainId] = useState<DomainId | null>(null);
   const [activeSkillId, setActiveSkillId] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -52,8 +55,8 @@ export default function SkillsTab() {
 
   // Get projects for active domain
   const domainProjects = useMemo(
-    () => activeDomain?.featuredProjectIds.map(id => projects.find(p => p.id === id)).filter(Boolean) as Project[] ?? [],
-    [activeDomain]
+    () => activeDomainId ? projects.filter((project) => project.domainIds?.includes(activeDomainId)) : [],
+    [activeDomainId]
   );
 
   // Handle domain selection
@@ -113,6 +116,7 @@ export default function SkillsTab() {
               domainSubclusters={domainSubclusters}
               domainProjects={domainProjects}
               domains={domains}
+              onOpenProject={onOpenProject}
             />
           </div>
         </div>
