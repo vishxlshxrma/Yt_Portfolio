@@ -5,7 +5,7 @@ import HeroSection from "components/HeroSection";
 import VideoInfo from "components/VideoInfo";
 import Footer from "components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs";
-import { HomeTab, SkillsTab, ExperienceTab, EducationTab } from "components/tabs";
+import { SkillsTab, ExperienceTab, EducationTab } from "components/tabs";
 import ProjectsTab from "components/tabs/ProjectsTab"; // <-- added
 
 export default function Portfolio() {
@@ -43,43 +43,81 @@ export default function Portfolio() {
   const workExperience = [
     {
       title: "Teaching Assistant",
-      company: "Viterbi K-12, USC",
-      duration: "6:2025–8:2025",
-      views: "10K",
+      company: "USC Viterbi",
+      dateLabel: "Jun 2025 - Aug 2025",
       thumbnail: "/images/viterbi-k12.png",
+      logo: "/images/usc.png",
+      location: "Los Angeles, CA",
+      metaLine: "Teaching • Cybersecurity • Python • Los Angeles, CA",
+      summary:
+        "Taught cybersecurity, Python, and game development to 50+ high school students through USC’s K-12 outreach, designing hands-on modules that improved completion rates by 25%.",
       description:
-        "Teaching Cybersecurity, Python, and Game Development to high school students as part of USC’s outreach program. Design and deliver interactive, hands-on lessons to simplify complex CS concepts and encourage active learning. Help create a fun, inclusive environment that fosters curiosity and foundational tech skills.",
-      tags: ["Teaching", "CyberSecurity"],
+        "Delivered high-impact instruction in cybersecurity, Python, and game development through USC Viterbi's K-12 outreach, helping students build confidence with programming fundamentals through guided labs, hands-on projects, and structured classroom support.",
+      details: [
+        "Delivered 40+ hours of weekly instruction across cybersecurity, Python, and game development for 100+ high school students.",
+        "Designed structured learning modules and project-based exercises that improved student task completion by 25%.",
+        "Guided students during labs and office hours, helping debug code and reinforce core CS concepts."
+      ],
+      techStack: ["Python", "Cybersecurity", "Game Development", "Teaching", "Curriculum Design"],
+      featured: "Most Recent",
     },
     {
       title: "Software Developer Intern",
       company: "Punjab National Bank",
-      duration: "6:2024-9:2024",
-      views: "12K",
+      dateLabel: "Jun 2024 - Sep 2024",
       thumbnail: "/images/pnb.png",
+      logo: "/images/pnb.png",
+      location: "New Delhi, India",
+      metaLine: "Web Development • APIs • Banking Systems • India",
+      summary:
+        "Developed and deployed banking workflow systems at Punjab National Bank using Java, JSP, MySQL, Node.js, and Express, reducing processing time by 40% and improving backend response times by 50%.",
       description:
-        "In my role as a Software Developer Intern at Punjab National Bank (PNB), a prestigious government-owned financial institution, I was actively engaged in the process of developing and enhancing digital banking solutions. I was responsible for collaborating with senior developers, developing the modern banking interfaces and developing and testing software applications.",
-      tags: ["Web Development", "Design Systems"],
+        "Built and deployed a litigation management system and supporting banking workflow automations for Punjab National Bank, improving internal process speed, system responsiveness, and release efficiency across backend and deployment layers.",
+      details: [
+        "Developed and deployed a Litigation Management System using Java Servlets, JSP, and MySQL to streamline case tracking and document workflows.",
+        "Built RESTful APIs with Node.js and Express to automate banking processes, reducing processing time by 40%.",
+        "Optimized backend logic and database queries, improving response times by 50% under around 500 concurrent users and reducing errors by 25%.",
+        "Deployed on Apache Tomcat and collaborated in Agile sprints, improving release efficiency by 15%."
+      ],
+      techStack: ["Java Servlets", "JSP", "MySQL", "Node.js", "Express", "Apache Tomcat", "REST APIs"],
     },
     {
-      title: "Software Developer Intern",
+      title: "Technical Intern",
       company: "Vartulz Technologies Pvt. Ltd.",
-      duration: "2:2024–4:2024",
-      views: "8K",
+      dateLabel: "Feb 2024 - Apr 2024",
       thumbnail: "/images/vartulz.png",
+      logo: "/images/vartulz.png",
+      location: "India",
+      metaLine: "Product UI • Analytics • Feature Delivery • India",
+      summary:
+        "During a 3-month internship, improved 3 core product areas across website functionality, analytics, and user-data capture to strengthen visibility and usability.",
       description:
-        "Software Developer Intern at Vartulz Technologies, where I enhanced the website by adding new functionalities, designed analytics frameworks, and integrated user data collection features.",
-      tags: ["UX Design", "Data Analytics"],
+        "Supported product improvements across the website experience by shipping new features, strengthening analytics visibility, and improving user-data capture flows for the team.",
+      details: [
+        "Delivered improvements across 3 key product areas: website functionality, analytics workflows, and user-data collection.",
+        "Designed analytics workflows that improved productivity by 20% and gave the team better visibility into user behavior and feature performance.",
+        "Integrated user data capture features that improved measurement coverage and supported more informed product decisions during the internship."
+      ],
+      techStack: ["JavaScript", "Web Development", "Analytics", "UX Design", "Feature Delivery"],
     },
     {
-      title: "Operational Analyst",
+      title: "Operational Analyst Intern",
       company: "LMDMax",
-      duration: "8:2023–1:2024",
-      views: "6K",
+      dateLabel: "Aug 2023 - Jan 2024",
       thumbnail: "/images/lmdmax.png",
+      logo: "/images/lmdmax.png",
+      location: "India",
+      metaLine: "Operations • Data Analysis • Process Improvement",
+      summary:
+        "Across a 6-month internship, analyzed operational workflows and built an internal Power BI dashboard that improved work representation and reduced workload effort by 25%.",
       description:
-        "In my previous role as an Operational Analyst intern, I was actively engaged in the process of optimizing operational efficiency and streamlining workflows. I was responsible for collecting and analyzing data, allowing me to identify areas for improvement and provide data-driven insights to support decision-making.",
-      tags: ["Data Analytics", "Systems Design"],
+        "Worked on operational analysis and process optimization initiatives, using data to surface workflow bottlenecks and building internal reporting tools to support better planning across day-to-day business operations.",
+      details: [
+        "Collected and analyzed operational data over a 6-month engagement to identify workflow bottlenecks and process inefficiencies.",
+        "Developed a Power BI dashboard for internal staff to present work outlook and operational status more clearly, reducing workload effort by 25%.",
+        "Helped teams make faster, better-informed decisions by surfacing improvement opportunities across day-to-day business operations."
+      ],
+      techStack: ["Power BI", "Data Analysis", "Process Improvement", "Operations", "Reporting", "Systems Thinking"],
     },
   ];
 
@@ -149,8 +187,7 @@ export default function Portfolio() {
               {/* Targets for scrolling; scroll offset handled by sticky header */}
               {/* First tab now renders Experience content */}
               <TabsContent value="experience" id="experience" className="mt-6 scroll-mt-24">
-                {/* tile/placard layout using HomeTab with experience data */}
-                <HomeTab projects={workExperience} />
+                <ExperienceTab workExperience={workExperience} />
               </TabsContent>
 
               <TabsContent value="skills" id="skills" className="mt-6 scroll-mt-24">

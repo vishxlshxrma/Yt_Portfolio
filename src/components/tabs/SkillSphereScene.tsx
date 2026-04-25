@@ -6,7 +6,7 @@ import { Group, Vector3 } from "three";
 
 const skillsMap = new Map(skills.map((skill) => [skill.id, skill]));
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
-const MAX_SKILLS_PER_DOMAIN = 20;
+const MAX_SKILLS_PER_DOMAIN = 50;
 
 type SkillGlobeNode = {
   skillId: string;
