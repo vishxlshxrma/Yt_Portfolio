@@ -17,9 +17,10 @@ export type ViewMode = "overview" | "domain" | "skill";
 
 type Props = {
   onOpenProject?: (projectId: string) => void;
+  theme?: "light" | "dark";
 };
 
-export default function SkillsTab({ onOpenProject }: Props) {
+export default function SkillsTab({ onOpenProject, theme = "dark" }: Props) {
   const [activeDomainId, setActiveDomainId] = useState<DomainId | null>(null);
   const [activeSkillId, setActiveSkillId] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -97,13 +98,14 @@ export default function SkillsTab({ onOpenProject }: Props) {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden py-10 lg:py-16">
-      <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,_rgba(38,147,255,0.14),_transparent_35%)] pointer-events-none" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,_rgba(255,0,0,0.14),_transparent_35%)]" />
       <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
-          <div className="relative min-h-[560px] rounded-[2.5rem] border border-white/10 bg-[#070a12]/80 p-4 shadow-[0_50px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+          <div className="relative min-h-[560px] rounded-[2.5rem] border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[0_50px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl">
             <SkillSphereScene 
               activeDomainId={activeDomainId}
               activeSkillId={activeSkillId}
+              theme={theme}
             />
           </div>
 

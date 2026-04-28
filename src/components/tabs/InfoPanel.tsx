@@ -132,16 +132,16 @@ export default function InfoPanel({
   // Overview Panel
   if (viewMode === "overview") {
     return (
-      <div className="min-w-0 max-w-full rounded-[2rem] border border-white/10 bg-[#090b11]/95 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-white">
+      <div className="min-w-0 max-w-full rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-[var(--text-primary)]">
         <div className="space-y-4">
-          <div className="inline-flex items-center gap-3 rounded-full bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+          <div className="inline-flex items-center gap-3 rounded-full bg-[var(--surface-muted)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--accent-red)]">
             Skill Cosmos
           </div>
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
               Interactive map of my Technincal Skills
             </h2>
-            <p className="mt-4 text-sm leading-7 text-gray-300 sm:text-base">
+            <p className="mt-4 text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
               A multi-layer map of the technologies, systems, and domains I work across.
               Click on a domain in the sphere or pills below to explore.
             </p>
@@ -150,12 +150,12 @@ export default function InfoPanel({
 
         {/* Core Stack */}
         <div className="mt-8">
-          <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">What I build</h3>
+          <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">What I build</h3>
           <div className="mt-4 flex flex-wrap gap-2">
             {overviewShowcaseItems.map((item) => (
               <span 
                 key={item}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-200"
+                className="rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)]"
               >
                 {item}
               </span>
@@ -165,12 +165,12 @@ export default function InfoPanel({
 
         {/* Domain Summary */}
         <div className="mt-8">
-          <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Domains</h3>
+          <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">Domains</h3>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {domains.map((d) => (
               <div 
                 key={d.id}
-                className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] p-4"
                 style={{ borderLeft: `3px solid ${d.color}` }}
               >
                 <div className="flex items-center gap-2">
@@ -178,9 +178,9 @@ export default function InfoPanel({
                     className="w-2 h-2 rounded-full" 
                     style={{ backgroundColor: d.color }}
                   />
-                  <p className="text-sm font-semibold text-white">{d.name}</p>
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">{d.name}</p>
                 </div>
-                <p className="mt-2 text-xs leading-5 text-gray-400">{d.shortName}</p>
+                <p className="mt-2 text-xs leading-5 text-[var(--text-secondary)]">{d.shortName}</p>
               </div>
             ))}
           </div>
@@ -192,7 +192,7 @@ export default function InfoPanel({
   // Domain Panel
   if (viewMode === "domain" && domain) {
     return (
-      <div className="min-w-0 max-w-full rounded-[2rem] border border-white/10 bg-[#090b11]/95 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-white">
+      <div className="min-w-0 max-w-full rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-[var(--text-primary)]">
         <div className="space-y-4">
           <div 
             className="inline-flex items-center gap-3 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em]"
@@ -208,10 +208,10 @@ export default function InfoPanel({
             {domain.shortName}
           </div>
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
               {domain.name}
             </h2>
-            <p className="mt-4 text-sm leading-7 text-gray-300 sm:text-base">
+            <p className="mt-4 text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
               {domain.description}
             </p>
           </div>
@@ -219,12 +219,12 @@ export default function InfoPanel({
 
         {/* Subclusters */}
         <div className="mt-8">
-          <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">What this covers</h3>
+          <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">What this covers</h3>
           <div className="mt-4 flex flex-wrap gap-2">
             {domainSubclusters.map((sub) => (
               <span 
                 key={sub.id}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-200"
+                className="rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)]"
               >
                 {sub.name}
               </span>
@@ -234,7 +234,7 @@ export default function InfoPanel({
 
         {/* Core Technologies */}
         <div className="mt-8">
-          <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Core technologies</h3>
+          <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">Core technologies</h3>
           <div
             ref={coreTechScrollRef}
             className="mt-4 -mx-2 w-full max-w-full overflow-x-auto px-2 pb-2 select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -250,14 +250,14 @@ export default function InfoPanel({
               {domainSkills.map((s) => (
               <div 
                 key={s.id} 
-                className="min-w-[250px] snap-start rounded-3xl bg-[#0f1320]/80 p-4 sm:min-w-[290px]"
+                className="min-w-[250px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 sm:min-w-[290px]"
                 style={{ borderLeft: `3px solid ${domain.color}` }}
               >
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-white">{s.name}</p>
-                  <span className="text-xs text-gray-500 capitalize">{s.type}</span>
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">{s.name}</p>
+                  <span className="text-xs text-[var(--text-secondary)] capitalize">{s.type}</span>
                 </div>
-                <p className="mt-2 text-xs leading-5 text-gray-400">{s.description}</p>
+                <p className="mt-2 text-xs leading-5 text-[var(--text-secondary)]">{s.description}</p>
               </div>
               ))}
             </div>
@@ -267,7 +267,7 @@ export default function InfoPanel({
         {/* Applied In */}
         {domainProjects.length > 0 && (
           <div className="mt-8">
-            <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Applied in</h3>
+            <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">Applied in</h3>
             <div
               ref={appliedProjectsScrollRef}
               className="mt-4 -mx-2 w-full max-w-full overflow-x-auto px-2 pb-2 select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -285,11 +285,11 @@ export default function InfoPanel({
                   type="button"
                   key={project.id}
                   onClick={() => handleProjectCardClick(project.id)}
-                  className="w-[220px] min-w-[220px] max-w-[220px] snap-start rounded-3xl bg-[#0f1320]/80 p-4 text-left transition hover:bg-[#141a2c]/90 sm:w-[240px] sm:min-w-[240px] sm:max-w-[240px]"
+                  className="w-[220px] min-w-[220px] max-w-[220px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 text-left transition hover:bg-[var(--surface-hover)] sm:w-[240px] sm:min-w-[240px] sm:max-w-[240px]"
                   style={{ borderLeft: `3px solid ${domain.color}` }}
                 >
-                  <p className="line-clamp-2 text-sm font-semibold text-white">{project.name}</p>
-                  <p className="mt-1 line-clamp-3 text-xs leading-5 text-gray-400">{project.description}</p>
+                  <p className="line-clamp-2 text-sm font-semibold text-[var(--text-primary)]">{project.name}</p>
+                  <p className="mt-1 line-clamp-3 text-xs leading-5 text-[var(--text-secondary)]">{project.description}</p>
                 </button>
               ))}
               </div>
@@ -298,9 +298,9 @@ export default function InfoPanel({
         )}
 
         {/* Why It Matters */}
-        <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-5">
-          <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Why it matters</h3>
-          <p className="mt-4 text-sm leading-6 text-gray-300">
+        <div className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface-muted)] p-5">
+          <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">Why it matters</h3>
+          <p className="mt-4 text-sm leading-6 text-[var(--text-secondary)]">
             {domain.whyItMatters}
           </p>
         </div>
@@ -313,21 +313,21 @@ export default function InfoPanel({
     const skillDomains = domains.filter(d => skill.domainIds.includes(d.id));
     
     return (
-      <div className="min-w-0 max-w-full rounded-[2rem] border border-white/10 bg-[#090b11]/95 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-white">
+      <div className="min-w-0 max-w-full rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-[var(--text-primary)]">
         <div className="space-y-4">
-          <div className="inline-flex items-center gap-3 rounded-full bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+          <div className="inline-flex items-center gap-3 rounded-full bg-[var(--surface-muted)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--accent-red)]">
             Skill Detail
           </div>
           <div>
             <div className="flex items-center gap-3">
-              <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
                 {skill.name}
               </h2>
-              <span className="rounded-full border border-white/20 bg-white/10 px-2 py-1 text-xs text-gray-300 capitalize">
+              <span className="rounded-full border border-[var(--border)] bg-[var(--surface-hover)] px-2 py-1 text-xs text-[var(--text-secondary)] capitalize">
                 {skill.type}
               </span>
             </div>
-            <p className="mt-4 text-sm leading-7 text-gray-300 sm:text-base">
+            <p className="mt-4 text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
               {skill.description}
             </p>
           </div>
@@ -335,21 +335,21 @@ export default function InfoPanel({
 
         {/* Importance */}
         <div className="mt-8">
-          <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Proficiency</h3>
+          <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">Proficiency</h3>
           <div className="mt-3">
             <span 
               className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium capitalize"
               style={{
                 backgroundColor: skill.importance === "core" ? "#34ff8820" :
                                  skill.importance === "strong" ? "#34d6ff20" :
-                                 "#ffffff10",
+                                 "var(--surface-hover)",
                 color: skill.importance === "core" ? "#34ff88" :
                        skill.importance === "strong" ? "#34d6ff" :
-                       "#888888",
+                       "var(--text-secondary)",
                 border: `1px solid ${
                   skill.importance === "core" ? "#34ff8840" :
                   skill.importance === "strong" ? "#34d6ff40" :
-                  "#ffffff20"
+                  "var(--border)"
                 }`
               }}
             >
@@ -360,12 +360,12 @@ export default function InfoPanel({
 
         {/* Connected Domains */}
         <div className="mt-8">
-          <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Connected Domains</h3>
+          <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">Connected Domains</h3>
           <div className="mt-4 flex flex-wrap gap-2">
             {skillDomains.map((d) => (
               <span 
                 key={d.id}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-gray-200"
+                className="rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)]"
                 style={{ borderLeft: `3px solid ${d.color}` }}
               >
                 {d.name}
@@ -377,7 +377,7 @@ export default function InfoPanel({
         {/* Related Projects */}
         {skillProjects.length > 0 && (
           <div className="mt-8">
-            <h3 className="text-sm uppercase tracking-[0.25em] text-gray-400">Applied in Projects</h3>
+            <h3 className="text-sm uppercase tracking-[0.25em] text-[var(--text-secondary)]">Applied in Projects</h3>
             <div
               ref={relatedProjectsScrollRef}
               className="mt-4 -mx-2 w-full max-w-full overflow-x-auto px-2 pb-2 select-none cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -395,10 +395,10 @@ export default function InfoPanel({
                   type="button"
                   key={project.id}
                   onClick={() => handleProjectCardClick(project.id)}
-                  className="w-[220px] min-w-[220px] max-w-[220px] snap-start rounded-3xl bg-[#0f1320]/80 p-4 text-left transition hover:bg-[#141a2c]/90 sm:w-[240px] sm:min-w-[240px] sm:max-w-[240px]"
+                  className="w-[220px] min-w-[220px] max-w-[220px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 text-left transition hover:bg-[var(--surface-hover)] sm:w-[240px] sm:min-w-[240px] sm:max-w-[240px]"
                 >
-                  <p className="line-clamp-2 text-sm font-semibold text-white">{project.name}</p>
-                  <p className="mt-1 line-clamp-3 text-xs leading-5 text-gray-400">{project.description}</p>
+                  <p className="line-clamp-2 text-sm font-semibold text-[var(--text-primary)]">{project.name}</p>
+                  <p className="mt-1 line-clamp-3 text-xs leading-5 text-[var(--text-secondary)]">{project.description}</p>
                 </button>
               ))}
               </div>

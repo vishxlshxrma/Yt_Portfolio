@@ -7,8 +7,10 @@ import Footer from "components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs";
 import { SkillsTab, ExperienceTab, EducationTab } from "components/tabs";
 import ProjectsTab from "components/tabs/ProjectsTab"; // <-- added
+import useTheme from "hooks/useTheme";
 
 export default function Portfolio() {
+  const { theme, toggleTheme } = useTheme();
   // DEFAULT TO EXPERIENCE (since Home is becoming Work Experience)
   const [activeTab, setActiveTab] = useState("experience");
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -176,24 +178,29 @@ export default function Portfolio() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] transition-colors duration-300">
       {projectTransition ? (
-        <div className="pointer-events-none fixed inset-0 z-[10000] flex items-center justify-center bg-black/45 backdrop-blur-md transition-all duration-500">
-          <div className="animate-experiencePanelIn rounded-[1.5rem] border border-white/10 bg-[#11141d]/95 px-6 py-5 text-center shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f9db8]">
+        <div className="pointer-events-none fixed inset-0 z-[10000] flex items-center justify-center bg-[var(--overlay-backdrop)] backdrop-blur-md transition-all duration-500">
+          <div className="animate-experiencePanelIn rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] px-6 py-5 text-center shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+            <p className="text-[11px] uppercase tracking-[0.28em] text-[var(--text-secondary)]">
               Opening Project
             </p>
-            <p className="mt-3 text-lg font-semibold text-white">
+            <p className="mt-3 text-lg font-semibold text-[var(--text-primary)]">
               {projectTransition}
             </p>
-            <div className="mt-4 h-1.5 w-48 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full w-full origin-left animate-[projectRouteLoad_0.7s_ease-in-out_forwards] rounded-full bg-[#ff4e45]" />
+            <div className="mt-4 h-1.5 w-48 overflow-hidden rounded-full bg-[var(--surface-muted)]">
+              <div className="h-full w-full origin-left animate-[projectRouteLoad_0.7s_ease-in-out_forwards] rounded-full bg-[var(--accent-red)]" />
             </div>
           </div>
         </div>
       ) : null}
 
-      <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Header
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
       <div className="flex">
         {/* Pass active tab + goto handler so the blue dot tracks the visible section */}
         <Sidebar
@@ -210,18 +217,18 @@ export default function Portfolio() {
           {/* Tabs area */}
           <div className="px-6">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-              <TabsList className="bg-transparent border-b border-gray-800 rounded-none h-auto p-0 w-full justify-start">
+              <TabsList className="h-auto w-full justify-start rounded-none border-b border-[var(--border)] bg-transparent p-0">
                 {/* Home -> Work Experience (id/value: 'experience') */}
                 <TabsTrigger
                   value="experience"
-                  className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400"
+                  className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
                 >
                   Work Experience
                 </TabsTrigger>
 
                 <TabsTrigger
                   value="skills"
-                  className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400"
+                  className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
                 >
                   Skills
                 </TabsTrigger>
@@ -229,14 +236,14 @@ export default function Portfolio() {
                 {/* Work Exp -> Projects (id/value: 'projects') */}
                 <TabsTrigger
                   value="projects"
-                  className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400"
+                  className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
                 >
                   Projects
                 </TabsTrigger>
 
                 <TabsTrigger
                   value="education"
-                  className="bg-transparent border-b-2 border-transparent data-[state=active]:border-[#FF0000] data-[state=active]:text-white rounded-none px-6 py-3 text-gray-400"
+                  className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
                 >
                   Education
                 </TabsTrigger>
@@ -249,7 +256,7 @@ export default function Portfolio() {
               </TabsContent>
 
               <TabsContent value="skills" id="skills" className="mt-6 scroll-mt-24">
-                <SkillsTab onOpenProject={handleOpenProjectFromSkills} />
+                <SkillsTab onOpenProject={handleOpenProjectFromSkills} theme={theme} />
               </TabsContent>
 
               {/* Projects tab uses the grid cards (previous HomeTab) */}

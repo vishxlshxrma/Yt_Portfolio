@@ -46,7 +46,7 @@ export default function ExperienceTab({ workExperience = [] }) {
             className="group cursor-pointer outline-none"
             aria-label={`Open details for ${exp.title}`}
           >
-            <div className="relative overflow-hidden rounded-2xl bg-[#1f1f1f]">
+            <div className="relative overflow-hidden rounded-2xl bg-[var(--surface)]">
               <img
                 src={exp.thumbnail}
                 alt={exp.title}
@@ -57,7 +57,7 @@ export default function ExperienceTab({ workExperience = [] }) {
               </div>
               {exp.featured ? (
                 <div className="absolute left-3 top-3">
-                  <Badge className="rounded-full border border-white/10 bg-[rgba(0,0,0,0.72)] px-3 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                  <Badge className="rounded-full border border-white/15 bg-[rgba(0,0,0,0.72)] px-3 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
                     {exp.featured}
                   </Badge>
                 </div>
@@ -68,31 +68,31 @@ export default function ExperienceTab({ workExperience = [] }) {
               <img
                 src={exp.logo ?? exp.thumbnail}
                 alt={`${exp.company} logo`}
-                className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-full border border-white/10 object-cover"
+                className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-full border border-[var(--border)] object-cover"
               />
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="line-clamp-2 text-[1.08rem] font-semibold leading-6 text-white transition-colors group-hover:text-[#f1f1f1]">
+                  <h3 className="line-clamp-2 text-[1.08rem] font-semibold leading-6 text-[var(--text-primary)] transition-colors group-hover:opacity-90">
                     {exp.title}
                   </h3>
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[#aaaaaa] transition group-hover:bg-white/8 group-hover:text-white">
+                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition group-hover:bg-[var(--surface-hover)] group-hover:text-[var(--text-primary)]">
                     <MoreVertical className="h-5 w-5" />
                   </div>
                 </div>
 
-                <div className="mt-1 flex items-center gap-1.5 text-sm text-[#aaaaaa]">
+                <div className="mt-1 flex items-center gap-1.5 text-sm text-[var(--text-secondary)]">
                   <span className="truncate">{exp.company}</span>
                   {exp.verified ? (
-                    <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0 fill-current text-[#aaaaaa]" />
+                    <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0 fill-current text-[var(--text-secondary)]" />
                   ) : null}
                 </div>
 
-                <p className="mt-1 text-sm text-[#9f9f9f]">
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
                   {exp.metaLine}
                 </p>
 
-                <p className="mt-1 line-clamp-2 text-sm leading-5 text-[#8c8c8c]">
+                <p className="mt-1 line-clamp-2 text-sm leading-5 text-[var(--text-secondary)]">
                   {exp.summary}
                 </p>
               </div>
@@ -107,7 +107,7 @@ export default function ExperienceTab({ workExperience = [] }) {
           onClick={() => setActiveExperience(null)}
         >
           <div
-            className="animate-experiencePanelIn w-full max-w-4xl overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#181818] shadow-[0_30px_120px_rgba(0,0,0,0.65)]"
+            className="animate-experiencePanelIn w-full max-w-4xl overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[var(--surface)] shadow-[0_30px_120px_rgba(0,0,0,0.65)]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="relative">
@@ -116,7 +116,7 @@ export default function ExperienceTab({ workExperience = [] }) {
                 alt={activeExperience.title}
                 className="h-[240px] w-full object-cover sm:h-[320px]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-[#181818]/25 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
               <button
                 type="button"
@@ -132,7 +132,7 @@ export default function ExperienceTab({ workExperience = [] }) {
                   {activeExperience.dateLabel}
                 </Badge>
                 {activeExperience.featured ? (
-                  <Badge className="rounded-full bg-[#ff0000] px-3 py-1 text-xs text-white">
+                  <Badge className="rounded-full bg-[var(--accent-red)] px-3 py-1 text-xs text-white">
                     {activeExperience.featured}
                   </Badge>
                 ) : null}
@@ -150,52 +150,52 @@ export default function ExperienceTab({ workExperience = [] }) {
                 <img
                   src={activeExperience.logo ?? activeExperience.thumbnail}
                   alt={`${activeExperience.company} logo`}
-                  className="h-14 w-14 flex-shrink-0 rounded-full border border-white/10 object-cover"
+                  className="h-14 w-14 flex-shrink-0 rounded-full border border-[var(--border)] object-cover"
                 />
 
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2 text-sm text-[#aaaaaa]">
-                    <span className="truncate font-medium text-[#d6d6d6]">
+                  <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--text-secondary)]">
+                    <span className="truncate font-medium text-[var(--text-primary)]">
                       {activeExperience.company}
                     </span>
                     {activeExperience.verified ? (
-                      <CheckCircle2 className="h-4 w-4 flex-shrink-0 fill-current text-[#aaaaaa]" />
+                      <CheckCircle2 className="h-4 w-4 flex-shrink-0 fill-current text-[var(--text-secondary)]" />
                     ) : null}
                   </div>
 
-                  <h3 className="mt-1 text-2xl font-semibold leading-tight text-white sm:text-[2rem]">
+                  <h3 className="mt-1 text-2xl font-semibold leading-tight text-[var(--text-primary)] sm:text-[2rem]">
                     {activeExperience.title}
                   </h3>
 
-                  <p className="mt-2 text-sm leading-6 text-[#a7a7a7]">
+                  <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
                     {activeExperience.metaLine}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-white/8 bg-[#202020] p-5">
-                <div className="flex flex-wrap items-center gap-3 text-sm text-[#b7b7b7]">
+              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] p-5">
+                <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-secondary)]">
                   <span className="inline-flex items-center gap-2">
-                    <BriefcaseBusiness className="h-4 w-4 text-[#ff4e45]" />
+                    <BriefcaseBusiness className="h-4 w-4 text-[var(--accent-red)]" />
                     Work Experience
                   </span>
                   <span>{activeExperience.dateLabel}</span>
                   {activeExperience.location ? <span>{activeExperience.location}</span> : null}
                 </div>
 
-                <p className="mt-4 text-[15px] leading-7 text-[#e3e3e3]">
+                <p className="mt-4 text-[15px] leading-7 text-[var(--text-primary)]">
                   {activeExperience.description ?? activeExperience.summary}
                 </p>
 
                 {activeExperience.details?.length ? (
                   <div className="mt-5">
-                    <h4 className="text-sm font-medium uppercase tracking-[0.18em] text-[#9d9d9d]">
+                    <h4 className="text-sm font-medium uppercase tracking-[0.18em] text-[var(--text-secondary)]">
                       Key Highlights
                     </h4>
-                    <ul className="mt-3 space-y-3 text-sm leading-6 text-[#d0d0d0]">
+                    <ul className="mt-3 space-y-3 text-sm leading-6 text-[var(--text-secondary)]">
                       {activeExperience.details.map((detail) => (
                         <li key={detail} className="flex gap-3">
-                          <span className="mt-[9px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#ff4e45]" />
+                          <span className="mt-[9px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--accent-red)]" />
                           <span>{detail}</span>
                         </li>
                       ))}
@@ -205,14 +205,14 @@ export default function ExperienceTab({ workExperience = [] }) {
 
                 {activeExperience.techStack?.length ? (
                   <div className="mt-5">
-                    <h4 className="text-sm font-medium uppercase tracking-[0.18em] text-[#9d9d9d]">
+                    <h4 className="text-sm font-medium uppercase tracking-[0.18em] text-[var(--text-secondary)]">
                       Tech Stack
                     </h4>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {activeExperience.techStack.map((item) => (
                         <Badge
                           key={item}
-                          className="rounded-full border border-white/10 bg-[#2a2a2a] px-3 py-1 text-xs font-medium text-[#ededed]"
+                          className="rounded-full border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]"
                         >
                           {item}
                         </Badge>

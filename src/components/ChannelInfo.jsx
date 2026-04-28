@@ -40,17 +40,17 @@ export default function ChannelInfo() {
 
   return (
     <>
-      <div className="flex items-center justify-between p-4 bg-[#1a1a1a] rounded-lg mb-6">
+      <div className="mb-6 flex items-center justify-between rounded-lg bg-[var(--surface)] p-4 text-[var(--text-primary)]">
         {/* Left: Avatar + Info */}
         <div className="flex items-center space-x-4">
           <Avatar className="w-10 h-10">
-            <AvatarFallback className="bg-[#FF0000] text-white font-bold">
+            <AvatarFallback className="bg-[var(--accent-red)] text-white font-bold">
               VK
             </AvatarFallback>
           </Avatar>
           <div>
             <h3 className="font-semibold">Vishal Kumar</h3>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-[var(--text-secondary)]">
               2+ years experience • Available for hire
             </p>
           </div>
@@ -59,7 +59,7 @@ export default function ChannelInfo() {
         {/* Contact Button */}
         <Button
           onClick={() => setShowContact(true)}
-          className="bg-[#FF0000] hover:bg-red-600 text-white px-6 py-2 rounded-full font-medium"
+          className="rounded-full bg-[var(--accent-red)] px-6 py-2 font-medium text-white hover:opacity-90"
         >
           Contact
         </Button>
@@ -69,11 +69,11 @@ export default function ChannelInfo() {
       {showContact && (
         <div
           className="fixed inset-0 z-[9999] flex items-center justify-center
-                     backdrop-blur-md bg-black/60 animate-fadeIn"
+                     backdrop-blur-md bg-[var(--overlay-backdrop)] animate-fadeIn"
         >
           <div
-            className="bg-[#1a1a1a] w-[480px] rounded-xl p-6 shadow-2xl
-                       border border-gray-700 animate-popupIn max-h-[90vh] overflow-y-auto"
+            className="max-h-[90vh] w-[480px] overflow-y-auto rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 text-[var(--text-primary)] shadow-2xl
+                       animate-popupIn"
           >
             {!selectedContactType ? (
               // Initial contact type selection
@@ -88,7 +88,7 @@ export default function ChannelInfo() {
                       key={category}
                       onClick={() => handleContactTypeSelect(category)}
                       variant="outline"
-                      className="w-full bg-[#222] text-white border-gray-700 hover:bg-[#333] transition-colors"
+                      className="w-full border-[var(--border)] bg-[var(--surface-muted)] text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-hover)]"
                     >
                       {category}
                     </Button>
@@ -97,7 +97,7 @@ export default function ChannelInfo() {
 
                 <Button
                   onClick={() => setShowContact(false)}
-                  className="mt-6 bg-[#272727] hover:bg-[#333333] text-white w-full"
+                  className="mt-6 w-full bg-[var(--surface-hover)] text-[var(--text-primary)] hover:bg-[var(--surface-strong)]"
                 >
                   Close
                 </Button>
@@ -122,6 +122,10 @@ export default function ChannelInfo() {
 
 // Contact Form Component
 function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, onClose }) {
+  const fieldClassName =
+    "w-full rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] p-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--accent-red)] focus:outline-none";
+  const textareaClassName = `${fieldClassName} resize-none`;
+
   const renderFormFields = () => {
     switch (contactType) {
       case "Employers / Recruiters":
@@ -133,7 +137,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.yourName || ""}
                 onChange={(e) => onInputChange("yourName", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="Enter your name"
                 required
               />
@@ -144,7 +148,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.companyName || ""}
                 onChange={(e) => onInputChange("companyName", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="Enter company name"
                 required
               />
@@ -155,7 +159,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.position || ""}
                 onChange={(e) => onInputChange("position", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="e.g., HR Manager, Tech Lead"
               />
             </div>
@@ -165,7 +169,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="email"
                 value={formData.email || ""}
                 onChange={(e) => onInputChange("email", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="your.email@company.com"
                 required
               />
@@ -176,7 +180,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="tel"
                 value={formData.phone || ""}
                 onChange={(e) => onInputChange("phone", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="+1 (555) 123-4567"
               />
             </div>
@@ -185,7 +189,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
               <textarea
                 value={formData.message || ""}
                 onChange={(e) => onInputChange("message", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none resize-none"
+                className={textareaClassName}
                 rows="4"
                 placeholder="Describe the role, team, and why you're reaching out..."
                 required
@@ -203,7 +207,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.yourName || ""}
                 onChange={(e) => onInputChange("yourName", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="Enter your name"
                 required
               />
@@ -213,7 +217,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
               <select
                 value={formData.projectType || ""}
                 onChange={(e) => onInputChange("projectType", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 required
               >
                 <option value="">Select project type</option>
@@ -229,7 +233,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
               <select
                 value={formData.budget || ""}
                 onChange={(e) => onInputChange("budget", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 required
               >
                 <option value="">Select budget range</option>
@@ -244,7 +248,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
               <select
                 value={formData.timeline || ""}
                 onChange={(e) => onInputChange("timeline", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 required
               >
                 <option value="">Select timeline</option>
@@ -260,7 +264,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="email"
                 value={formData.email || ""}
                 onChange={(e) => onInputChange("email", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="your.email@example.com"
                 required
               />
@@ -271,7 +275,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="tel"
                 value={formData.phone || ""}
                 onChange={(e) => onInputChange("phone", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="+1 (555) 123-4567"
               />
             </div>
@@ -280,7 +284,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
               <textarea
                 value={formData.message || ""}
                 onChange={(e) => onInputChange("message", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none resize-none"
+                className={textareaClassName}
                 rows="4"
                 placeholder="Describe your project requirements, goals, and any specific technologies..."
                 required
@@ -298,7 +302,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.yourName || ""}
                 onChange={(e) => onInputChange("yourName", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="Enter your name"
                 required
               />
@@ -309,7 +313,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.role || ""}
                 onChange={(e) => onInputChange("role", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="e.g., Computer Science Student, Junior Developer"
                 required
               />
@@ -320,7 +324,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.interests || ""}
                 onChange={(e) => onInputChange("interests", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="e.g., React, AI, Web Development, Machine Learning"
                 required
               />
@@ -331,7 +335,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="email"
                 value={formData.email || ""}
                 onChange={(e) => onInputChange("email", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="your.email@example.com"
                 required
               />
@@ -342,7 +346,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="url"
                 value={formData.portfolio || ""}
                 onChange={(e) => onInputChange("portfolio", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="https://linkedin.com/in/yourprofile"
               />
             </div>
@@ -351,7 +355,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
               <textarea
                 value={formData.message || ""}
                 onChange={(e) => onInputChange("message", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none resize-none"
+                className={textareaClassName}
                 rows="4"
                 placeholder="What would you like to discuss or learn about?"
                 required
@@ -369,7 +373,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.yourName || ""}
                 onChange={(e) => onInputChange("yourName", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="Enter your name"
                 required
               />
@@ -380,7 +384,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="text"
                 value={formData.interests || ""}
                 onChange={(e) => onInputChange("interests", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="e.g., Machine Learning, ChatGPT, Robotics, Future of AI"
                 required
               />
@@ -391,7 +395,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
                 type="email"
                 value={formData.email || ""}
                 onChange={(e) => onInputChange("email", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 placeholder="your.email@example.com"
                 required
               />
@@ -401,7 +405,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
               <select
                 value={formData.communication || ""}
                 onChange={(e) => onInputChange("communication", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white focus:border-[#FF0000] focus:outline-none"
+                className={fieldClassName}
                 required
               >
                 <option value="">Select preference</option>
@@ -415,7 +419,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
               <textarea
                 value={formData.message || ""}
                 onChange={(e) => onInputChange("message", e.target.value)}
-                className="w-full p-3 bg-[#222] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#FF0000] focus:outline-none resize-none"
+                className={textareaClassName}
                 rows="4"
                 placeholder="Share your thoughts on AI, ask questions, or suggest discussion topics..."
                 required
@@ -435,7 +439,7 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
         <Button
           onClick={onBack}
           variant="ghost"
-          className="text-gray-400 hover:text-white p-2 mr-2"
+          className="mr-2 p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
         >
           ← Back
         </Button>
@@ -452,13 +456,13 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
             type="button"
             onClick={onClose}
             variant="outline"
-            className="flex-1 bg-[#272727] hover:bg-[#333333] text-white border-gray-600"
+            className="flex-1 border-[var(--border)] bg-[var(--surface-hover)] text-[var(--text-primary)] hover:bg-[var(--surface-strong)]"
           >
             Cancel
           </Button>
           <Button
             type="submit"
-            className="flex-1 bg-[#FF0000] hover:bg-red-600 text-white"
+            className="flex-1 bg-[var(--accent-red)] text-white hover:opacity-90"
           >
             Send Message
           </Button>

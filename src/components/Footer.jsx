@@ -18,12 +18,12 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="bg-[#1a1a1a] border-t border-gray-800 py-6 mt-8">
+      <footer className="mt-8 border-t border-[var(--border)] bg-[var(--surface)] py-6 text-[var(--text-primary)] transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-wrap justify-center space-x-8 text-sm text-gray-400">
+          <div className="flex flex-wrap justify-center space-x-8 text-sm text-[var(--text-secondary)]">
             <button
               onClick={() => openInBackground("/Vishal_Kumar_Resume.pdf")}
-              className="hover:text-white transition-colors flex items-center"
+              className="flex items-center transition-colors hover:text-[var(--text-primary)]"
             >
               <Download className="w-4 h-4 mr-1" />
               My Resume
@@ -33,7 +33,7 @@ export default function Footer() {
               onClick={() =>
                 openInBackground("https://www.linkedin.com/in/vishal-kumar-130a90249/")
               }
-              className="hover:text-white transition-colors flex items-center"
+              className="flex items-center transition-colors hover:text-[var(--text-primary)]"
             >
               <ExternalLink className="w-4 h-4 mr-1" />
               LinkedIn
@@ -41,13 +41,13 @@ export default function Footer() {
 
             <button
               onClick={() => setShowContact(true)}
-              className="hover:text-white transition-colors"
+              className="transition-colors hover:text-[var(--text-primary)]"
             >
               Contact
             </button>
           </div>
 
-          <div className="text-center text-xs text-gray-500 mt-4">
+          <div className="mt-4 text-center text-xs text-[var(--text-secondary)]">
             © 2025 Vishal Kumar Portfolio • Inspired by a thought in my dream 😴
           </div>
         </div>
@@ -57,11 +57,11 @@ export default function Footer() {
       {showContact && (
         <div
           className="fixed inset-0 z-[9999] flex items-center justify-center
-                     backdrop-blur-md bg-black/60 animate-fadeIn"
+                     backdrop-blur-md bg-[var(--overlay-backdrop)] animate-fadeIn"
         >
           <div
-            className="bg-[#1a1a1a] w-[420px] rounded-xl p-6 shadow-2xl
-                       border border-gray-700 animate-popupIn"
+            className="w-[420px] rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 text-[var(--text-primary)] shadow-2xl
+                       animate-popupIn"
           >
             <h2 className="text-lg font-semibold mb-4 text-center">
               How would you like to connect?
@@ -78,7 +78,7 @@ export default function Footer() {
                 <Button
                   key={category}
                   variant="outline"
-                  className="w-full bg-[#222] text-white border-gray-700 hover:bg-[#333] transition-colors"
+                  className="w-full border-[var(--border)] bg-[var(--surface-muted)] text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-hover)]"
                 >
                   {category}
                 </Button>
@@ -87,7 +87,7 @@ export default function Footer() {
 
             <Button
               onClick={() => setShowContact(false)}
-              className="mt-6 bg-[#272727] hover:bg-[#333333] text-white w-full"
+              className="mt-6 w-full bg-[var(--surface-hover)] text-[var(--text-primary)] hover:bg-[var(--surface-strong)]"
             >
               Close
             </Button>

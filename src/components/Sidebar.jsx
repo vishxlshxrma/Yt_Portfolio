@@ -4,7 +4,6 @@ import {
   Zap,
   PlaySquare,
   History,
-  List,
   Video,
   GraduationCap,
 } from "lucide-react";
@@ -27,7 +26,7 @@ export default function Sidebar({ open, subscriptions = [], activeId, onGoto }) 
 
   return (
     <aside
-      className={`${open ? "w-60" : "w-0"} transition-all duration-300 overflow-hidden bg-[#0f0f0f] border-r border-gray-800 min-h-screen`}
+      className={`${open ? "w-60" : "w-0"} min-h-screen overflow-hidden border-r border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] transition-all duration-300`}
     >
       <div className="p-3">
         {/* Top nav items */}
@@ -39,12 +38,14 @@ export default function Sidebar({ open, subscriptions = [], activeId, onGoto }) 
                 key={id}
                 onClick={() => onGoto?.(id)}
                 className={`flex items-center space-x-6 px-3 py-2 rounded-lg w-full text-left ${
-                  active ? "bg-[#272727] text-white" : "hover:bg-[#272727]"
+                  active
+                    ? "bg-[var(--surface-hover)] text-[var(--text-primary)]"
+                    : "text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-sm">{label}</span>
-                {active && <span className="w-2 h-2 bg-blue-500 rounded-full ml-auto" />}
+                {active && <span className="ml-auto h-2 w-2 rounded-full bg-[var(--accent-red)]" />}
               </button>
             );
           })}
@@ -52,7 +53,7 @@ export default function Sidebar({ open, subscriptions = [], activeId, onGoto }) 
 
         {/* You Section */}
         <div className="mb-6">
-          <div className="flex items-center space-x-2 px-3 py-2 text-white">
+          <div className="flex items-center space-x-2 px-3 py-2 text-[var(--text-primary)]">
             <span className="text-sm font-medium">A little about me</span>
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -68,7 +69,7 @@ export default function Sidebar({ open, subscriptions = [], activeId, onGoto }) 
               <button
                 key={label}
                 onClick={() => onGoto?.(id)}
-                className="flex items-center space-x-6 px-3 py-2 rounded-lg hover:bg-[#272727] w-full text-left"
+                className="flex w-full items-center space-x-6 rounded-lg px-3 py-2 text-left text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]"
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-sm">{label}</span>
@@ -77,27 +78,27 @@ export default function Sidebar({ open, subscriptions = [], activeId, onGoto }) 
           </div>
         </div>
 
-        <div className="border-t border-gray-700 my-4" />
+        <div className="my-4 border-t border-[var(--border)]" />
 
         {/* Core Skills */}
         <div>
           <div className="px-3 py-2">
-            <h3 className="text-sm font-medium text-white">Core Skills</h3>
+            <h3 className="text-sm font-medium text-[var(--text-primary)]">Core Skills</h3>
           </div>
           <div className="space-y-1">
             {subscriptions.map((s, i) => (
               <div
                 key={i}
-                className="flex items-center space-x-6 px-3 py-2 rounded-lg hover:bg-[#272727] cursor-pointer"
+                className="flex cursor-pointer items-center space-x-6 rounded-lg px-3 py-2 text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]"
               >
-                <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-xs font-bold">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--surface-strong)] text-xs font-bold text-[var(--text-primary)]">
                   {s.avatar}
                 </div>
                 <span className="text-sm flex-1">{s.name}</span>
                 {s.isLive && (
                   <div className="flex items-center">
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse ml-0.5" />
+                    <div className="h-2 w-2 animate-pulse rounded-full bg-[var(--accent-red)]" />
+                    <div className="ml-0.5 h-2 w-2 animate-pulse rounded-full bg-[var(--accent-red)]" />
                   </div>
                 )}
               </div>

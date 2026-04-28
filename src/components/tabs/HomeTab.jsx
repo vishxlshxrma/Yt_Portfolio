@@ -55,7 +55,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
             className="group cursor-pointer outline-none"
             aria-label={`Open details for ${project.title}`}
           >
-            <div className="relative overflow-hidden rounded-2xl bg-[#1f1f1f]">
+            <div className="relative overflow-hidden rounded-2xl bg-[var(--surface)]">
               <img
                 src={project.thumbnail}
                 alt={project.title}
@@ -70,26 +70,26 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
               <img
                 src={project.thumbnail}
                 alt={`${project.title} logo`}
-                className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-full border border-white/10 object-cover"
+                className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-full border border-[var(--border)] object-cover"
               />
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="line-clamp-2 text-[1.08rem] font-semibold leading-6 text-white transition-colors group-hover:text-[#f1f1f1]">
+                  <h3 className="line-clamp-2 text-[1.08rem] font-semibold leading-6 text-[var(--text-primary)] transition-colors group-hover:opacity-90">
                     {project.title}
                   </h3>
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[#aaaaaa] transition group-hover:bg-white/8 group-hover:text-white">
+                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition group-hover:bg-[var(--surface-hover)] group-hover:text-[var(--text-primary)]">
                     <MoreVertical className="h-5 w-5" />
                   </div>
                 </div>
 
-                <p className="mt-1 text-sm text-[#aaaaaa]">{project.company}</p>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">{project.company}</p>
 
-                <p className="mt-1 line-clamp-2 text-sm leading-5 text-[#8c8c8c]">
+                <p className="mt-1 line-clamp-2 text-sm leading-5 text-[var(--text-secondary)]">
                   {project.description}
                 </p>
 
-                <div className="mt-3 flex items-center justify-between gap-3 text-xs text-[#aaaaaa]">
+                <div className="mt-3 flex items-center justify-between gap-3 text-xs text-[var(--text-secondary)]">
                   <div className="flex items-center gap-1.5">
                     <Eye className="h-3.5 w-3.5" />
                     <span>{project.views} impact</span>
@@ -99,7 +99,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                       <Badge
                         key={tag}
                         variant="secondary"
-                        className="rounded-full border border-white/10 bg-[#2a2a2a] px-2.5 py-0.5 text-[11px] text-[#d7d7d7]"
+                        className="rounded-full border border-[var(--border)] bg-[var(--surface-hover)] px-2.5 py-0.5 text-[11px] text-[var(--text-primary)]"
                       >
                         {tag}
                       </Badge>
@@ -118,7 +118,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
           onClick={() => setActiveProject(null)}
         >
           <div
-            className="animate-experiencePanelIn w-full max-w-4xl overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#181818] shadow-[0_30px_120px_rgba(0,0,0,0.65)]"
+            className="animate-experiencePanelIn w-full max-w-4xl overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[var(--surface)] shadow-[0_30px_120px_rgba(0,0,0,0.65)]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="relative">
@@ -127,7 +127,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                 alt={activeProject.title}
                 className="h-[240px] w-full object-cover sm:h-[320px]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-[#181818]/25 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
               <button
                 type="button"
@@ -154,46 +154,46 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                 <img
                   src={activeProject.thumbnail}
                   alt={`${activeProject.title} logo`}
-                  className="h-14 w-14 flex-shrink-0 rounded-full border border-white/10 object-cover"
+                  className="h-14 w-14 flex-shrink-0 rounded-full border border-[var(--border)] object-cover"
                 />
 
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2 text-sm text-[#aaaaaa]">
-                    <span className="truncate font-medium text-[#d6d6d6]">
+                  <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--text-secondary)]">
+                    <span className="truncate font-medium text-[var(--text-primary)]">
                       {activeProject.company}
                     </span>
                   </div>
 
-                  <h3 className="mt-1 text-2xl font-semibold leading-tight text-white sm:text-[2rem]">
+                  <h3 className="mt-1 text-2xl font-semibold leading-tight text-[var(--text-primary)] sm:text-[2rem]">
                     {activeProject.title}
                   </h3>
                 </div>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-white/8 bg-[#202020] p-5">
-                <div className="flex flex-wrap items-center gap-3 text-sm text-[#b7b7b7]">
+              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] p-5">
+                <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-secondary)]">
                   <span className="inline-flex items-center gap-2">
-                    <FolderOpen className="h-4 w-4 text-[#ff4e45]" />
+                    <FolderOpen className="h-4 w-4 text-[var(--accent-red)]" />
                     Project
                   </span>
                   <span>{activeProject.duration}</span>
                   <span>{activeProject.views} impact</span>
                 </div>
 
-                <p className="mt-4 text-[15px] leading-7 text-[#e3e3e3]">
+                <p className="mt-4 text-[15px] leading-7 text-[var(--text-primary)]">
                   {activeProject.description}
                 </p>
 
                 {activeProject.tags?.length ? (
                   <div className="mt-5">
-                    <h4 className="text-sm font-medium uppercase tracking-[0.18em] text-[#9d9d9d]">
+                    <h4 className="text-sm font-medium uppercase tracking-[0.18em] text-[var(--text-secondary)]">
                       Tech Stack
                     </h4>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {activeProject.tags.map((tag) => (
                         <Badge
                           key={tag}
-                          className="rounded-full border border-white/10 bg-[#2a2a2a] px-3 py-1 text-xs font-medium text-[#ededed]"
+                          className="rounded-full border border-[var(--border)] bg-[var(--surface-hover)] px-3 py-1 text-xs font-medium text-[var(--text-primary)]"
                         >
                           {tag}
                         </Badge>

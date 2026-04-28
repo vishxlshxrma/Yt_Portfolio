@@ -82,7 +82,7 @@ const createSkillGlobeNodes = (): SkillGlobeNode[] => {
 };
 
 // Background Particle Field
-function ParticleShell() {
+function ParticleShell({ particleColor }: { particleColor: string }) {
   const points = useMemo(() => {
     const positions = [] as number[];
     for (let i = 0; i < 300; i += 1) {
@@ -101,7 +101,7 @@ function ParticleShell() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" count={points.length / 3} array={points} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.035} color="#7ee2ff" transparent opacity={0.35} depthWrite={false} />
+      <pointsMaterial size={0.035} color={particleColor} transparent opacity={0.35} depthWrite={false} />
     </points>
   );
 }
@@ -109,15 +109,26 @@ function ParticleShell() {
 // Main Skill Cosmos Sphere
 function SkillCosmos({ 
   activeDomainId, 
-  activeSkillId 
+  activeSkillId,
+  theme
 }: { 
   activeDomainId: DomainId | null;
   activeSkillId: string | null;
+  theme: "light" | "dark";
 }) {
   const sphereRef = useRef<Group>(null);
   const { viewport, mouse } = useThree();
   const [hoveredSkillId, setHoveredSkillId] = useState<string | null>(null);
   const nodes = useMemo(() => createSkillGlobeNodes(), []);
+  const isLightTheme = theme === "light";
+  const coreSphereColor = isLightTheme ? "#263247" : "#111827";
+  const coreSphereEmissive = isLightTheme ? "#0f4c81" : "#0b3b58";
+  const wireframeColor = isLightTheme ? "#ff9b8f" : "#7ee2ff";
+  const outerGlowColor = isLightTheme ? "#7ec8ff" : "#31d1ff";
+  const pointBaseColor = isLightTheme ? "#081121" : "#081121";
+  const labelColor = isLightTheme ? "#f8fbff" : "#f8fbff";
+  const labelOutlineColor = isLightTheme ? "#0b1220" : "#041221";
+  const centerColor = isLightTheme ? "#fff0f0" : "#0d1220";
   
   useFrame((state) => {
     if (!sphereRef.current) return;
@@ -136,12 +147,12 @@ function SkillCosmos({
       <mesh>
         <sphereGeometry args={[1.4, 64, 64]} />
         <meshStandardMaterial
-          color="#111827"
+          color={coreSphereColor}
           roughness={0.15}
           metalness={0.9}
           transparent
           opacity={0.75}
-          emissive="#0b3b58"
+          emissive={coreSphereEmissive}
           emissiveIntensity={0.25}
         />
       </mesh>
@@ -149,13 +160,13 @@ function SkillCosmos({
       {/* Inner Wireframe */}
       <mesh scale={[1.05, 1.05, 1.05]}>
         <icosahedronGeometry args={[1.44, 3]} />
-        <meshBasicMaterial color="#7ee2ff" transparent opacity={0.1} wireframe />
+        <meshBasicMaterial color={wireframeColor} transparent opacity={0.1} wireframe />
       </mesh>
       
       {/* Outer Glow */}
       <mesh scale={[1.22, 1.22, 1.22]}>
         <sphereGeometry args={[1, 32, 32]} />
-        <meshStandardMaterial color="#31d1ff" roughness={0.9} transparent opacity={0.03} />
+        <meshStandardMaterial color={outerGlowColor} roughness={0.9} transparent opacity={0.03} />
       </mesh>
       
       {/* Skill dots + city-style labels */}
@@ -192,7 +203,7 @@ function SkillCosmos({
             <mesh position={node.pointPosition}>
               <sphereGeometry args={[pointSize, 16, 16]} />
               <meshStandardMaterial
-                color="#081121"
+                color={pointBaseColor}
                 emissive={node.domainColor}
                 emissiveIntensity={emphasis ? 1.4 : 0.95}
                 transparent
@@ -210,8 +221,8 @@ function SkillCosmos({
             <Billboard position={labelPosition}>
               <Text
                 fontSize={emphasis ? 0.07 : 0.062}
-                color="#f8fbff"
-                outlineColor="#041221"
+                color={labelColor}
+                outlineColor={labelOutlineColor}
                 outlineWidth={0.004}
                 anchorX="center"
                 anchorY="middle"
@@ -235,7 +246,7 @@ function SkillCosmos({
       })}
       
       {/* Background Particles */}
-      <ParticleShell />
+      <ParticleShell particleColor={wireframeColor} />
       
       {/* Center Core */}
       <mesh position={[0, 0, 0]}>
@@ -243,7 +254,7 @@ function SkillCosmos({
         <meshStandardMaterial 
           emissive="#ffffff" 
           emissiveIntensity={0.85} 
-          color="#0d1220" 
+          color={centerColor}
           roughness={0.2} 
           metalness={0.9} 
           transparent 
@@ -257,18 +268,28 @@ function SkillCosmos({
 interface Props {
   activeDomainId: DomainId | null;
   activeSkillId: string | null;
+  theme: "light" | "dark";
 }
 
-export default function SkillSphereScene({ activeDomainId, activeSkillId }: Props) {
+export default function SkillSphereScene({ activeDomainId, activeSkillId, theme }: Props) {
+  const isLightTheme = theme === "light";
+  const sceneBackground = isLightTheme ? "#101826" : "#05070f";
+  const primaryLightColor = isLightTheme ? "#78d4ff" : "#70d5ff";
+  const secondaryLightColor = isLightTheme ? "#ff8a80" : "#ff5ebe";
+  const frameBackground = isLightTheme ? "#131d2d" : "var(--surface-muted)";
+
   return (
-    <div className="relative h-[520px] w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#05070f] shadow-[0_50px_120px_rgba(0,0,0,0.45)]">
+    <div
+      className="relative h-[520px] w-full overflow-hidden rounded-[2.5rem] border border-[var(--border)] shadow-[0_50px_120px_rgba(0,0,0,0.45)]"
+      style={{ backgroundColor: frameBackground }}
+    >
       <Canvas camera={{ position: [0, 0, 6], fov: 38 }} shadows>
-        <color attach="background" args={["#05070f"]} />
-        <ambientLight intensity={0.5} />
-        <pointLight position={[6, 4, 8]} intensity={1.1} color="#70d5ff" />
-        <pointLight position={[-5, -2, -5]} intensity={0.35} color="#ff5ebe" />
+        <color attach="background" args={[sceneBackground]} />
+        <ambientLight intensity={0.52} />
+        <pointLight position={[6, 4, 8]} intensity={1.1} color={primaryLightColor} />
+        <pointLight position={[-5, -2, -5]} intensity={0.35} color={secondaryLightColor} />
         <Stars radius={40} depth={60} count={2500} factor={4} saturation={0.3} fade />
-        <SkillCosmos activeDomainId={activeDomainId} activeSkillId={activeSkillId} />
+        <SkillCosmos activeDomainId={activeDomainId} activeSkillId={activeSkillId} theme={theme} />
       </Canvas>
     </div>
   );
