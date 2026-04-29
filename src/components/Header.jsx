@@ -3,6 +3,7 @@ import { Menu, Play, Folder, Bell, Search, Linkedin, Moon, Sun } from "lucide-re
 import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import { Avatar, AvatarFallback } from "components/ui/avatar";
+import ContactModal from "components/ContactModal";
 
 export default function Header({
   sidebarOpen,
@@ -189,47 +190,7 @@ export default function Header({
         </div>
       </header>
 
-      {/* Contact Modal */}
-      {showContact && (
-        <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center
-                     backdrop-blur-md bg-[var(--overlay-backdrop)] animate-fadeIn"
-        >
-          <div
-            className="w-[420px] rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 text-[var(--text-primary)] shadow-2xl
-                       animate-popupIn"
-          >
-            <h2 className="mb-4 text-center text-lg font-semibold">
-              How would you like to connect?
-            </h2>
-
-            <div className="space-y-3">
-              {[
-                "Employers / Recruiters",
-                "Collaborators / Founders / Startups",
-                "Freelance / Client Work Enquiries",
-                "Networking / Students / Learners",
-                "Casual Chat / AI Enthusiasts",
-              ].map((category) => (
-                <Button
-                  key={category}
-                  variant="outline"
-                  className="w-full border-[var(--border)] bg-[var(--surface-muted)] text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-hover)]"
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
-
-            <Button
-              onClick={() => setShowContact(false)}
-              className="mt-6 w-full bg-[var(--surface-hover)] text-[var(--text-primary)] hover:bg-[var(--surface-strong)]"
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      )}
+      <ContactModal open={showContact} onClose={() => setShowContact(false)} />
     </>
   );
 }

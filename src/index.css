@@ -151,6 +151,73 @@ code {
   animation: fadeSlide 220ms ease-out forwards;
 }
 
+@keyframes startupLogoZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(18);
+  }
+}
+
+@keyframes startupOverlayFade {
+  0%,
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes startupLogoFadeReduced {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes startupOverlayFadeReduced {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.startup-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: #0f0f0f;
+  animation: startupOverlayFade 2050ms ease-in-out forwards;
+}
+
+.startup-splash-logo {
+  width: clamp(96px, 22vw, 190px);
+  height: auto;
+  will-change: transform, opacity;
+  transform-origin: center center;
+  animation: startupLogoZoom 2050ms cubic-bezier(0.2, 0.75, 0.24, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-experienceOverlayIn,
   .animate-experiencePanelIn,
@@ -159,5 +226,14 @@ code {
   .animate-popupIn,
   .animate-fadeSlide {
     animation: none;
+  }
+
+  .startup-splash {
+    animation: startupOverlayFadeReduced 420ms ease-out forwards;
+  }
+
+  .startup-splash-logo {
+    animation: startupLogoFadeReduced 420ms ease-out forwards;
+    transform: none;
   }
 }
