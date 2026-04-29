@@ -9,7 +9,7 @@ export default function EducationTab() {
     {
       title: "Master of Science in Computer Science",
       institution: "University of Southern California",
-      dateLabel: "2024 - 2026",
+      dateLabel: "2025 - 2027",
       location: "Los Angeles, CA",
       thumbnail: "/images/usc.png",
       logo: "/images/usc.png",
@@ -25,7 +25,6 @@ export default function EducationTab() {
       ],
       coursework: ["Advanced Algorithms", "Web Technologies", "Game Development", "Software Engineering"],
       featured: "Current",
-      verified: true,
     },
     {
       title: "Bachelor of Technology in Computer Engineering",
@@ -46,7 +45,6 @@ export default function EducationTab() {
       ],
       coursework: ["Data Structures", "Artificial Intelligence", "Full-Stack Development", "Computer Engineering"],
       featured: "Graduated",
-      verified: true,
     },
   ];
 

@@ -18,9 +18,14 @@ export type ViewMode = "overview" | "domain" | "skill";
 type Props = {
   onOpenProject?: (projectId: string) => void;
   theme?: "light" | "dark";
+  searchFocus?: {
+    skillId?: string;
+    domainId?: DomainId;
+    token: number;
+  } | null;
 };
 
-export default function SkillsTab({ onOpenProject, theme = "dark" }: Props) {
+export default function SkillsTab({ onOpenProject, theme = "dark", searchFocus = null }: Props) {
   const [activeDomainId, setActiveDomainId] = useState<DomainId | null>(null);
   const [activeSkillId, setActiveSkillId] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -65,6 +70,26 @@ export default function SkillsTab({ onOpenProject, theme = "dark" }: Props) {
     setActiveDomainId(current => current === domainId ? null : domainId);
     setActiveSkillId(null); // Clear skill when domain changes
   };
+
+  useEffect(() => {
+    if (!searchFocus?.token) return;
+
+    const focusedSkill = searchFocus.skillId
+      ? skills.find((skill) => skill.id === searchFocus.skillId) ?? null
+      : null;
+
+    const nextDomainId = searchFocus.domainId ?? focusedSkill?.domainIds?.[0] ?? null;
+    if (nextDomainId) {
+      setActiveDomainId(nextDomainId);
+    }
+
+    if (searchFocus.skillId) {
+      setActiveSkillId(searchFocus.skillId);
+      return;
+    }
+
+    setActiveSkillId(null);
+  }, [searchFocus]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {

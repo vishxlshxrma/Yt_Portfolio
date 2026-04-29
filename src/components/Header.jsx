@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Menu, Play, Folder, Bell, Search, Linkedin, Moon, Sun } from "lucide-react";
 import { Button } from "components/ui/button";
 import { Input } from "components/ui/input";
 import { Avatar, AvatarFallback } from "components/ui/avatar";
 
-export default function Header({ sidebarOpen, setSidebarOpen, theme, onToggleTheme }) {
+export default function Header({
+  sidebarOpen,
+  setSidebarOpen,
+  theme,
+  onToggleTheme,
+  onSearchSubmit,
+  searchQuery,
+  setSearchQuery,
+  searchSuggestions = [],
+  contactRequestToken = 0,
+}) {
   const [showContact, setShowContact] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchRef = useRef(null);
 
   const openInBackground = (path) => {
     const absoluteUrl = path.startsWith("http")
@@ -17,6 +29,32 @@ export default function Header({ sidebarOpen, setSidebarOpen, theme, onToggleThe
       window.focus();
     }
   };
+
+  useEffect(() => {
+    if (!contactRequestToken) return;
+    setShowContact(true);
+  }, [contactRequestToken]);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!searchRef.current?.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
+  const handleSearchSubmit = (value = searchQuery) => {
+    const trimmed = String(value ?? "").trim();
+    if (!trimmed) return;
+    onSearchSubmit?.(trimmed);
+    setShowSuggestions(false);
+  };
+
+  const shouldShowSuggestions =
+    showSuggestions && String(searchQuery ?? "").trim().length > 0 && searchSuggestions.length > 0;
 
   return (
     <>
@@ -43,21 +81,56 @@ export default function Header({ sidebarOpen, setSidebarOpen, theme, onToggleThe
 
           {/* Middle: search */}
           <div className="flex-1 max-w-2xl mx-8">
-            <div className="relative">
+            <div className="relative" ref={searchRef}>
               <div className="flex items-center overflow-hidden rounded-full border border-[var(--border)]">
                 <Input
-                  placeholder="Search my skills... (e.g., Python, Project Management)"
+                  value={searchQuery}
+                  onChange={(event) => {
+                    setSearchQuery?.(event.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => setShowSuggestions(true)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      handleSearchSubmit();
+                    }
+                    if (event.key === "Escape") {
+                      setShowSuggestions(false);
+                    }
+                  }}
+                  placeholder="Search projects, skills, experience..."
                   className="h-10 rounded-none border-0 bg-[var(--surface)] pl-4 pr-12
                              text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]
                              focus:outline-none focus:ring-0 focus-visible:ring-0"
                 />
                 <button
                   type="button"
+                  onClick={() => handleSearchSubmit()}
                   className="flex h-10 w-12 items-center justify-center bg-[var(--surface-muted)] text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-hover)]"
                 >
                   <Search className="w-4 h-4" />
                 </button>
               </div>
+
+              {shouldShowSuggestions ? (
+                <div className="absolute left-0 right-0 top-full z-[90] mt-2 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+                  {searchSuggestions.map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery?.(suggestion);
+                        handleSearchSubmit(suggestion);
+                      }}
+                      className="flex w-full items-center gap-3 border-b border-[var(--border)] px-4 py-3 text-left text-sm text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-hover)] last:border-b-0"
+                    >
+                      <Search className="h-3.5 w-3.5 text-[var(--text-secondary)]" />
+                      <span>{suggestion}</span>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
 

@@ -1,69 +1,284 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Header from "components/Header";
 import Sidebar from "components/Sidebar";
 import HeroSection from "components/HeroSection";
 import VideoInfo from "components/VideoInfo";
 import Footer from "components/Footer";
+import SearchResults from "components/SearchResults";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs";
 import { SkillsTab, ExperienceTab, EducationTab } from "components/tabs";
-import ProjectsTab from "components/tabs/ProjectsTab"; // <-- added
+import ProjectsTab from "components/tabs/ProjectsTab";
+import projectsData from "components/tabs/projects.data";
+import workExperienceData from "components/tabs/experience.data";
+import {
+  domains,
+  skills,
+  subclusters,
+  projects as skillsProjects,
+} from "components/tabs/skillsData";
 import useTheme from "hooks/useTheme";
+import {
+  buildSearchSuggestions,
+  dedupeBy,
+  getSearchMatchScore,
+  matchesSearchQuery,
+  normalizeSearchText,
+} from "lib/searchUtils";
+
+const skillProjectToPortfolioTitle = {
+  "apple-iphone-website-clone": "Apple Website Clone",
+  "artsy-android-app": "Artsy Platform – Android App",
+  "artsy-website": "Artsy Platform – Web App",
+  "chatbot-template": "Chatbot Template (NLP)",
+  codebundle: "CodeBundle",
+  "invoice-generator": "Invoice Generator Platform",
+  "malaria-classification": "Malaria Detection using Deep Learning",
+  "morph-runner": "Morph Runner",
+  "music-store-analysis": "Music Store Analytics",
+  "sales-analysis": "Sales Analysis Dashboard",
+  sightranger: "SightRanger",
+  "taxi-demand-prediction": "Taxi Demand Prediction",
+  transizr: "Transizr",
+};
+
+const openInBackground = (path) => {
+  const absoluteUrl = path.startsWith("http")
+    ? path
+    : `${window.location.origin}${path}`;
+  const newTab = window.open(absoluteUrl, "_blank", "noopener,noreferrer");
+  if (newTab) {
+    newTab.blur();
+    window.focus();
+  }
+};
+
+const emptySearchResults = {
+  projects: [],
+  experience: [],
+  skills: [],
+  domains: [],
+};
 
 export default function Portfolio() {
   const { theme, toggleTheme } = useTheme();
-  // DEFAULT TO EXPERIENCE (since Home is becoming Work Experience)
   const [activeTab, setActiveTab] = useState("experience");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [projectToOpen, setProjectToOpen] = useState(null);
   const [projectTransition, setProjectTransition] = useState(null);
-  const firstRender = useRef(true); // track initial mount
-  const scrollFromSidebar = useRef(false); // scroll only when sidebar triggers the change
+  const [searchQuery, setSearchQuery] = useState("");
+  const [submittedSearchQuery, setSubmittedSearchQuery] = useState("");
+  const [contactRequestToken, setContactRequestToken] = useState(0);
+  const [skillsSearchFocus, setSkillsSearchFocus] = useState(null);
+  const firstRender = useRef(true);
+  const scrollFromSidebar = useRef(false);
 
-  const skillProjectToPortfolioTitle = {
-    "apple-iphone-website-clone": "Apple Website Clone",
-    "artsy-android-app": "Artsy Platform – Android App",
-    "artsy-website": "Artsy Platform – Web App",
-    "chatbot-template": "Chatbot Template (NLP)",
-    codebundle: "CodeBundle",
-    "invoice-generator": "Invoice Generator Platform",
-    "malaria-classification": "Malaria Detection using Deep Learning",
-    "morph-runner": "Morph Runner",
-    "music-store-analysis": "Music Store Analytics",
-    "sales-analysis": "Sales Analysis Dashboard",
-    sightranger: "SightRanger",
-    "taxi-demand-prediction": "Taxi Demand Prediction",
-    transizr: "Transizr",
-  };
+  const skillsById = useMemo(
+    () => new Map(skills.map((skill) => [skill.id, skill])),
+    []
+  );
+  const domainsById = useMemo(
+    () => new Map(domains.map((domain) => [domain.id, domain])),
+    []
+  );
+  const skillsProjectsById = useMemo(
+    () => new Map(skillsProjects.map((project) => [project.id, project])),
+    []
+  );
+  const skillsProjectsByName = useMemo(
+    () =>
+      new Map(
+        skillsProjects.map((project) => [normalizeSearchText(project.name), project])
+      ),
+    []
+  );
+  const subclustersByDomainId = useMemo(() => {
+    const map = new Map();
+    subclusters.forEach((cluster) => {
+      const list = map.get(cluster.domainId) ?? [];
+      list.push(cluster);
+      map.set(cluster.domainId, list);
+    });
+    return map;
+  }, []);
 
-  // Smooth scroll on tab change, but:
-  // - skip the very first render
-  // - (home special-case removed since we no longer use 'home' as a tab)
+  const enrichedProjects = useMemo(() => {
+    return projectsData.map((project) => {
+      const titleKey = normalizeSearchText(project.title);
+      const directMappedProjectId = Object.entries(skillProjectToPortfolioTitle).find(
+        ([, title]) => normalizeSearchText(title) === titleKey
+      )?.[0];
+
+      let skillProject = directMappedProjectId
+        ? skillsProjectsById.get(directMappedProjectId)
+        : skillsProjectsByName.get(titleKey);
+
+      if (!skillProject && titleKey.includes("chatbot template")) {
+        skillProject = skillsProjectsByName.get("chatbot template");
+      }
+
+      const skillIds = skillProject?.skillIds ?? [];
+      const domainIdsFromSkills = skillIds.flatMap(
+        (skillId) => skillsById.get(skillId)?.domainIds ?? []
+      );
+      const domainIds = dedupeBy(
+        [...(skillProject?.domainIds ?? []), ...domainIdsFromSkills],
+        (id) => id
+      );
+
+      return {
+        ...project,
+        skillIds,
+        domainIds,
+      };
+    });
+  }, [skillsById, skillsProjectsById, skillsProjectsByName]);
+
+  const enrichedExperience = useMemo(
+    () =>
+      workExperienceData.map((experience) => ({
+        ...experience,
+        skillIds: experience.skillIds ?? [],
+        domainIds: experience.domainIds ?? [],
+      })),
+    []
+  );
+
+  const searchSuggestions = useMemo(
+    () => buildSearchSuggestions(searchQuery, { skills, domains }),
+    [searchQuery]
+  );
+
+  const searchResults = useMemo(() => {
+    if (!submittedSearchQuery.trim()) return emptySearchResults;
+
+    const query = submittedSearchQuery;
+    const scoreAndFilter = (items, searchFields) =>
+      items
+        .map((item) => {
+          const values = searchFields(item);
+          const score = getSearchMatchScore(values, query);
+          const matches = score > 0 || matchesSearchQuery(values, query);
+          return { item, score, matches };
+        })
+        .filter((entry) => entry.matches)
+        .sort((a, b) => b.score - a.score)
+        .map((entry) => entry.item);
+
+    const matchedProjects = scoreAndFilter(enrichedProjects, (project) => {
+      const skillNames = (project.skillIds ?? []).map((skillId) => skillsById.get(skillId)?.name);
+      const domainNames = (project.domainIds ?? []).map((domainId) => domainsById.get(domainId)?.name);
+      return [
+        project.title,
+        project.company,
+        project.description,
+        project.tags,
+        project.skillIds,
+        project.domainIds,
+        skillNames,
+        domainNames,
+      ];
+    });
+
+    const matchedExperience = scoreAndFilter(enrichedExperience, (experience) => {
+      const skillNames = (experience.skillIds ?? []).map((skillId) => skillsById.get(skillId)?.name);
+      const domainNames = (experience.domainIds ?? []).map((domainId) => domainsById.get(domainId)?.name);
+      return [
+        experience.title,
+        experience.company,
+        experience.summary,
+        experience.description,
+        experience.details,
+        experience.techStack,
+        experience.dateLabel,
+        experience.location,
+        experience.metaLine,
+        experience.skillIds,
+        experience.domainIds,
+        skillNames,
+        domainNames,
+      ];
+    });
+
+    const directSkillMatches = scoreAndFilter(skills, (skill) => [
+      skill.name,
+      skill.description,
+      skill.type,
+      skill.importance,
+      skill.domainIds,
+      skill.domainIds.map((domainId) => domainsById.get(domainId)?.name),
+      skill.domainIds.map((domainId) => domainsById.get(domainId)?.shortName),
+    ]);
+
+    const relatedSkillIds = new Set([
+      ...directSkillMatches.map((skill) => skill.id),
+      ...matchedProjects.flatMap((project) => project.skillIds ?? []),
+      ...matchedExperience.flatMap((experience) => experience.skillIds ?? []),
+    ]);
+
+    const relatedSkills = dedupeBy(
+      Array.from(relatedSkillIds)
+        .map((skillId) => skillsById.get(skillId))
+        .filter(Boolean),
+      (skill) => skill.id
+    );
+
+    const directDomainMatches = scoreAndFilter(domains, (domain) => {
+      const domainSubclusters = subclustersByDomainId.get(domain.id) ?? [];
+      return [
+        domain.name,
+        domain.shortName,
+        domain.description,
+        domain.whyItMatters,
+        domainSubclusters.map((cluster) => cluster.name),
+        domainSubclusters.map((cluster) => cluster.description),
+      ];
+    });
+
+    const relatedDomainIds = new Set([
+      ...directDomainMatches.map((domain) => domain.id),
+      ...relatedSkills.flatMap((skill) => skill.domainIds ?? []),
+      ...matchedProjects.flatMap((project) => project.domainIds ?? []),
+      ...matchedExperience.flatMap((experience) => experience.domainIds ?? []),
+    ]);
+
+    const relatedDomains = dedupeBy(
+      Array.from(relatedDomainIds)
+        .map((domainId) => domainsById.get(domainId))
+        .filter(Boolean),
+      (domain) => domain.id
+    );
+
+    return {
+      projects: matchedProjects.slice(0, 9),
+      experience: matchedExperience.slice(0, 9),
+      skills: relatedSkills.slice(0, 8),
+      domains: relatedDomains.slice(0, 6),
+    };
+  }, [
+    submittedSearchQuery,
+    enrichedProjects,
+    enrichedExperience,
+    skillsById,
+    domainsById,
+    subclustersByDomainId,
+  ]);
+
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
-      return; // no scroll on initial load
+      return;
     }
 
     requestAnimationFrame(() => {
-      // only scroll when navigation came from the sidebar
       if (scrollFromSidebar.current) {
         const el = document.getElementById(activeTab);
         el?.scrollIntoView({ behavior: "smooth", block: "start" });
-        scrollFromSidebar.current = false; // reset
+        scrollFromSidebar.current = false;
       }
     });
   }, [activeTab]);
 
-  // Sidebar click handler: switch tab (scroll handled by the effect above)
-  const handleGoto = (id) => {
-    scrollFromSidebar.current = true; // flag that this change came from sidebar
-    setProjectToOpen(null);
-    setProjectTransition(null);
-    setActiveTab(id);
-  };
-
-  const handleOpenProjectFromSkills = (projectId) => {
-    const projectTitle = skillProjectToPortfolioTitle[projectId];
+  const routeToProjectByTitle = (projectTitle) => {
     if (!projectTitle) return;
     setProjectTransition(projectTitle);
 
@@ -84,89 +299,82 @@ export default function Portfolio() {
     }, 760);
   };
 
-  const workExperience = [
-    {
-      title: "Teaching Assistant",
-      company: "USC Viterbi",
-      dateLabel: "Jun 2025 - Aug 2025",
-      thumbnail: "/images/viterbi-k12.png",
-      logo: "/images/usc.png",
-      location: "Los Angeles, CA",
-      metaLine: "Teaching • Cybersecurity • Python • Los Angeles, CA",
-      summary:
-        "Taught cybersecurity, Python, and game development to 50+ high school students through USC’s K-12 outreach, designing hands-on modules that improved completion rates by 25%.",
-      description:
-        "Delivered high-impact instruction in cybersecurity, Python, and game development through USC Viterbi's K-12 outreach, helping students build confidence with programming fundamentals through guided labs, hands-on projects, and structured classroom support.",
-      details: [
-        "Delivered 40+ hours of weekly instruction across cybersecurity, Python, and game development for 100+ high school students.",
-        "Designed structured learning modules and project-based exercises that improved student task completion by 25%.",
-        "Guided students during labs and office hours, helping debug code and reinforce core CS concepts."
-      ],
-      techStack: ["Python", "Cybersecurity", "Game Development", "Teaching", "Curriculum Design"],
-      featured: "Most Recent",
-    },
-    {
-      title: "Software Developer Intern",
-      company: "Punjab National Bank",
-      dateLabel: "Jun 2024 - Sep 2024",
-      thumbnail: "/images/pnb.png",
-      logo: "/images/pnb.png",
-      location: "New Delhi, India",
-      metaLine: "Web Development • APIs • Banking Systems • India",
-      summary:
-        "Developed and deployed banking workflow systems at Punjab National Bank using Java, JSP, MySQL, Node.js, and Express, reducing processing time by 40% and improving backend response times by 50%.",
-      description:
-        "Built and deployed a litigation management system and supporting banking workflow automations for Punjab National Bank, improving internal process speed, system responsiveness, and release efficiency across backend and deployment layers.",
-      details: [
-        "Developed and deployed a Litigation Management System using Java Servlets, JSP, and MySQL to streamline case tracking and document workflows.",
-        "Built RESTful APIs with Node.js and Express to automate banking processes, reducing processing time by 40%.",
-        "Optimized backend logic and database queries, improving response times by 50% under around 500 concurrent users and reducing errors by 25%.",
-        "Deployed on Apache Tomcat and collaborated in Agile sprints, improving release efficiency by 15%."
-      ],
-      techStack: ["Java Servlets", "JSP", "MySQL", "Node.js", "Express", "Apache Tomcat", "REST APIs"],
-    },
-    {
-      title: "Technical Intern",
-      company: "Vartulz Technologies Pvt. Ltd.",
-      dateLabel: "Feb 2024 - Apr 2024",
-      thumbnail: "/images/vartulz.png",
-      logo: "/images/vartulz.png",
-      location: "India",
-      metaLine: "Product UI • Analytics • Feature Delivery • India",
-      summary:
-        "During a 3-month internship, improved 3 core product areas across website functionality, analytics, and user-data capture to strengthen visibility and usability.",
-      description:
-        "Supported product improvements across the website experience by shipping new features, strengthening analytics visibility, and improving user-data capture flows for the team.",
-      details: [
-        "Delivered improvements across 3 key product areas: website functionality, analytics workflows, and user-data collection.",
-        "Designed analytics workflows that improved productivity by 20% and gave the team better visibility into user behavior and feature performance.",
-        "Integrated user data capture features that improved measurement coverage and supported more informed product decisions during the internship."
-      ],
-      techStack: ["JavaScript", "Web Development", "Analytics", "UX Design", "Feature Delivery"],
-    },
-    {
-      title: "Operational Analyst Intern",
-      company: "LMDMax",
-      dateLabel: "Aug 2023 - Jan 2024",
-      thumbnail: "/images/lmdmax.png",
-      logo: "/images/lmdmax.png",
-      location: "India",
-      metaLine: "Operations • Data Analysis • Process Improvement",
-      summary:
-        "Across a 6-month internship, analyzed operational workflows and built an internal Power BI dashboard that improved work representation and reduced workload effort by 25%.",
-      description:
-        "Worked on operational analysis and process optimization initiatives, using data to surface workflow bottlenecks and building internal reporting tools to support better planning across day-to-day business operations.",
-      details: [
-        "Collected and analyzed operational data over a 6-month engagement to identify workflow bottlenecks and process inefficiencies.",
-        "Developed a Power BI dashboard for internal staff to present work outlook and operational status more clearly, reducing workload effort by 25%.",
-        "Helped teams make faster, better-informed decisions by surfacing improvement opportunities across day-to-day business operations."
-      ],
-      techStack: ["Power BI", "Data Analysis", "Process Improvement", "Operations", "Reporting", "Systems Thinking"],
-    },
-  ];
+  const handleGoto = (id) => {
+    scrollFromSidebar.current = true;
+    setProjectToOpen(null);
+    setProjectTransition(null);
+    setActiveTab(id);
+  };
 
-  // NEW: separate data source for the Projects tab (unlinks from workExperience)
-  // moved to its own component (ProjectsTab) for clarity and reuse
+  const handleOpenProjectFromSkills = (projectId) => {
+    const projectTitle = skillProjectToPortfolioTitle[projectId];
+    if (!projectTitle) return;
+    routeToProjectByTitle(projectTitle);
+  };
+
+  const handleViewInSkillCosmos = ({ skillId, domainId }) => {
+    setSkillsSearchFocus({
+      skillId,
+      domainId,
+      token: Date.now(),
+    });
+
+    if (activeTab === "skills") {
+      document.getElementById("skills")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    scrollFromSidebar.current = true;
+    setActiveTab("skills");
+  };
+
+  const handleSearchSubmit = (rawQuery) => {
+    const query = String(rawQuery ?? "").trim();
+    if (!query) return;
+
+    const normalized = normalizeSearchText(query);
+
+    if (normalized === "resume" || normalized === "cv") {
+      openInBackground("/Vishal_Kumar_Resume.pdf");
+      return;
+    }
+    if (normalized === "linkedin") {
+      openInBackground("https://www.linkedin.com/in/vishal-kumar-130a90249/");
+      return;
+    }
+    if (normalized === "projects") {
+      handleGoto("projects");
+      return;
+    }
+    if (normalized === "skills") {
+      handleGoto("skills");
+      return;
+    }
+    if (normalized === "experience") {
+      handleGoto("experience");
+      return;
+    }
+    if (normalized === "education") {
+      handleGoto("education");
+      return;
+    }
+    if (normalized.includes("contact") || normalized.includes("hire me")) {
+      setContactRequestToken(Date.now());
+      return;
+    }
+
+    setSubmittedSearchQuery(query);
+
+    if (activeTab === "search") {
+      requestAnimationFrame(() => {
+        document.getElementById("search")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      return;
+    }
+
+    scrollFromSidebar.current = true;
+    setActiveTab("search");
+  };
 
   const subscriptions = [
     { name: "Web Development", avatar: "W", isLive: true },
@@ -200,9 +408,13 @@ export default function Portfolio() {
         setSidebarOpen={setSidebarOpen}
         theme={theme}
         onToggleTheme={toggleTheme}
+        onSearchSubmit={handleSearchSubmit}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchSuggestions={searchSuggestions}
+        contactRequestToken={contactRequestToken}
       />
       <div className="flex">
-        {/* Pass active tab + goto handler so the blue dot tracks the visible section */}
         <Sidebar
           open={sidebarOpen}
           subscriptions={subscriptions}
@@ -214,11 +426,16 @@ export default function Portfolio() {
           <HeroSection />
           <VideoInfo />
 
-          {/* Tabs area */}
           <div className="px-6">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+            <Tabs
+              value={activeTab}
+              onValueChange={(value) => {
+                scrollFromSidebar.current = true;
+                setActiveTab(value);
+              }}
+              className="mb-6"
+            >
               <TabsList className="h-auto w-full justify-start rounded-none border-b border-[var(--border)] bg-transparent p-0">
-                {/* Home -> Work Experience (id/value: 'experience') */}
                 <TabsTrigger
                   value="experience"
                   className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
@@ -233,7 +450,6 @@ export default function Portfolio() {
                   Skills
                 </TabsTrigger>
 
-                {/* Work Exp -> Projects (id/value: 'projects') */}
                 <TabsTrigger
                   value="projects"
                   className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
@@ -247,25 +463,45 @@ export default function Portfolio() {
                 >
                   Education
                 </TabsTrigger>
+
+                {submittedSearchQuery ? (
+                  <TabsTrigger
+                    value="search"
+                    className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
+                  >
+                    Search Results
+                  </TabsTrigger>
+                ) : null}
               </TabsList>
 
-              {/* Targets for scrolling; scroll offset handled by sticky header */}
-              {/* First tab now renders Experience content */}
               <TabsContent value="experience" id="experience" className="mt-6 scroll-mt-24">
-                <ExperienceTab workExperience={workExperience} />
+                <ExperienceTab workExperience={enrichedExperience} />
               </TabsContent>
 
               <TabsContent value="skills" id="skills" className="mt-6 scroll-mt-24">
-                <SkillsTab onOpenProject={handleOpenProjectFromSkills} theme={theme} />
+                <SkillsTab
+                  onOpenProject={handleOpenProjectFromSkills}
+                  theme={theme}
+                  searchFocus={skillsSearchFocus}
+                />
               </TabsContent>
 
-              {/* Projects tab uses the grid cards (previous HomeTab) */}
               <TabsContent value="projects" id="projects" className="mt-6 scroll-mt-24">
                 <ProjectsTab openProjectRequest={projectToOpen} />
               </TabsContent>
 
               <TabsContent value="education" id="education" className="mt-6 scroll-mt-24">
                 <EducationTab />
+              </TabsContent>
+
+              <TabsContent value="search" id="search" className="mt-6 scroll-mt-24">
+                <SearchResults
+                  query={submittedSearchQuery}
+                  results={searchResults}
+                  onOpenProject={routeToProjectByTitle}
+                  onOpenExperience={() => handleGoto("experience")}
+                  onViewSkillCosmos={handleViewInSkillCosmos}
+                />
               </TabsContent>
             </Tabs>
           </div>
