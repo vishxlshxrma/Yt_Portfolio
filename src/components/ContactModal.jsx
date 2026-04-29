@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "components/ui/button";
+import { submitContactForm } from "lib/api";
 
 const contactOptions = [
   "Employers / Recruiters",
@@ -11,11 +12,17 @@ const contactOptions = [
 export default function ContactModal({ open, onClose }) {
   const [selectedContactType, setSelectedContactType] = useState(null);
   const [formData, setFormData] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
 
   useEffect(() => {
     if (open) return;
     setSelectedContactType(null);
     setFormData({});
+    setIsSubmitting(false);
+    setSubmitError("");
+    setSubmitSuccess("");
   }, [open]);
 
   if (!open) return null;
@@ -23,18 +30,38 @@ export default function ContactModal({ open, onClose }) {
   const handleContactTypeSelect = (type) => {
     setSelectedContactType(type);
     setFormData({});
+    setSubmitError("");
+    setSubmitSuccess("");
   };
 
   const handleBackToOptions = () => {
     setSelectedContactType(null);
     setFormData({});
+    setSubmitError("");
+    setSubmitSuccess("");
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form submitted:", { type: selectedContactType, ...formData });
-    alert("Thank you! Your message has been sent.");
-    onClose?.();
+    setSubmitError("");
+    setSubmitSuccess("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await submitContactForm({
+        type: selectedContactType,
+        ...formData,
+      });
+      setSubmitSuccess(response?.message || "Message sent successfully.");
+
+      window.setTimeout(() => {
+        onClose?.();
+      }, 700);
+    } catch (error) {
+      setSubmitError(error?.message || "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field, value) => {
@@ -78,6 +105,9 @@ export default function ContactModal({ open, onClose }) {
             onSubmit={handleFormSubmit}
             onBack={handleBackToOptions}
             onClose={onClose}
+            isSubmitting={isSubmitting}
+            submitError={submitError}
+            submitSuccess={submitSuccess}
           />
         )}
       </div>
@@ -85,7 +115,17 @@ export default function ContactModal({ open, onClose }) {
   );
 }
 
-function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, onClose }) {
+function ContactForm({
+  contactType,
+  formData,
+  onInputChange,
+  onSubmit,
+  onBack,
+  onClose,
+  isSubmitting,
+  submitError,
+  submitSuccess,
+}) {
   const fieldClassName =
     "w-full rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] p-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--accent-red)] focus:outline-none";
   const textareaClassName = `${fieldClassName} resize-none`;
@@ -417,6 +457,18 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
       </div>
 
       <form onSubmit={onSubmit}>
+        {submitError ? (
+          <div className="mb-4 rounded-lg border border-red-400/45 bg-red-500/10 px-3 py-2 text-sm text-red-400">
+            {submitError}
+          </div>
+        ) : null}
+
+        {submitSuccess ? (
+          <div className="mb-4 rounded-lg border border-emerald-400/45 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-400">
+            {submitSuccess}
+          </div>
+        ) : null}
+
         {renderFormFields()}
 
         <div className="mt-6 flex space-x-3">
@@ -428,8 +480,12 @@ function ContactForm({ contactType, formData, onInputChange, onSubmit, onBack, o
           >
             Cancel
           </Button>
-          <Button type="submit" className="flex-1 bg-[var(--accent-red)] text-white hover:opacity-90">
-            Send Message
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex-1 bg-[var(--accent-red)] text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {isSubmitting ? "Sending..." : "Send Message"}
           </Button>
         </div>
       </form>

@@ -2,6 +2,33 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Backend Setup
+
+### Backend
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+### Frontend
+
+```bash
+npm install
+npm start
+```
+
+### Local URLs
+
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:5001`
+
+### Required Environment Variables
+
+- `server/.env` must contain `MONGODB_URI`
+- Root `.env` can contain `REACT_APP_API_BASE_URL`
+
 ## Available Scripts
 
 In the project directory, you can run:

@@ -1,18 +1,79 @@
-import React, { useState } from "react";
-import {
-  Eye,
-  ThumbsUp,
-  MessageCircle,
-  Share,
-  ExternalLink,
-} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Eye, ThumbsUp, Share, ExternalLink } from "lucide-react";
 import { Button } from "components/ui/button";
 import ChannelInfo from "components/ChannelInfo";
+import {
+  getPortfolioStats,
+  incrementPortfolioLike,
+  incrementPortfolioView,
+} from "lib/api";
+
+const DEFAULT_LIKES = 0;
+const DEFAULT_VIEWS = 0;
+const SESSION_VIEW_KEY = "portfolio-view-counted";
+const LOCAL_LIKE_KEY = "portfolio-liked-v2";
+
+const formatCount = (value) => {
+  const count = Number(value ?? 0);
+  if (!Number.isFinite(count)) return "0";
+  if (count < 1000) return String(Math.round(count));
+  if (count < 1000000) {
+    const thousands = count / 1000;
+    return `${Number.isInteger(thousands) ? thousands.toFixed(0) : thousands.toFixed(1)}K`;
+  }
+  const millions = count / 1000000;
+  return `${Number.isInteger(millions) ? millions.toFixed(0) : millions.toFixed(1)}M`;
+};
 
 export default function VideoInfo() {
-  const [likes, setLikes] = useState(126);
-  const [showComments, setShowComments] = useState(false);
+  const [likes, setLikes] = useState(DEFAULT_LIKES);
+  const [views, setViews] = useState(DEFAULT_VIEWS);
   const [showCopied, setShowCopied] = useState(false);
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
+  const [hasLiked, setHasLiked] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const bootstrapStats = async () => {
+      try {
+        const likedFlag = window.localStorage.getItem(LOCAL_LIKE_KEY) === "true";
+        if (isMounted) setHasLiked(likedFlag);
+      } catch (error) {
+        console.error("Failed to read like status:", error);
+      }
+
+      try {
+        const stats = await getPortfolioStats();
+        if (isMounted) {
+          setLikes(Number(stats.likes ?? DEFAULT_LIKES));
+          setViews(Number(stats.views ?? DEFAULT_VIEWS));
+        }
+      } catch (error) {
+        console.error("Failed to fetch portfolio stats:", error);
+      }
+
+      try {
+        const hasCountedView = window.sessionStorage.getItem(SESSION_VIEW_KEY) === "true";
+        if (!hasCountedView) {
+          const updatedStats = await incrementPortfolioView();
+          if (isMounted) {
+            setViews(Number(updatedStats.views ?? DEFAULT_VIEWS));
+            setLikes(Number(updatedStats.likes ?? DEFAULT_LIKES));
+          }
+          window.sessionStorage.setItem(SESSION_VIEW_KEY, "true");
+        }
+      } catch (error) {
+        console.error("Failed to increment portfolio view:", error);
+      }
+    };
+
+    bootstrapStats();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleResumeOpen = () => {
     const absoluteUrl = `${window.location.origin}/Vishal_Kumar_Resume.pdf`;
@@ -28,54 +89,63 @@ export default function VideoInfo() {
       await navigator.clipboard.writeText(window.location.href);
       setShowCopied(true);
       setTimeout(() => setShowCopied(false), 2200);
-    } catch (e) {
-      console.error("Clipboard copy failed:", e);
+    } catch (error) {
+      console.error("Clipboard copy failed:", error);
+    }
+  };
+
+  const handleLike = async () => {
+    if (isLikeLoading || hasLiked) return;
+
+    setIsLikeLoading(true);
+    try {
+      const updatedStats = await incrementPortfolioLike();
+      setLikes(Number(updatedStats.likes ?? likes));
+      setViews(Number(updatedStats.views ?? views));
+      setHasLiked(true);
+      window.localStorage.setItem(LOCAL_LIKE_KEY, "true");
+    } catch (error) {
+      console.error("Failed to increment portfolio like:", error);
+    } finally {
+      setIsLikeLoading(false);
     }
   };
 
   return (
-    <div className="px-6 pb-4 relative">
-      <h1 className="text-xl font-bold mb-3">My Journey | Resume 2025</h1>
+    <div className="relative px-6 pb-4">
+      <h1 className="mb-3 text-xl font-bold">My Journey | Resume 2025</h1>
 
       <div className="mb-4 flex items-center space-x-4 text-sm text-[var(--text-secondary)]">
         <div className="flex items-center space-x-1">
-          <Eye className="w-4 h-4" />
-          <span>10K views</span>
+          <Eye className="h-4 w-4" />
+          <span>{formatCount(views)} views</span>
         </div>
       </div>
 
-      {/* Buttons Row */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          {/* Like Counter */}
           <Button
             variant="ghost"
-            onClick={() => setLikes(likes + 1)}
-            className="flex items-center space-x-2 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
+            disabled={isLikeLoading}
+            onClick={handleLike}
+            className={`flex items-center space-x-2 px-4 py-2 hover:bg-[var(--surface-hover)] ${
+              hasLiked
+                ? "bg-[var(--surface-hover)] text-[var(--accent-red)]"
+                : "text-[var(--text-primary)]"
+            }`}
           >
-            <ThumbsUp className="w-5 h-5" />
+            <ThumbsUp className={`h-5 w-5 ${hasLiked ? "fill-current" : ""}`} />
             <span>{likes}</span>
-          </Button>
-
-          {/* Comments Button */}
-          <Button
-            variant="ghost"
-            onClick={() => setShowComments(true)}
-            className="flex items-center space-x-2 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
-          >
-            <MessageCircle className="w-5 h-5" />
-            <span>Comments</span>
           </Button>
         </div>
 
-        {/* Right Buttons */}
         <div className="flex items-center space-x-3">
           <Button
             variant="ghost"
             onClick={handleShare}
             className="flex items-center space-x-2 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
           >
-            <Share className="w-5 h-5" />
+            <Share className="h-5 w-5" />
             <span>Share</span>
           </Button>
 
@@ -84,7 +154,7 @@ export default function VideoInfo() {
             onClick={handleResumeOpen}
             className="flex items-center space-x-2 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
           >
-            <ExternalLink className="w-5 h-5" />
+            <ExternalLink className="h-5 w-5" />
             <span>Resume</span>
           </Button>
         </div>
@@ -92,68 +162,11 @@ export default function VideoInfo() {
 
       <ChannelInfo />
 
-      {/* Comments Modal */}
-      {showComments && (
-        <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center
-                     backdrop-blur-md bg-[var(--overlay-backdrop)] animate-fadeIn"
-        >
-          <div
-            className="w-96 transform rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 text-[var(--text-primary)] shadow-2xl
-                       animate-popupIn"
-          >
-            <h2 className="text-lg font-semibold mb-4">Comments</h2>
-            <div className="flex h-40 items-center justify-center rounded-lg bg-[var(--surface-muted)] text-[var(--text-secondary)]">
-              <p>No comments yet...</p>
-            </div>
-            <Button
-              onClick={() => setShowComments(false)}
-              className="mt-4 w-full bg-[var(--surface-hover)] text-[var(--text-primary)] hover:bg-[var(--surface-strong)]"
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {/* Share Toast (Top Right) */}
       {showCopied && (
-        <div
-          className="fixed right-5 top-5 z-[9999] animate-fadeSlide rounded-lg border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm text-[var(--text-primary)] shadow-lg"
-        >
+        <div className="fixed right-5 top-5 z-[9999] animate-fadeSlide rounded-lg border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm text-[var(--text-primary)] shadow-lg">
           📋 Portfolio link copied!
         </div>
       )}
     </div>
   );
 }
-
-/* Add these animations in your global.css or tailwind.css
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes popupIn {
-  0% { opacity: 0; transform: scale(0.9); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-@keyframes fadeSlide {
-  0% { opacity: 0; transform: translateY(-10px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.animate-popupIn {
-  animation: popupIn 0.25s ease-out forwards;
-}
-
-.animate-fadeSlide {
-  animation: fadeSlide 0.3s ease-out;
-}
-*/
