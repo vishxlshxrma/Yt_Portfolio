@@ -3,7 +3,7 @@ import { Play } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <div className="p-6 pb-0">
+    <div className="px-3 pb-0 pt-3 sm:px-4 sm:pt-4 md:px-6 md:pt-6">
       <div
         className="relative mb-6 overflow-hidden rounded-lg bg-black"
         style={{ aspectRatio: "16/9" }}
@@ -14,17 +14,17 @@ export default function HeroSection() {
           className="w-full h-full object-cover opacity-80"
         />
 
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div className="text-center">
-            <div className="mx-auto mb-4 flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-[var(--accent-red)] text-white transition-opacity hover:opacity-90">
-              <Play className="w-8 h-8 text-white fill-current ml-1" />
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="px-4 text-center sm:px-6">
+            <div className="mx-auto mb-3 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-[var(--accent-red)] text-white transition-opacity hover:opacity-90 sm:mb-4 sm:h-20 sm:w-20">
+              <Play className="ml-0.5 h-6 w-6 fill-current text-white sm:ml-1 sm:h-8 sm:w-8" />
             </div>
 
-            <h1 className="mb-2 text-2xl font-bold text-white">
+            <h1 className="mb-2 text-lg font-bold text-white sm:text-xl md:text-2xl">
               My Career Journey | Resume
             </h1>
 
-            <p className="text-white/80">
+            <p className="mx-auto max-w-xl text-xs text-white/80 sm:text-sm md:text-base">
               I tend to look at creative solutions to complex problems.
             </p>
           </div>

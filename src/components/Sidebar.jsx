@@ -26,7 +26,9 @@ export default function Sidebar({ open, subscriptions = [], activeId, onGoto }) 
 
   return (
     <aside
-      className={`${open ? "w-60" : "w-0"} min-h-screen overflow-hidden border-r border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] transition-all duration-300`}
+      className={`fixed inset-y-0 left-0 z-[70] w-72 max-w-[85vw] transform overflow-y-auto border-r border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] shadow-xl transition-transform duration-300 lg:sticky lg:top-[56px] lg:z-30 lg:h-[calc(100vh-56px)] lg:w-60 lg:max-w-none lg:translate-x-0 lg:shadow-none ${
+        open ? "translate-x-0" : "-translate-x-full"
+      }`}
     >
       <div className="p-3">
         {/* Top nav items */}

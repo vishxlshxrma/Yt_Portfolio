@@ -280,7 +280,7 @@ export default function SkillSphereScene({ activeDomainId, activeSkillId, theme 
 
   return (
     <div
-      className="relative h-[520px] w-full overflow-hidden rounded-[2.5rem] border border-[var(--border)] shadow-[0_50px_120px_rgba(0,0,0,0.45)]"
+      className="relative h-[360px] w-full overflow-hidden rounded-[1.6rem] border border-[var(--border)] shadow-[0_24px_60px_rgba(0,0,0,0.4)] sm:h-[420px] md:h-[460px] lg:h-[520px] lg:rounded-[2.5rem] lg:shadow-[0_50px_120px_rgba(0,0,0,0.45)]"
       style={{ backgroundColor: frameBackground }}
     >
       <Canvas camera={{ position: [0, 0, 6], fov: 38 }} shadows>

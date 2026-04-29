@@ -37,7 +37,7 @@ export default function SearchResults({
       {projects.length ? (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-[var(--text-primary)]">Projects using {query}</h3>
-          <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
               <article
                 key={`${project.title}-${project.company}`}
@@ -78,7 +78,7 @@ export default function SearchResults({
       {experiences.length ? (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-[var(--text-primary)]">Experience using {query}</h3>
-          <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
             {experiences.map((exp) => (
               <article
                 key={`${exp.company}-${exp.title}`}
@@ -110,7 +110,7 @@ export default function SearchResults({
       {skills.length ? (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-[var(--text-primary)]">Related Skills</h3>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {skills.map((skill) => (
               <article
                 key={skill.id}
@@ -143,7 +143,7 @@ export default function SearchResults({
       {domains.length ? (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-[var(--text-primary)]">Related Skill Domains</h3>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {domains.map((domain) => (
               <article
                 key={domain.id}

@@ -69,8 +69,8 @@ export default function ContactModal({ open, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-md bg-[var(--overlay-backdrop)] animate-fadeIn">
-      <div className="max-h-[90vh] w-[480px] overflow-y-auto rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 text-[var(--text-primary)] shadow-2xl animate-popupIn">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[var(--overlay-backdrop)] px-3 py-4 backdrop-blur-md animate-fadeIn sm:px-4 sm:py-6">
+      <div className="max-h-[92vh] w-full max-w-[480px] overflow-y-auto rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 text-[var(--text-primary)] shadow-2xl animate-popupIn sm:p-6">
         {!selectedContactType ? (
           <>
             <h2 className="mb-4 text-center text-lg font-semibold">
@@ -453,7 +453,7 @@ function ContactForm({
         >
           ← Back
         </Button>
-        <h2 className="mr-8 flex-1 text-center text-lg font-semibold">{contactType}</h2>
+        <h2 className="mr-8 flex-1 text-center text-base font-semibold sm:text-lg">{contactType}</h2>
       </div>
 
       <form onSubmit={onSubmit}>
@@ -471,7 +471,7 @@ function ContactForm({
 
         {renderFormFields()}
 
-        <div className="mt-6 flex space-x-3">
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:space-x-3">
           <Button
             type="button"
             onClick={onClose}

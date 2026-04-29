@@ -61,14 +61,17 @@ const emptySearchResults = {
 
 export default function Portfolio() {
   const { theme, toggleTheme } = useTheme();
+  const initialIsMobile =
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false;
   const [activeTab, setActiveTab] = useState("experience");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(!initialIsMobile);
   const [projectToOpen, setProjectToOpen] = useState(null);
   const [projectTransition, setProjectTransition] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [submittedSearchQuery, setSubmittedSearchQuery] = useState("");
   const [contactRequestToken, setContactRequestToken] = useState(0);
   const [skillsSearchFocus, setSkillsSearchFocus] = useState(null);
+  const [isMobileLayout, setIsMobileLayout] = useState(initialIsMobile);
   const firstRender = useRef(true);
   const scrollFromSidebar = useRef(false);
 
@@ -264,6 +267,19 @@ export default function Portfolio() {
   ]);
 
   useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 1024;
+      setIsMobileLayout(isMobile);
+      setSidebarOpen(!isMobile);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
       return;
@@ -304,6 +320,9 @@ export default function Portfolio() {
     setProjectToOpen(null);
     setProjectTransition(null);
     setActiveTab(id);
+    if (isMobileLayout) {
+      setSidebarOpen(false);
+    }
   };
 
   const handleOpenProjectFromSkills = (projectId) => {
@@ -414,7 +433,15 @@ export default function Portfolio() {
         searchSuggestions={searchSuggestions}
         contactRequestToken={contactRequestToken}
       />
-      <div className="flex">
+      <div className="relative flex">
+        {isMobileLayout && sidebarOpen ? (
+          <button
+            type="button"
+            aria-label="Close sidebar"
+            className="fixed inset-0 z-[60] bg-black/45 backdrop-blur-[1px] lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        ) : null}
         <Sidebar
           open={sidebarOpen}
           subscriptions={subscriptions}
@@ -422,11 +449,11 @@ export default function Portfolio() {
           onGoto={handleGoto}
         />
 
-        <main className="flex-1">
+        <main className="min-w-0 flex-1">
           <HeroSection />
           <VideoInfo />
 
-          <div className="px-6">
+          <div className="px-3 sm:px-4 md:px-6">
             <Tabs
               value={activeTab}
               onValueChange={(value) => {
@@ -435,31 +462,31 @@ export default function Portfolio() {
               }}
               className="mb-6"
             >
-              <TabsList className="h-auto w-full justify-start rounded-none border-b border-[var(--border)] bg-transparent p-0">
+              <TabsList className="h-auto w-full justify-start overflow-x-auto whitespace-nowrap rounded-none border-b border-[var(--border)] bg-transparent p-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <TabsTrigger
                   value="experience"
-                  className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
+                  className="shrink-0 rounded-none border-b-2 border-transparent bg-transparent px-4 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)] sm:px-6"
                 >
                   Work Experience
                 </TabsTrigger>
 
                 <TabsTrigger
                   value="skills"
-                  className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
+                  className="shrink-0 rounded-none border-b-2 border-transparent bg-transparent px-4 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)] sm:px-6"
                 >
                   Skills
                 </TabsTrigger>
 
                 <TabsTrigger
                   value="projects"
-                  className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
+                  className="shrink-0 rounded-none border-b-2 border-transparent bg-transparent px-4 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)] sm:px-6"
                 >
                   Projects
                 </TabsTrigger>
 
                 <TabsTrigger
                   value="education"
-                  className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
+                  className="shrink-0 rounded-none border-b-2 border-transparent bg-transparent px-4 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)] sm:px-6"
                 >
                   Education
                 </TabsTrigger>
@@ -467,7 +494,7 @@ export default function Portfolio() {
                 {submittedSearchQuery ? (
                   <TabsTrigger
                     value="search"
-                    className="rounded-none border-b-2 border-transparent bg-transparent px-6 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)]"
+                    className="shrink-0 rounded-none border-b-2 border-transparent bg-transparent px-4 py-3 text-[var(--text-secondary)] data-[state=active]:border-[var(--accent-red)] data-[state=active]:text-[var(--text-primary)] sm:px-6"
                   >
                     Search Results
                   </TabsTrigger>

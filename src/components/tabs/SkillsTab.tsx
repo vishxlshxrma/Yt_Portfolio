@@ -122,11 +122,11 @@ export default function SkillsTab({ onOpenProject, theme = "dark", searchFocus =
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-10 lg:py-16">
+    <section ref={sectionRef} className="relative overflow-hidden py-8 lg:py-16">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,_rgba(255,0,0,0.14),_transparent_35%)]" />
       <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
-          <div className="relative min-h-[560px] rounded-[2.5rem] border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[0_50px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+        <div className="grid items-start gap-5 lg:grid-cols-[1.6fr_1fr] lg:gap-8">
+          <div className="relative min-h-[360px] rounded-[1.6rem] border border-[var(--border)] bg-[var(--surface)] p-2 shadow-[0_40px_80px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:min-h-[420px] sm:p-3 lg:min-h-[560px] lg:rounded-[2.5rem] lg:p-4 lg:shadow-[0_50px_120px_rgba(0,0,0,0.45)]">
             <SkillSphereScene 
               activeDomainId={activeDomainId}
               activeSkillId={activeSkillId}
@@ -134,7 +134,7 @@ export default function SkillsTab({ onOpenProject, theme = "dark", searchFocus =
             />
           </div>
 
-          <div ref={panelRef} className="min-w-0 space-y-6">
+          <div ref={panelRef} className="min-w-0 space-y-4 lg:space-y-6">
             <InfoPanel 
               viewMode={viewMode}
               domain={activeDomain}
@@ -148,7 +148,7 @@ export default function SkillsTab({ onOpenProject, theme = "dark", searchFocus =
           </div>
         </div>
 
-        <div ref={pillsRef} className="mt-10">
+        <div ref={pillsRef} className="mt-8 lg:mt-10">
           <DomainPills
             domains={domains}
             activeDomainId={activeDomainId}

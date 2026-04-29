@@ -30,6 +30,13 @@
   --overlay-backdrop: rgba(0, 0, 0, 0.62);
 }
 
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   background-color: var(--background);
@@ -45,6 +52,12 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 @keyframes experienceOverlayIn {

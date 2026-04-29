@@ -132,7 +132,7 @@ export default function InfoPanel({
   // Overview Panel
   if (viewMode === "overview") {
     return (
-      <div className="min-w-0 max-w-full rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-[var(--text-primary)]">
+      <div className="min-w-0 max-w-full rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[0_24px_64px_rgba(0,0,0,0.4)] backdrop-blur-xl text-[var(--text-primary)] sm:p-6 lg:rounded-[2rem] lg:p-8 lg:shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
         <div className="space-y-4">
           <div className="inline-flex items-center gap-3 rounded-full bg-[var(--surface-muted)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--accent-red)]">
             Skill Cosmos
@@ -192,7 +192,7 @@ export default function InfoPanel({
   // Domain Panel
   if (viewMode === "domain" && domain) {
     return (
-      <div className="min-w-0 max-w-full rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-[var(--text-primary)]">
+      <div className="min-w-0 max-w-full rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[0_24px_64px_rgba(0,0,0,0.4)] backdrop-blur-xl text-[var(--text-primary)] sm:p-6 lg:rounded-[2rem] lg:p-8 lg:shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
         <div className="space-y-4">
           <div 
             className="inline-flex items-center gap-3 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em]"
@@ -250,7 +250,7 @@ export default function InfoPanel({
               {domainSkills.map((s) => (
               <div 
                 key={s.id} 
-                className="min-w-[250px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 sm:min-w-[290px]"
+                className="min-w-[210px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 sm:min-w-[260px] lg:min-w-[290px]"
                 style={{ borderLeft: `3px solid ${domain.color}` }}
               >
                 <div className="flex items-center justify-between">
@@ -285,7 +285,7 @@ export default function InfoPanel({
                   type="button"
                   key={project.id}
                   onClick={() => handleProjectCardClick(project.id)}
-                  className="w-[220px] min-w-[220px] max-w-[220px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 text-left transition hover:bg-[var(--surface-hover)] sm:w-[240px] sm:min-w-[240px] sm:max-w-[240px]"
+                  className="w-[190px] min-w-[190px] max-w-[190px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 text-left transition hover:bg-[var(--surface-hover)] sm:w-[220px] sm:min-w-[220px] sm:max-w-[220px] lg:w-[240px] lg:min-w-[240px] lg:max-w-[240px]"
                   style={{ borderLeft: `3px solid ${domain.color}` }}
                 >
                   <p className="line-clamp-2 text-sm font-semibold text-[var(--text-primary)]">{project.name}</p>
@@ -313,7 +313,7 @@ export default function InfoPanel({
     const skillDomains = domains.filter(d => skill.domainIds.includes(d.id));
     
     return (
-      <div className="min-w-0 max-w-full rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl text-[var(--text-primary)]">
+      <div className="min-w-0 max-w-full rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[0_24px_64px_rgba(0,0,0,0.4)] backdrop-blur-xl text-[var(--text-primary)] sm:p-6 lg:rounded-[2rem] lg:p-8 lg:shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
         <div className="space-y-4">
           <div className="inline-flex items-center gap-3 rounded-full bg-[var(--surface-muted)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--accent-red)]">
             Skill Detail
@@ -395,7 +395,7 @@ export default function InfoPanel({
                   type="button"
                   key={project.id}
                   onClick={() => handleProjectCardClick(project.id)}
-                  className="w-[220px] min-w-[220px] max-w-[220px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 text-left transition hover:bg-[var(--surface-hover)] sm:w-[240px] sm:min-w-[240px] sm:max-w-[240px]"
+                  className="w-[190px] min-w-[190px] max-w-[190px] snap-start rounded-3xl bg-[var(--surface-muted)] p-4 text-left transition hover:bg-[var(--surface-hover)] sm:w-[220px] sm:min-w-[220px] sm:max-w-[220px] lg:w-[240px] lg:min-w-[240px] lg:max-w-[240px]"
                 >
                   <p className="line-clamp-2 text-sm font-semibold text-[var(--text-primary)]">{project.name}</p>
                   <p className="mt-1 line-clamp-3 text-xs leading-5 text-[var(--text-secondary)]">{project.description}</p>

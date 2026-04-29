@@ -112,8 +112,8 @@ export default function VideoInfo() {
   };
 
   return (
-    <div className="relative px-6 pb-4">
-      <h1 className="mb-3 text-xl font-bold">My Journey | Resume 2025</h1>
+    <div className="relative px-3 pb-4 sm:px-4 md:px-6">
+      <h1 className="mb-3 text-lg font-bold sm:text-xl">My Journey | Resume 2025</h1>
 
       <div className="mb-4 flex items-center space-x-4 text-sm text-[var(--text-secondary)]">
         <div className="flex items-center space-x-1">
@@ -122,7 +122,7 @@ export default function VideoInfo() {
         </div>
       </div>
 
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center space-x-4">
           <Button
             variant="ghost"
@@ -135,27 +135,27 @@ export default function VideoInfo() {
             }`}
           >
             <ThumbsUp className={`h-5 w-5 ${hasLiked ? "fill-current" : ""}`} />
-            <span>{likes}</span>
-          </Button>
+              <span className="text-sm sm:text-base">{likes}</span>
+            </Button>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Button
             variant="ghost"
             onClick={handleShare}
-            className="flex items-center space-x-2 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
+            className="flex items-center space-x-1 px-3 py-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)] sm:space-x-2 sm:px-4"
           >
             <Share className="h-5 w-5" />
-            <span>Share</span>
+            <span className="hidden sm:inline">Share</span>
           </Button>
 
           <Button
             variant="ghost"
             onClick={handleResumeOpen}
-            className="flex items-center space-x-2 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
+            className="flex items-center space-x-1 px-3 py-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)] sm:space-x-2 sm:px-4"
           >
             <ExternalLink className="h-5 w-5" />
-            <span>Resume</span>
+            <span className="hidden sm:inline">Resume</span>
           </Button>
         </div>
       </div>
@@ -163,7 +163,7 @@ export default function VideoInfo() {
       <ChannelInfo />
 
       {showCopied && (
-        <div className="fixed right-5 top-5 z-[9999] animate-fadeSlide rounded-lg border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm text-[var(--text-primary)] shadow-lg">
+        <div className="fixed right-3 top-3 z-[9999] animate-fadeSlide rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-xs text-[var(--text-primary)] shadow-lg sm:right-5 sm:top-5 sm:px-6 sm:py-3 sm:text-sm">
           📋 Portfolio link copied!
         </div>
       )}

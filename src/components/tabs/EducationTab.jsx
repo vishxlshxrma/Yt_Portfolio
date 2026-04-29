@@ -72,7 +72,7 @@ export default function EducationTab() {
     <>
       <section
         id="education"
-        className="grid gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3 scroll-mt-24"
+        className="grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3 scroll-mt-24"
       >
         {education.map((item) => (
           <article
@@ -192,7 +192,7 @@ export default function EducationTab() {
               </div>
             </div>
 
-            <div className="animate-experienceContentIn max-h-[calc(90vh-240px)] overflow-y-auto px-5 pb-6 pt-5 sm:px-7 sm:pb-7">
+            <div className="animate-experienceContentIn max-h-[calc(88vh-200px)] sm:max-h-[calc(90vh-240px)] overflow-y-auto px-5 pb-6 pt-5 sm:px-7 sm:pb-7">
               <div className="flex items-start gap-4">
                 <img
                   src={activeEducation.logo ?? activeEducation.thumbnail}
