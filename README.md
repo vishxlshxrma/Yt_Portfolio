@@ -1,4 +1,3 @@
-```markdown
 # 🚀 Portfolio
 
 A modern, full-stack developer portfolio powered by real-time analytics and recruiter engagement tracking.  
@@ -164,5 +163,3 @@ data-driven, scalable, and user-focused.
 ---
 
 **If you like this project, consider giving it a ⭐ on GitHub.**
-
-```
