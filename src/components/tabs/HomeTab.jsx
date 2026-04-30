@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Eye, FolderOpen, MoreVertical, X } from "lucide-react";
+import { ExternalLink, Eye, FolderOpen, MoreVertical, X } from "lucide-react";
 import { Badge } from "components/ui/badge";
 
 // NOTE: keep the file/component, but accept `projects` and render under id="projects"
 export default function HomeTab({ projects = [], openProjectRequest = null }) {
   const [activeProject, setActiveProject] = useState(null);
+  const activeProjectRedirectUrl =
+    activeProject?.projectUrl || activeProject?.liveUrl || activeProject?.githubUrl;
+  const activeProjectRedirectLabel =
+    activeProject?.projectUrlLabel ||
+    (activeProject?.liveUrl ? "View Live Project" : activeProject?.githubUrl ? "View GitHub Repo" : "View Project");
 
   useEffect(() => {
     if (!activeProject) return undefined;
@@ -183,6 +188,20 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                 <p className="mt-4 text-[15px] leading-7 text-[var(--text-primary)]">
                   {activeProject.description}
                 </p>
+
+                {activeProjectRedirectUrl ? (
+                  <div className="mt-5">
+                    <a
+                      href={activeProjectRedirectUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-[var(--accent-red)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+                    >
+                      {activeProjectRedirectLabel}
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  </div>
+                ) : null}
 
                 {activeProject.tags?.length ? (
                   <div className="mt-5">

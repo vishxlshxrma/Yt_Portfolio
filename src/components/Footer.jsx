@@ -48,7 +48,7 @@ export default function Footer() {
           </div>
 
           <div className="mt-4 text-center text-xs text-[var(--text-secondary)]">
-            © 2025 Vishal Kumar Portfolio • Inspired by a thought in my dream 😴
+            © Vishal Kumar Portfolio • Inspired by a thought in my dream 😴
           </div>
         </div>
       </footer>

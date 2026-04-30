@@ -1,4 +1,9 @@
 // Keep this purely as data so it's easy to reuse/test
+// Optional link fields per project:
+// - githubUrl: "https://github.com/..."
+// - liveUrl: "https://your-live-site.com/..."
+// - projectUrl: "https://..." (generic override, used first if present)
+// - projectUrlLabel: "View GitHub Repo" | "View Live Project" | "View Project"
 const projects = [
   {
     title: "SightRanger",
@@ -9,6 +14,7 @@ const projects = [
     description:
       "Built an intelligent real-time surveillance platform using FastAPI, YOLOv8, and Next.js that monitors webcam or mobile video streams, detects human intrusions, and sends instant email alerts with captured evidence. Designed modular backend and frontend services with bulk video processing and Docker-based deployment for scalable monitoring workflows.",
     tags: ["FastAPI", "YOLOv8", "Next.js", "Tailwind", "Docker"],
+    githubUrl: "https://github.com/vishxlshxrma/SightRanger.git",
   },
   {
     title: "CodeBundle",
@@ -19,6 +25,7 @@ const projects = [
     description:
       "Created a lightweight Go CLI that bundles an entire directory into a single structured text file for AI tools, code reviews, and project snapshots. Added recursive file collection, tree-style structure output, fast mode for large repositories, and a zero-config developer experience optimized for sharing full codebases with LLMs.",
     tags: ["Go", "CLI", "Developer Tools", "LLM Workflow", "Automation"],
+    githubUrl: "https://github.com/vishxlshxrma/CodeBundle.git",
   },
   {
     title: "Transizr",
@@ -29,6 +36,7 @@ const projects = [
     description:
       "Developed a distributed transcription system for audio and video processing with FastAPI, Celery, RabbitMQ, Redis, and containerized workers. Implemented scalable task execution, media optimization, and real-time status updates through Redis Pub-Sub and Server-Sent Events to support reliable high-volume transcription workloads.",
     tags: ["FastAPI", "Celery", "RabbitMQ", "Redis", "Docker"],
+    githubUrl: "https://github.com/vishxlshxrma/Transizr.git",
   },
   {
     title: "Artsy Platform – Web App",
@@ -59,6 +67,7 @@ const projects = [
     description:
       "Built a Unity 3D runner game integrated with Python + Firebase analytics. Designed player-performance visualizations and GPT-powered dashboards to deliver intelligent gameplay insights and testing feedback.",
     tags: ["Unity", "C#", "Firebase", "Python", "Analytics"],
+    liveUrl: "https://vincent-weiyu.github.io/gold_milestone_webGL/",
   },
   {
     title: "Apple Website Clone",
@@ -69,6 +78,7 @@ const projects = [
     description:
       "Recreated Apple’s product showcase experience using React, GSAP, and Three.js with interactive 3D transitions. Used RunwayML and Hugging Face diffusion models for automated asset generation and motion sequences.",
     tags: ["React", "Three.js", "GSAP", "RunwayML", "Hugging Face"],
+    liveUrl: "https://apple-iphone-website-clone-alpha.vercel.app/",
   },
   {
     title: "J.A.R.V.I.S Virtual Assistant",
@@ -79,6 +89,7 @@ const projects = [
     description:
       "Engineered a GPT-powered virtual assistant capable of automation, speech recognition, and contextual conversation. Integrated TTS, web scraping, and AI-generated daily cyber briefings.",
     tags: ["Python", "GPT-3", "SpeechRecognition", "Automation", "NLP"],
+    githubUrl: "https://github.com/vishxlshxrma/J.A.R.V.I.S..git",
   },
   {
     title: "Taxi Demand Prediction",
@@ -89,6 +100,7 @@ const projects = [
     description:
       "Developed predictive LSTM and ARIMA models for NYC taxi demand forecasting. Automated EDA, feature extraction, and GPT-driven anomaly commentary for data storytelling.",
     tags: ["Python", "LSTM", "ARIMA", "Dask", "AI Analytics"],
+    githubUrl: "https://github.com/vishxlshxrma/Taxi_Demand_Prediction.git",
   },
   {
     title: "Malaria Detection using Deep Learning",
@@ -99,6 +111,7 @@ const projects = [
     description:
       "Built a CNN-based model for early malaria detection using transfer learning (ResNet, EfficientNet) via Hugging Face + TensorFlow Hub. Deployed on Streamlit with Grad-CAM explainability for diagnostic insights.",
     tags: ["TensorFlow", "Keras", "Streamlit", "Hugging Face", "CNN"],
+    githubUrl: "https://github.com/vishxlshxrma/Malaria_Classification.git",
   },
   {
     title: "Chatbot Template (NLP)",
@@ -109,6 +122,7 @@ const projects = [
     description:
       "Designed a lightweight chatbot using Hugging Face transformers and custom-trained intent recognizers. Deployed via Streamlit with sentiment-aware contextual responses.",
     tags: ["Python", "Streamlit", "NLP", "Hugging Face", "Chatbot"],
+    githubUrl: "https://github.com/vishxlshxrma/ChatBot_Template.git",
   },
   {
     title: "Invoice Generator Platform",
@@ -119,6 +133,7 @@ const projects = [
     description:
       "Developed a scalable full-stack invoicing platform using React, TypeScript, and Node.js, featuring secure JWT-based authentication, dynamic invoice creation with real-time GST calculations, and automated PDF generation via Puppeteer. Designed RESTful APIs with MongoDB for efficient data management and retrieval.",
     tags: ["React", "TypeScript", "Node.js", "MongoDB", "Puppeteer"],
+    githubUrl: "https://github.com/vishxlshxrma/Invoice_Generator.git",
   },
   {
     title: "Sales Analysis Dashboard",
@@ -129,6 +144,7 @@ const projects = [
     description:
       "Developed a data analysis pipeline using Python, Pandas, and Matplotlib to process and visualize sales data, enabling insights into trends, product performance, and customer behavior through structured exploratory analysis.",
     tags: ["Python", "Pandas", "Matplotlib", "EDA", "Data Analysis"],
+    githubUrl: "https://github.com/vishxlshxrma/Sales_Analysis.git",
   },
   {
     title: "Music Store Analytics",
@@ -139,6 +155,7 @@ const projects = [
     description:
       "Designed complex SQL queries using joins, CTEs, and window functions to analyze a digital music store dataset, uncovering insights into customer purchasing behavior, genre trends, and revenue distribution.",
     tags: ["PostgreSQL", "SQL", "CTEs", "Window Functions", "Data Analysis"],
+    githubUrl: "https://github.com/vishxlshxrma/Music_Store_Analysis.git",
   },
 ];
 

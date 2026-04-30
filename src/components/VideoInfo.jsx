@@ -113,7 +113,7 @@ export default function VideoInfo() {
 
   return (
     <div className="relative px-3 pb-4 sm:px-4 md:px-6">
-      <h1 className="mb-3 text-lg font-bold sm:text-xl">My Journey | Resume 2025</h1>
+      <h1 className="mb-3 text-lg font-bold sm:text-xl">My Journey | Resume</h1>
 
       <div className="mb-4 flex items-center space-x-4 text-sm text-[var(--text-secondary)]">
         <div className="flex items-center space-x-1">
