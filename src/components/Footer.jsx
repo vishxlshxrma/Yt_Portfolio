@@ -22,7 +22,7 @@ export default function Footer() {
         <div className="mx-auto max-w-6xl px-3 sm:px-4 md:px-6">
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-[var(--text-secondary)]">
             <button
-              onClick={() => openInBackground("/Vishal_Kumar_Resume.pdf")}
+              onClick={() => openInBackground("/Kumar_Vishal_Resume.pdf")}
               className="inline-flex min-h-10 items-center transition-colors hover:text-[var(--text-primary)]"
             >
               <Download className="w-4 h-4 mr-1" />

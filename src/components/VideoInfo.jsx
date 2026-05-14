@@ -76,7 +76,7 @@ export default function VideoInfo() {
   }, []);
 
   const handleResumeOpen = () => {
-    const absoluteUrl = `${window.location.origin}/Vishal_Kumar_Resume.pdf`;
+    const absoluteUrl = `${window.location.origin}/Kumar_Vishal_Resume.pdf`;
     const newTab = window.open(absoluteUrl, "_blank", "noopener,noreferrer");
     if (newTab) {
       newTab.blur();

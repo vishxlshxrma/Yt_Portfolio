@@ -354,7 +354,7 @@ export default function Portfolio() {
     const normalized = normalizeSearchText(query);
 
     if (normalized === "resume" || normalized === "cv") {
-      openInBackground("/Vishal_Kumar_Resume.pdf");
+      openInBackground("/Kumar_Vishal_Resume.pdf");
       return;
     }
     if (normalized === "linkedin") {

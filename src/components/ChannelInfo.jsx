@@ -16,7 +16,7 @@ export default function ChannelInfo() {
           <div className="min-w-0">
             <h3 className="truncate font-semibold">Vishal Kumar</h3>
             <p className="truncate text-xs text-[var(--text-secondary)] sm:text-sm">
-              2+ years experience • Available for hire
+              2+ years professional experience
             </p>
           </div>
         </div>

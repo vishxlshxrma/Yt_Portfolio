@@ -142,7 +142,7 @@ export default function Header({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => openInBackground("/Vishal_Kumar_Resume.pdf")}
+              onClick={() => openInBackground("/Kumar_Vishal_Resume.pdf")}
               className="h-9 px-2 text-[var(--text-primary)] hover:bg-[var(--surface-hover)] sm:px-3"
             >
               <Folder className="w-4 h-4" />
