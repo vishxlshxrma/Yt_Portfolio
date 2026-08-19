@@ -2,19 +2,19 @@ const workExperience = [
   {
     title: "Teaching Assistant",
     company: "USC Viterbi",
-    dateLabel: "Jun 2025 - Aug 2025",
+    dateLabel: "Summer 2025 & Summer 2026",
     thumbnail: "/images/viterbi-k12.png",
     logo: "/images/usc.png",
     location: "Los Angeles, CA",
     metaLine: "Teaching • Cybersecurity • Python • Los Angeles, CA",
     summary:
-      "Taught cybersecurity, Python, and game development to 50+ high school students through USC’s K-12 outreach, designing hands-on modules that improved completion rates by 25%.",
+      "Delivered 200+ hours of instruction in Drones, Python, and Game Development to 300+ high school students through USC’s K-12 outreach, designing structured modules that increased task completion rates by 25%.",
     description:
-      "Delivered high-impact instruction in cybersecurity, Python, and game development through USC Viterbi's K-12 outreach, helping students build confidence with programming fundamentals through guided labs, hands-on projects, and structured classroom support.",
+      "Delivered 200+ hours of instruction in Drones, Python, and Game Development to 300+ high school students as part of USC’s K-12 outreach. Designed structured learning modules and projects, increasing student task completion rates by 25%, and guided students during labs and office hours to debug code and reinforce core CS concepts and programming fundamentals.",
     details: [
-      "Delivered 40+ hours of weekly instruction across cybersecurity, Python, and game development for 100+ high school students.",
-      "Designed structured learning modules and project-based exercises that improved student task completion by 25%.",
-      "Guided students during labs and office hours, helping debug code and reinforce core CS concepts."
+      "Delivered 200+ hours of instruction in Drones, Python, and Game Development to 300+ high school students as part of USC’s K-12 outreach.",
+      "Designed structured learning modules and projects, increasing student task completion rates by 25%.",
+      "Guided students during labs and office hours, helping debug code and reinforce core CS concepts and programming fundamentals."
     ],
     techStack: ["Python", "Cybersecurity", "Game Development", "Teaching", "Curriculum Design"],
     skillIds: ["python", "cybersecurity", "game-development", "technical-communication", "problem-solving"],

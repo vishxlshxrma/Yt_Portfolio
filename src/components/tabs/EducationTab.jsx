@@ -9,7 +9,7 @@ export default function EducationTab() {
     {
       title: "Master of Science in Computer Science",
       institution: "University of Southern California",
-      dateLabel: "2025 - 2027",
+      dateLabel: "Jan 2025 - Dec 2026",
       location: "Los Angeles, CA",
       thumbnail: "/images/usc.png",
       logo: "/images/usc.png",
