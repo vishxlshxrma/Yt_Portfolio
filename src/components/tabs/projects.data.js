@@ -19,8 +19,8 @@ const projects = [
     thumbnailAlt:
       "North Star v2 Today screen: a conversational task composer above a month calendar on a dark night-sky background",
     description:
-      "Built a local-first scheduling and productivity system that turns plain-language task input into a realistic daily plan. A Next.js + TypeScript conversational composer shows an editable interpretation before anything is saved, and a FastAPI backend schedules the day with a deterministic OR-Tools CP-SAT solver around fixed commitments, sleep, travel, and deadlines, giving a reason code for any unscheduled work. V2 adds a keyboard-navigable calendar, a reduced-motion-aware night-sky UI, and a safe local reset, backed by pytest, Vitest, and Playwright + axe-core checks in GitHub Actions.",
-    tags: ["FastAPI", "Next.js", "TypeScript", "OR-Tools CP-SAT", "PostgreSQL"],
+      "Built a planner that turns plain-language task input into a realistic daily plan. A FastAPI backend schedules the day with a deterministic OR-Tools CP-SAT solver around fixed commitments, sleep, travel, and deadlines, and gives a reason code for any unscheduled work. A Next.js + TypeScript conversational composer shows an editable interpretation before anything is saved. V2 adds a keyboard-navigable calendar, a reduced-motion-aware night-sky UI, and a safe local reset. Tested with pytest, Vitest, and Playwright + axe-core checks in GitHub Actions.",
+    tags: ["FastAPI", "OR-Tools CP-SAT", "Next.js", "TypeScript", "PostgreSQL"],
     githubUrl: "https://github.com/vishxlshxrma/Northstar",
     releaseUrl: "https://github.com/vishxlshxrma/Northstar/releases/tag/v2.0.0",
   },

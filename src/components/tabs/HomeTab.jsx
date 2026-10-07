@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { ExternalLink, Eye, FolderOpen, MoreVertical, X } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { ExternalLink, Eye, FolderOpen, MoreVertical, Tag, X } from "lucide-react";
 import { Badge } from "components/ui/badge";
 
 // NOTE: keep the file/component, but accept `projects` and render under id="projects"
 export default function HomeTab({ projects = [], openProjectRequest = null }) {
   const [activeProject, setActiveProject] = useState(null);
+  const closeButtonRef = useRef(null);
+  const dialogRef = useRef(null);
   const activeProjectRedirectUrl =
     activeProject?.projectUrl || activeProject?.liveUrl || activeProject?.githubUrl;
   const activeProjectRedirectLabel =
@@ -15,11 +17,32 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
     if (!activeProject) return undefined;
 
     const previousOverflow = document.body.style.overflow;
+    const previouslyFocused = document.activeElement;
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         setActiveProject(null);
+        return;
+      }
+
+      // keep keyboard focus inside the open dialog
+      if (event.key === "Tab" && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll("a[href], button:not([disabled])");
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!first) return;
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        } else if (!dialogRef.current.contains(document.activeElement)) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
 
@@ -28,6 +51,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      previouslyFocused?.focus?.();
     };
   }, [activeProject]);
 
@@ -57,7 +81,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                 setActiveProject(project);
               }
             }}
-            className="group cursor-pointer outline-none"
+            className="group cursor-pointer rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-red)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)]"
             aria-label={`Open details for ${project.title}`}
           >
             <div className="relative overflow-hidden rounded-2xl bg-[var(--surface)]">
@@ -74,7 +98,8 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
             <div className="mt-3 flex items-start gap-3">
               <img
                 src={project.thumbnail}
-                alt={`${project.title} logo`}
+                alt=""
+                aria-hidden="true"
                 className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-full border border-[var(--border)] object-cover"
               />
 
@@ -125,6 +150,10 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
           onClick={() => setActiveProject(null)}
         >
           <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="project-modal-title"
             className="animate-experiencePanelIn w-full max-w-4xl overflow-hidden rounded-[1.75rem] border border-[var(--border)] bg-[var(--surface)] shadow-[0_30px_120px_rgba(0,0,0,0.65)]"
             onClick={(event) => event.stopPropagation()}
           >
@@ -137,6 +166,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
               <button
+                ref={closeButtonRef}
                 type="button"
                 onClick={() => setActiveProject(null)}
                 className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/55 text-white transition hover:bg-black/75"
@@ -147,13 +177,10 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
 
               <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center gap-3">
                 <Badge className="rounded-full bg-black/65 px-3 py-1 text-xs text-white">
-                  {activeProject.duration}
+                  {activeProject.version
+                    ? `${activeProject.duration} · ${activeProject.version}`
+                    : activeProject.duration}
                 </Badge>
-                {activeProject.version ? (
-                  <Badge className="rounded-full bg-black/65 px-3 py-1 text-xs text-white">
-                    {activeProject.version}
-                  </Badge>
-                ) : null}
                 {activeProject.views ? (
                   <Badge className="rounded-full bg-black/65 px-3 py-1 text-xs text-white">
                     <Eye className="mr-1 h-3.5 w-3.5" />
@@ -167,18 +194,19 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
               <div className="flex items-start gap-4">
                 <img
                   src={activeProject.thumbnail}
-                  alt={`${activeProject.title} logo`}
+                  alt=""
+                  aria-hidden="true"
                   className="h-14 w-14 flex-shrink-0 rounded-full border border-[var(--border)] object-cover"
                 />
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--text-secondary)]">
-                    <span className="truncate font-medium text-[var(--text-primary)]">
+                    <span className="font-medium text-[var(--text-primary)]">
                       {activeProject.company}
                     </span>
                   </div>
 
-                  <h3 className="mt-1 text-2xl font-semibold leading-tight text-[var(--text-primary)] sm:text-[2rem]">
+                  <h3 id="project-modal-title" className="mt-1 text-2xl font-semibold leading-tight text-[var(--text-primary)] sm:text-[2rem]">
                     {activeProject.title}
                   </h3>
                 </div>
@@ -209,7 +237,8 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                         className="inline-flex items-center gap-2 rounded-full bg-[var(--accent-red)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
                       >
                         {activeProjectRedirectLabel}
-                        <ExternalLink className="h-4 w-4" />
+                        <span className="sr-only">(opens in a new tab)</span>
+                        <ExternalLink className="h-4 w-4" aria-hidden="true" />
                       </a>
                     ) : null}
                     {activeProject.releaseUrl ? (
@@ -217,10 +246,12 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                         href={activeProject.releaseUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:opacity-90"
+                        className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:bg-[var(--surface-hover)]"
                       >
+                        <Tag className="h-4 w-4 text-[var(--text-secondary)]" aria-hidden="true" />
                         {activeProject.version ? `${activeProject.version} Release Notes` : "Release Notes"}
-                        <ExternalLink className="h-4 w-4" />
+                        <span className="sr-only">(opens in a new tab)</span>
+                        <ExternalLink className="h-4 w-4" aria-hidden="true" />
                       </a>
                     ) : null}
                   </div>
