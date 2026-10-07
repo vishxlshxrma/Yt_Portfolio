@@ -67,6 +67,14 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "northstar",
+    name: "North Star",
+    description: "Local-first scheduling and productivity system: a conversational task composer and calendar on Next.js, with a FastAPI backend that plans the day using a deterministic OR-Tools CP-SAT solver.",
+    domainIds: ["application-engineering", "backend-distributed", "data-storage", "infrastructure-devops", "languages-foundations", "intelligent-systems"],
+    skillIds: ["python", "fastapi", "rest-apis", "api-documentation", "api-integration", "nextjs", "react", "typescript", "tailwind", "css", "ui-design", "responsive-design", "postgresql", "database-design", "docker", "docker-compose", "github-actions", "ci-cd", "environment-management", "git", "github", "llms", "technical-communication", "problem-solving"],
+    skillKeywords: ["Scheduling", "Productivity", "Calendar", "Constraint Solving", "OR-Tools", "CP-SAT", "Natural-Language Task Intake", "Conversational UI", "Local-First Software", "Full Stack Development", "FastAPI", "Python", "Pydantic", "SQLAlchemy", "Alembic Migrations", "PostgreSQL", "REST APIs", "OpenAPI", "Next.js", "React", "TypeScript", "Tailwind CSS", "CSS Animation", "Accessibility (WCAG 2.1 AA)", "Keyboard Navigation", "Reduced Motion", "Responsive Design", "Ollama", "LLMs", "whisper.cpp", "Docker Compose", "Environment Management (.env)", "Vitest", "Testing Library", "Playwright", "axe-core", "pytest", "Ruff", "ESLint", "GitHub Actions", "CI/CD Concepts", "Release Engineering", "Technical Documentation"]
+  },
+  {
     id: "transizr",
     name: "Transizr",
     description: "AI-powered media transcription platform using distributed workers and real-time job tracking.",

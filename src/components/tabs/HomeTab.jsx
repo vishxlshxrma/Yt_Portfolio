@@ -63,11 +63,11 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
             <div className="relative overflow-hidden rounded-2xl bg-[var(--surface)]">
               <img
                 src={project.thumbnail}
-                alt={project.title}
+                alt={project.thumbnailAlt || project.title}
                 className="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.015] group-hover:brightness-105"
               />
               <div className="absolute bottom-3 right-3 rounded-md bg-[rgba(15,15,15,0.88)] px-2 py-1 text-xs font-medium tracking-wide text-white shadow-[0_2px_10px_rgba(0,0,0,0.35)]">
-                {project.duration}
+                {project.version ? `${project.duration} · ${project.version}` : project.duration}
               </div>
             </div>
 
@@ -95,11 +95,13 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                 </p>
 
                 <div className="mt-3 flex items-center justify-between gap-3 text-xs text-[var(--text-secondary)]">
-                  <div className="flex items-center gap-1.5">
-                    <Eye className="h-3.5 w-3.5" />
-                    <span>{project.views} impact</span>
-                  </div>
-                  <div className="flex flex-wrap justify-end gap-1.5">
+                  {project.views ? (
+                    <div className="flex items-center gap-1.5">
+                      <Eye className="h-3.5 w-3.5" />
+                      <span>{project.views} impact</span>
+                    </div>
+                  ) : null}
+                  <div className="ml-auto flex flex-wrap justify-end gap-1.5">
                     {(project.tags ?? []).slice(0, 2).map((tag) => (
                       <Badge
                         key={tag}
@@ -129,7 +131,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
             <div className="relative">
               <img
                 src={activeProject.thumbnail}
-                alt={activeProject.title}
+                alt={activeProject.thumbnailAlt || activeProject.title}
                 className="h-[240px] w-full object-cover sm:h-[320px]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -147,10 +149,17 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                 <Badge className="rounded-full bg-black/65 px-3 py-1 text-xs text-white">
                   {activeProject.duration}
                 </Badge>
-                <Badge className="rounded-full bg-black/65 px-3 py-1 text-xs text-white">
-                  <Eye className="mr-1 h-3.5 w-3.5" />
-                  {activeProject.views} impact
-                </Badge>
+                {activeProject.version ? (
+                  <Badge className="rounded-full bg-black/65 px-3 py-1 text-xs text-white">
+                    {activeProject.version}
+                  </Badge>
+                ) : null}
+                {activeProject.views ? (
+                  <Badge className="rounded-full bg-black/65 px-3 py-1 text-xs text-white">
+                    <Eye className="mr-1 h-3.5 w-3.5" />
+                    {activeProject.views} impact
+                  </Badge>
+                ) : null}
               </div>
             </div>
 
@@ -182,24 +191,38 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                     Project
                   </span>
                   <span>{activeProject.duration}</span>
-                  <span>{activeProject.views} impact</span>
+                  {activeProject.version ? <span>{activeProject.version}</span> : null}
+                  {activeProject.views ? <span>{activeProject.views} impact</span> : null}
                 </div>
 
                 <p className="mt-4 text-[15px] leading-7 text-[var(--text-primary)]">
                   {activeProject.description}
                 </p>
 
-                {activeProjectRedirectUrl ? (
-                  <div className="mt-5">
-                    <a
-                      href={activeProjectRedirectUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-[var(--accent-red)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
-                    >
-                      {activeProjectRedirectLabel}
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
+                {activeProjectRedirectUrl || activeProject.releaseUrl ? (
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    {activeProjectRedirectUrl ? (
+                      <a
+                        href={activeProjectRedirectUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full bg-[var(--accent-red)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+                      >
+                        {activeProjectRedirectLabel}
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    ) : null}
+                    {activeProject.releaseUrl ? (
+                      <a
+                        href={activeProject.releaseUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-hover)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:opacity-90"
+                      >
+                        {activeProject.version ? `${activeProject.version} Release Notes` : "Release Notes"}
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    ) : null}
                   </div>
                 ) : null}
 

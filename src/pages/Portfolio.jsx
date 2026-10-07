@@ -35,6 +35,7 @@ const skillProjectToPortfolioTitle = {
   "malaria-classification": "Malaria Detection using Deep Learning",
   "morph-runner": "Morph Runner",
   "music-store-analysis": "Music Store Analytics",
+  northstar: "North Star",
   "sales-analysis": "Sales Analysis Dashboard",
   sightranger: "SightRanger",
   "taxi-demand-prediction": "Taxi Demand Prediction",

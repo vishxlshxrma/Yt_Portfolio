@@ -43,7 +43,7 @@ export default function SearchResults({
                 key={`${project.title}-${project.company}`}
                 className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]"
               >
-                <img src={project.thumbnail} alt={project.title} className="aspect-video w-full object-cover" />
+                <img src={project.thumbnail} alt={project.thumbnailAlt || project.title} className="aspect-video w-full object-cover" />
                 <div className="p-4">
                   <h4 className="line-clamp-2 text-base font-semibold text-[var(--text-primary)]">
                     {project.title}
