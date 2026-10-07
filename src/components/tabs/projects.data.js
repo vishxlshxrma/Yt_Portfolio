@@ -8,6 +8,8 @@
 // Optional display fields:
 // - version: "v2.0.0" (shown next to the year)
 // - thumbnailAlt: descriptive alt text for the thumbnail
+// - avatar: square image for the round avatar (defaults to thumbnail)
+// - screenshot: { src, alt } product screenshot shown in the detail modal
 // - views: omit to hide the impact count
 const projects = [
   {
@@ -15,9 +17,13 @@ const projects = [
     company: "Local-First Scheduling & Productivity System",
     duration: "2026",
     version: "v2.0.0",
-    thumbnail: "/images/NorthStar.jpg",
-    thumbnailAlt:
-      "North Star v2 Today screen: a conversational task composer above a month calendar on a dark night-sky background",
+    thumbnail: "/images/NorthStar-brand.jpg",
+    thumbnailAlt: "North Star — Fixed Point. Clear Course.",
+    avatar: "/images/NorthStar-icon.jpg",
+    screenshot: {
+      src: "/images/NorthStar.jpg",
+      alt: "North Star v2 Today screen: a conversational task composer above a month calendar on a dark night-sky background",
+    },
     description:
       "Built a planner that turns plain-language task input into a realistic daily plan. A FastAPI backend schedules the day with a deterministic OR-Tools CP-SAT solver around fixed commitments, sleep, travel, and deadlines, and gives a reason code for any unscheduled work. A Next.js + TypeScript conversational composer shows an editable interpretation before anything is saved. V2 adds a keyboard-navigable calendar, a reduced-motion-aware night-sky UI, and a safe local reset. Tested with pytest, Vitest, and Playwright + axe-core checks in GitHub Actions.",
     tags: ["FastAPI", "OR-Tools CP-SAT", "Next.js", "TypeScript", "PostgreSQL"],

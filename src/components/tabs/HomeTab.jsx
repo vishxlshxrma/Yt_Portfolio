@@ -97,7 +97,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
 
             <div className="mt-3 flex items-start gap-3">
               <img
-                src={project.thumbnail}
+                src={project.avatar || project.thumbnail}
                 alt=""
                 aria-hidden="true"
                 className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-full border border-[var(--border)] object-cover"
@@ -193,7 +193,7 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
             <div className="animate-experienceContentIn max-h-[calc(88vh-200px)] sm:max-h-[calc(90vh-240px)] overflow-y-auto px-5 pb-6 pt-5 sm:px-7 sm:pb-7">
               <div className="flex items-start gap-4">
                 <img
-                  src={activeProject.thumbnail}
+                  src={activeProject.avatar || activeProject.thumbnail}
                   alt=""
                   aria-hidden="true"
                   className="h-14 w-14 flex-shrink-0 rounded-full border border-[var(--border)] object-cover"
@@ -273,6 +273,20 @@ export default function HomeTab({ projects = [], openProjectRequest = null }) {
                       ))}
                     </div>
                   </div>
+                ) : null}
+
+                {activeProject.screenshot ? (
+                  <figure className="mt-6">
+                    <figcaption className="text-sm font-medium uppercase tracking-[0.18em] text-[var(--text-secondary)]">
+                      Product Screenshot
+                    </figcaption>
+                    <img
+                      src={activeProject.screenshot.src}
+                      alt={activeProject.screenshot.alt}
+                      loading="lazy"
+                      className="mt-3 h-auto w-full rounded-xl border border-[var(--border)]"
+                    />
+                  </figure>
                 ) : null}
               </div>
             </div>
