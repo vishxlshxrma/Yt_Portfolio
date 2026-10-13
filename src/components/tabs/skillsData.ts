@@ -99,8 +99,8 @@ export const projects: Project[] = [
   {
     id: "usc-ta",
     name: "USC Teaching Assistant",
-    description: "Taught cybersecurity, Python, and game development fundamentals to high school students, focusing on hands-on learning and problem-solving skills.",
-    skillIds: ["python", "cybersecurity", "game-development", "problem-solving", "technical-communication"]
+    description: "Taught AI, Python coding, drones, game development, and programming fundamentals to 350+ high school students, focusing on hands-on learning and problem-solving skills.",
+    skillIds: ["python", "generative-ai", "game-development", "problem-solving", "technical-communication"]
   },
   {
     id: "genai-research",
@@ -341,7 +341,7 @@ export const skills: Skill[] = [
   // Intelligent Systems
   { id: "python", name: "Python", type: "language", importance: "core", description: "Primary language for backend, AI, and automation", domainIds: ["intelligent-systems", "backend-distributed", "data-storage", "languages-foundations"], subclusterIds: ["machine-learning", "generative-ai", "data-science", "api-design", "event-driven-systems", "programming-languages", "cs-fundamentals"], relatedProjectIds: ["sightranger", "transizr", "genai-research", "usc-ta"] },
   { id: "llms", name: "LLMs", type: "concept", importance: "core", description: "Large language models for natural language processing", domainIds: ["intelligent-systems"], subclusterIds: ["generative-ai"], relatedProjectIds: ["genai-research", "sightranger"] },
-  { id: "generative-ai", name: "Generative AI", type: "concept", importance: "core", description: "AI systems that generate content, text, and media", domainIds: ["intelligent-systems"], subclusterIds: ["generative-ai"], relatedProjectIds: ["genai-research"] },
+  { id: "generative-ai", name: "Generative AI", type: "concept", importance: "core", description: "AI systems that generate content, text, and media", domainIds: ["intelligent-systems"], subclusterIds: ["generative-ai"], relatedProjectIds: ["genai-research", "usc-ta"] },
   { id: "prompt-engineering", name: "Prompt Engineering", type: "concept", importance: "strong", description: "Creating precise prompts for AI workflows", domainIds: ["intelligent-systems"], subclusterIds: ["generative-ai"], relatedProjectIds: ["genai-research", "sightranger"] },
   { id: "tensorflow", name: "TensorFlow", type: "framework", importance: "strong", description: "Machine learning framework for neural networks", domainIds: ["intelligent-systems"], subclusterIds: ["machine-learning"], relatedProjectIds: ["sightranger"] },
   { id: "yolov8", name: "YOLOv8", type: "library", importance: "strong", description: "Real-time object detection and computer vision", domainIds: ["intelligent-systems"], subclusterIds: ["computer-vision"], relatedProjectIds: ["sightranger"] },
@@ -437,7 +437,7 @@ export const skills: Skill[] = [
   { id: "technical-communication", name: "Technical Communication", type: "concept", importance: "core", description: "Clear technical documentation and explanation", domainIds: ["languages-foundations"], subclusterIds: ["software-engineering"], relatedProjectIds: ["usc-ta"] },
   { id: "problem-solving", name: "Problem Solving", type: "concept", importance: "core", description: "Analytical thinking and solution design", domainIds: ["languages-foundations"], subclusterIds: ["problem-solving"], relatedProjectIds: ["all"] },
   { id: "debugging-foundation", name: "Debugging", type: "concept", importance: "core", description: "Systematic issue identification and resolution", domainIds: ["languages-foundations"], subclusterIds: ["problem-solving"], relatedProjectIds: ["all"] },
-  { id: "cybersecurity", name: "Cybersecurity", type: "concept", importance: "strong", description: "Security principles and practices", domainIds: ["languages-foundations"], subclusterIds: ["cs-fundamentals"], relatedProjectIds: ["usc-ta"] },
+  { id: "cybersecurity", name: "Cybersecurity", type: "concept", importance: "strong", description: "Security principles and practices", domainIds: ["languages-foundations"], subclusterIds: ["cs-fundamentals"], relatedProjectIds: [] },
   { id: "functional-programming", name: "Functional Programming", type: "concept", importance: "familiar", description: "Functional programming paradigms", domainIds: ["languages-foundations"], subclusterIds: ["cs-fundamentals"], relatedProjectIds: [] },
   { id: "api-integration", name: "API Integration", type: "concept", importance: "core", description: "Connecting and integrating external APIs", domainIds: ["languages-foundations", "backend-distributed"], subclusterIds: ["programming-languages", "api-design"], relatedProjectIds: ["genai-research", "sightranger"] }
 ];

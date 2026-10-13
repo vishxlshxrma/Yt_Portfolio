@@ -2,22 +2,22 @@ const workExperience = [
   {
     title: "Teaching Assistant",
     company: "USC Viterbi",
-    dateLabel: "Summer 2025 & Summer 2026",
+    dateLabel: "Summer 2025 - Present",
     thumbnail: "/images/viterbi-k12.png",
     logo: "/images/usc.png",
     location: "Los Angeles, CA",
-    metaLine: "Teaching • Cybersecurity • Python • Los Angeles, CA",
+    metaLine: "Teaching • AI • Python • Drones • Game Dev • Los Angeles, CA",
     summary:
-      "Delivered 200+ hours of instruction in Drones, Python, and Game Development to 300+ high school students through USC’s K-12 outreach, designing structured modules that increased task completion rates by 25%.",
+      "Delivered 200+ hours of instruction in AI, Python Coding, Drones, Game Development, and Programming to 350+ high school students through USC’s K-12 outreach, designing structured modules that increased task completion rates by 25%.",
     description:
-      "Delivered 200+ hours of instruction in Drones, Python, and Game Development to 300+ high school students as part of USC’s K-12 outreach. Designed structured learning modules and projects, increasing student task completion rates by 25%, and guided students during labs and office hours to debug code and reinforce core CS concepts and programming fundamentals.",
+      "Delivered 200+ hours of instruction in AI, Python Coding, Drones, Game Development, and Programming to 350+ high school students as part of USC’s K-12 outreach. Designed structured learning modules and projects, increasing student task completion rates by 25%, and guided students during labs and office hours to debug code and reinforce core CS concepts and programming fundamentals.",
     details: [
-      "Delivered 200+ hours of instruction in Drones, Python, and Game Development to 300+ high school students as part of USC’s K-12 outreach.",
+      "Delivered 200+ hours of instruction in AI, Python Coding, Drones, Game Development, and Programming to 350+ high school students as part of USC’s K-12 outreach.",
       "Designed structured learning modules and projects, increasing student task completion rates by 25%.",
       "Guided students during labs and office hours, helping debug code and reinforce core CS concepts and programming fundamentals."
     ],
-    techStack: ["Python", "Cybersecurity", "Game Development", "Teaching", "Curriculum Design"],
-    skillIds: ["python", "cybersecurity", "game-development", "technical-communication", "problem-solving"],
+    techStack: ["AI", "Python", "Drones", "Game Development", "Programming", "Teaching", "Curriculum Design"],
+    skillIds: ["python", "generative-ai", "game-development", "technical-communication", "problem-solving"],
     domainIds: ["application-engineering", "languages-foundations", "intelligent-systems"],
     featured: "Most Recent",
   },
